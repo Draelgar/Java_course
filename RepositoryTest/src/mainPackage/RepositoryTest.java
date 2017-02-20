@@ -4,7 +4,9 @@ public class RepositoryTest {
 
 	public static void main(String[] args) {
 		
-		System.out.println("Hello World!");
+		// Print hello world!
+		String s = "Hello World!";
+		System.out.println(s);
 		
 		
 
