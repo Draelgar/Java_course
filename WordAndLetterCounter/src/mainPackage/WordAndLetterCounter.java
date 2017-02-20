@@ -94,9 +94,10 @@ public class WordAndLetterCounter {
 	}
 	
 	private void showMenu()
-	{
+	{		
 		// Create the input buffer string.
 		String inputBuffer = "";
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		
 		// Print the menu to the console.
@@ -199,6 +200,7 @@ public class WordAndLetterCounter {
 		
 		String s = "";
 		
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		
 		try {
