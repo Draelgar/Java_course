@@ -7,7 +7,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
-public class TextPanel extends JPanel implements TextListener{
+public class TextPanel extends JPanel{
 
 	private JTextArea textArea;
 	
@@ -20,7 +20,7 @@ public class TextPanel extends JPanel implements TextListener{
 		
 	}
 
-	public void textEmitted(String text) {
+	public void append(String text) {
 		textArea.append(text);
 	}
 }

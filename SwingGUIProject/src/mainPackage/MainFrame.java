@@ -8,6 +8,7 @@ public class MainFrame extends JFrame{
 	
 	private Toolbar toolbar;
 	private TextPanel textArea;
+	private SidePanel sidePanel;
 	
 	public MainFrame()
 	{
@@ -19,11 +20,17 @@ public class MainFrame extends JFrame{
 		
 		toolbar = new Toolbar();
 		textArea = new TextPanel();
+		sidePanel = new SidePanel();
 		
-		toolbar.SetTextListener(textArea);
+		toolbar.SetTextListener(new TextListener() {
+			public void textEmitted(String text) {
+				textArea.append(text);
+			}
+		});
 		
 		add(toolbar, BorderLayout.NORTH);
 		add(textArea, BorderLayout.CENTER);
+		add(sidePanel, BorderLayout.WEST);
 		
 		setVisible(true);
 	}
