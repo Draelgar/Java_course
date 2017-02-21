@@ -180,7 +180,7 @@ public class WordAndLetterCounter {
 			for(int i = 0; i < s.length(); i++)
 			{
 				// Identify the character.
-				if(buffer[i] >= 'a' && buffer[i] <= 'ö') 
+				if((buffer[i] >= 'a' && buffer[i] <= 'z') || buffer[i] <= 'å' || buffer[i] <= 'ä' || buffer[i] <= 'ö')
 				{
 					count++;
 				}
@@ -230,7 +230,7 @@ public class WordAndLetterCounter {
 			for(int i = 0; i < s.length(); i++)
 			{
 				// Identify the character. Are we already at a new word?
-				if((buffer[i] >= 'a' && buffer[i] <= 'ö') || (buffer[i] >= '0' && buffer[i] <= '9')) 
+				if((buffer[i] >= 'a' && buffer[i] <= 'z') || buffer[i] <= 'å' || buffer[i] <= 'ä' || buffer[i] <= 'ö' || (buffer[i] >= '0' && buffer[i] <= '9')) 
 				{
 					if(!newWord)
 					{
