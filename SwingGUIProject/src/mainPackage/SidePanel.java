@@ -3,11 +3,13 @@ package mainPackage;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 @SuppressWarnings("serial")
@@ -22,8 +24,8 @@ public class SidePanel extends JPanel {
 	{	
 		nameLabel = new JLabel("Name: ");
 		orgLabel = new JLabel("Organization: ");
-		nameTxt = new JTextField();
-		orgTxt = new JTextField();
+		nameTxt = new JTextField(10);
+		orgTxt = new JTextField(10);
 		
 		Dimension  dim = getPreferredSize();
 		dim.width = 300;
@@ -39,28 +41,40 @@ public class SidePanel extends JPanel {
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		
+		gbc.weightx = 1.0;
+		gbc.weighty = 0.1;
+		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
 		gbc.fill = GridBagConstraints.NONE;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
 		
 		add(nameLabel, gbc);
 		
 		gbc.gridx = 1;
 		gbc.gridy = 0;
+		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		
 		add(nameTxt, gbc);
 		
+		gbc.weightx = 1.0;
+		gbc.weighty = 2.5;
+		
 		gbc.gridx = 0;
 		gbc.gridy = 1;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
 		
 		add(orgLabel, gbc);
 		
 		gbc.gridx = 1;
 		gbc.gridy = 1;
+		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		
-		add(nameLabel, gbc);
+		add(orgTxt, gbc);
 		
 	}
 }
