@@ -11,11 +11,6 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.Clock;
 import java.time.Duration;
 
@@ -43,7 +38,7 @@ public class BarberBookingSystem {
 	// Initialize the system.
 	private void init() {
 		// Add some default barbers.
-		load();
+		FileHandler.load(mBarbers, mBookings);
 		
 		if(mBarbers.size() <= 0)
 			mBarbers.add("Barber");
@@ -100,7 +95,7 @@ public class BarberBookingSystem {
 			}
 		}
 		
-		save(); // Save the data before exiting.
+		FileHandler.save(mBookings); // Save the data before exiting.
 	}
 	
 	// Book a new time for the customer.
@@ -156,34 +151,41 @@ public class BarberBookingSystem {
 					// Set the matcher to match against double numbers and skip the 4 first values as that was the year.
 					m = patTwo.matcher(response.substring(4));
 					
-					// Check for the month.
-					if(m.find()) {
-						month = Integer.parseInt(m.group(0));
-						
-						// Check for the day.
+					ZonedDateTime zdt = ZonedDateTime.now();
+					if(zdt.getYear() <= year) { // Is this a future year or same year?
+						// Check for the month.
 						if(m.find()) {
-							day = Integer.parseInt(m.group(0));
+							month = Integer.parseInt(m.group(0));
 							
-							if(month >= 1 && month <= 12) {	// Is this a valid month?
-								cal.set(Calendar.YEAR, year);
-								cal.set(Calendar.MONTH, month);
-								
-								if(day >= 1 && day <= cal.getActualMaximum(Calendar.DAY_OF_MONTH)) { // Is this a valid day of the month?
-									System.out.println(year + "-" + month + "-" + day);
-									repeat = false;
-								}
-								else {
+							if((zdt.getMonthValue() <= month && zdt.getYear() == year) || zdt.getYear() < year) { // Does this month lie in the future?
+								// Check for the day.
+								if(m.find()) {
+									day = Integer.parseInt(m.group(0));
 									
-									System.out.println(day + " is not a valid day! Only values between 01 and " + 
-											cal.getActualMaximum(Calendar.DAY_OF_MONTH) +" is accepted!");
-									day = -1;
-									repeat = true;
+									if(month >= 1 && month <= 12) {	// Is this a valid month?
+										cal.set(Calendar.YEAR, year);
+										cal.set(Calendar.MONTH, month);
+										
+										if((zdt.getDayOfMonth() <= day && zdt.getMonthValue() == month) || zdt.getMonthValue() < month) { // Does this day lie in the future?
+											if(day >= 1 && day <= cal.getActualMaximum(Calendar.DAY_OF_MONTH)) { // Is this a valid day of the month?
+												System.out.println(year + "-" + month + "-" + day);
+												repeat = false;
+											}
+											else {
+												
+												System.out.println(day + " is not a valid day! Only values between 01 and " + 
+														cal.getActualMaximum(Calendar.DAY_OF_MONTH) +" is accepted!");
+												day = -1;
+												repeat = true;
+											}
+										}
+									}
+									else {
+										System.out.println(month + " is not a valid month! Only values between 01 and 12 is accepted!");
+										day = -1;
+										repeat = true;
+									}
 								}
-							}
-							else {
-								System.out.println(month + " is not a valid month! Only values between 01 and 12 is accepted!");
-								day = -1;
-								repeat = true;
 							}
 						}
 					}
@@ -191,7 +193,7 @@ public class BarberBookingSystem {
 				
 				if(day == -1)
 				{
-					System.out.println("The date format was incorrect, please try again!");
+					System.out.println("The date format was incorrect or the date lies in the past, please try again!");
 					repeat = true;
 				}
 				
@@ -626,83 +628,6 @@ public class BarberBookingSystem {
 		}
 		
 		return 0;
-	}
-	
-	// Save the data.
-	private void save() {
-		
-		File file = new File("data/data.txt");
-		
-		try {
-			if(!file.exists()) // If the file does not exist, create a new one.
-				file.createNewFile();
-			
-			FileWriter fw = new FileWriter(file);
-			BufferedWriter bw = new BufferedWriter(fw);
-			
-			bw.write(""); // Overwrite the old data.
-			
-			for(BookedTime bt : mBookings) {
-				bt.save(bw);
-			}
-			
-			bw.close();
-			
-		} catch (IOException e) {
-			System.out.println("Error, failed to create the file! " + e.getMessage());
-		}
-		
-	}
-	
-	// Load the data.
-	private void load() {
-		// Open the file containing the barber names.
-		File file = new File("data/barbers.txt");
-		
-		try {
-			if(!file.exists()) // If the file does not exist, create a new one.
-				file.createNewFile();
-			
-			FileReader fr = new FileReader(file);
-			Scanner scanner = new Scanner(fr);
-			
-			String line = "";
-			
-			while(scanner.hasNext()) {
-				line = scanner.nextLine(); // Read 1 line of data.
-				
-				mBarbers.add(line);
-			}
-			
-			scanner.close();
-			
-		} catch (IOException e) {
-			System.out.println("Error, failed to create the file! " + e.getMessage());
-		}
-		
-		// Open a new file to get the appointments data.
-		file = new File("data/data.txt");
-		
-		try {
-			if(!file.exists()) // If the file does not exist, create a new one.
-				file.createNewFile();
-			
-			FileReader fr = new FileReader(file);
-			Scanner scanner = new Scanner(fr);
-			
-			String line = "";
-			
-			while(scanner.hasNext()) {
-				line = scanner.nextLine(); // Read 1 line of data.
-				
-				mBookings.add(new BookedTime(line));
-			}
-			
-			scanner.close();
-			
-		} catch (IOException e) {
-			System.out.println("Error, failed to create the file! " + e.getMessage());
-		}
 	}
 
 }

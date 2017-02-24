@@ -80,10 +80,15 @@ public class BookedTime implements Comparable{
 	
 	// Check weather the given time interval overlaps the booked one.
 	public boolean isOverlaping(String barber, ZonedDateTime start, ZonedDateTime end) {
-		if(mBarber.equals(barber) && ((start.isAfter(mStartTime) && start.isBefore(getEndTime())) || 
-				(end.isAfter(mStartTime) && end.isBefore(getEndTime()) || end.isEqual(mStartTime) || 
-						end.isEqual(getEndTime()) || start.isEqual(mStartTime) || start.isEqual(getEndTime()))))
-			return true;
+		if(mBarber.equalsIgnoreCase(barber))
+			if((start.isAfter(mStartTime) && start.isBefore(getEndTime())) || 
+				(end.isAfter(mStartTime) && end.isBefore(getEndTime())) || 
+				end.isEqual(mStartTime) || end.isEqual(getEndTime()) || 
+				start.isEqual(mStartTime) || start.isEqual(getEndTime()) ||
+				(mStartTime.isAfter(start) && mStartTime.isBefore(end)) || 
+				(getEndTime().isAfter(start) && getEndTime().isBefore(end))){
+				return true;
+			}
 		
 		return false;
 	}
@@ -111,8 +116,8 @@ public class BookedTime implements Comparable{
 	
 	public void save(BufferedWriter bw) {
 		try {
-		bw.append(mBarber + "," + mCustomer + "," + mStartTime.toString() + "," + mDuration.toMinutes() + "," + mRecurring);
-		bw.newLine();
+			bw.append(mBarber + "," + mCustomer + "," + mStartTime.toString() + "," + mDuration.toMinutes() + "," + mRecurring);
+			bw.newLine();
 		
 		} catch(IOException e) {
 			System.out.println("Error! " + e.getMessage());
