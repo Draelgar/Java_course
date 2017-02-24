@@ -18,7 +18,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Clock;
 import java.time.Duration;
-import java.time.LocalDateTime;
 
 public class BarberBookingSystem {
 	private SortedSet<BookedTime> mBookings; // A set of bookings.
@@ -38,10 +37,11 @@ public class BarberBookingSystem {
 		
 		mDisplayMode = DisplayMode.Day;
 		
-		Init();
+		init();
 	}
 	
-	private void Init() {
+	// Initialize the system.
+	private void init() {
 		// Add some default barbers.
 		load();
 		
@@ -59,10 +59,11 @@ public class BarberBookingSystem {
 		Clock localClock = Clock.system(localTimeZone.toZoneId()); // Get the current clock in local time.
 		ZonedDateTime localZdt = ZonedDateTime.now(localClock); // Convert the local time to a more suitable format.
 		
-		String time = localZdt.toLocalTime().toString();
-		time = time.substring(0, time.length() - 7);
+		String time = localZdt.toLocalTime().toString(); // Get the current local time as a string.
+		time = time.substring(0, time.length() - 7); // Cut seconds and milliseconds from the end.
 		System.out.println("Welcome to this barber booking system. " + localZdt.toLocalDate().toString() + ", " + time);
 		
+		// Start the program loop.
 		while(programMode >= 0)
 		{
 			switch(programMode) {
@@ -83,12 +84,12 @@ public class BarberBookingSystem {
 				}
 				case 3:
 				{
-					programMode = selectBarber();
+					programMode = selectBarber(); // Select active barber.
 					break;
 				}
 				case 4:
 				{
-					programMode = showFreeTime();
+					programMode = showFreeTime(); // Display times available for booking.
 					break;
 				}
 				default:
@@ -99,33 +100,31 @@ public class BarberBookingSystem {
 			}
 		}
 		
-		save();
+		save(); // Save the data before exiting.
 	}
 	
 	// Book a new time for the customer.
 	private int bookTime() {
 		boolean running = true, repeat = true;
 
-		@SuppressWarnings("resource")
+		@SuppressWarnings("resource") // Can not close scanner as that will also close the console input stream.
 		Scanner scanner = new Scanner(System.in);
 		
+		// Create and initialize variables to use.
 		String customer, barber = mCurrentBarber;
 		String response;
 		int year = -1, month = -1, day = -1, startH = -1, startM = -1, durationM = -1, recurring = 0;
-		
 		ZonedDateTime startTime;
 		ZonedDateTime newStartTime;
 		Duration duration;
-		
 		Calendar cal = Calendar.getInstance();
-		boolean leapyear = false;
 		
-		// Setting up the patterns.
+		// Setting up the patterns and creating the matcher.
 		Pattern patFour = Pattern.compile("(\\d{4})"), 
 				patTwo = Pattern.compile("(\\d{2})");
-		
 		Matcher m;
 		
+		// Start the loop.
 		while(running) {
 			System.out.println("What is your name?");
 			customer = scanner.nextLine();
@@ -148,8 +147,6 @@ public class BarberBookingSystem {
 				// Set the matcher to match for 4 numbers in a row.
 				m = patFour.matcher(response);
 				
-				LocalDateTime ldt;
-				
 				repeat = true;
 				
 				// Check for the year.
@@ -168,18 +165,17 @@ public class BarberBookingSystem {
 							day = Integer.parseInt(m.group(0));
 							
 							if(month >= 1 && month <= 12) {	// Is this a valid month?
-								ldt = LocalDateTime.of(1, month, 1, 1, 1, 0, 0);
+								cal.set(Calendar.YEAR, year);
+								cal.set(Calendar.MONTH, month);
 								
-								if(day >= 1 && day <= ldt.getMonth().length(false)) {
+								if(day >= 1 && day <= cal.getActualMaximum(Calendar.DAY_OF_MONTH)) { // Is this a valid day of the month?
 									System.out.println(year + "-" + month + "-" + day);
 									repeat = false;
 								}
 								else {
-									cal.set(Calendar.YEAR, year);
-									leapyear = cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
 									
 									System.out.println(day + " is not a valid day! Only values between 01 and " + 
-																			ldt.getMonth().length(leapyear) +" is accepted!");
+											cal.getActualMaximum(Calendar.DAY_OF_MONTH) +" is accepted!");
 									day = -1;
 									repeat = true;
 								}
@@ -322,6 +318,7 @@ public class BarberBookingSystem {
 				if(!repeat) {
 					mBookings.add(new BookedTime(startTime, duration, customer, barber, recurring));
 					
+					// If recurring, add the remaining bookings for the whole year.
 					if(recurring > 0) {
 						newStartTime = startTime;
 						while(newStartTime.getYear() == startTime.getYear()) {
@@ -340,49 +337,49 @@ public class BarberBookingSystem {
 		return 0;
 	}
 	
-	@SuppressWarnings("unused")
+	// Display the menu.
 	private int menu() {
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		
 		String response = "";
 		
+		// Display the options available.
 		System.out.println("What do you wish to do?\n-See current bookings (c)\n-See available time (a)\n" +
 				"-Book a new time (b)\n-Exit (exit)\n" + 
 				"-Select barber (s)\nYou can cancel at any time and go back here by typing (cancel)");
 		
+		// Wait for input.
 		response = scanner.nextLine();
 		response = response.toLowerCase();
 		
+		// Translate the input.
 		if(response.length() > 0) {
-			for(int i = 0; i < response.length(); i++) {
-				if(response.startsWith("c")) {
-					setDisplayMode();
-					return 2;
-				}
-				else if(response.startsWith("a")) {
-					setDisplayMode();
-					return 4;
-				}
-				else if(response.startsWith("b")) {
-					return 1;
-				}
-				else if(response.startsWith("s")) {
-					return 3;
-				}
-				else if(response.equals("exit")) {
-					return -1;
-				}
-				else {
-					System.out.println("Invalid data, try again!");
-					return 0;
-				}
+			if(response.startsWith("c")) {
+				setDisplayMode();
+				return 2;
+			}
+			else if(response.startsWith("a")) {
+				setDisplayMode();
+				return 4;
+			}
+			else if(response.startsWith("b")) {
+				return 1;
+			}
+			else if(response.startsWith("s")) {
+				return 3;
+			}
+			else if(response.equals("exit")) {
+				return -1;
 			}
 		}
 		
+		// No valid option.
+		System.out.println(response + " is no valid option, try again!");
 		return 0;
 	}
 	
+	// Set the flag deciding weather the display limit is a day, a week, a month or a year. 
 	private void setDisplayMode() {
 		boolean repeat = true;
 		@SuppressWarnings("resource")
@@ -422,9 +419,12 @@ public class BarberBookingSystem {
 		}
 	}
 	
+	// Call isIncluded with default value.
 	private boolean isIncluded(ZonedDateTime zdt) {
 		return isIncluded(zdt, -1);
 	}
+	
+	// Check weather the given time is included in the limit.
  	private boolean isIncluded(ZonedDateTime zdt, int i)
 	{
 		ZonedDateTime time = ZonedDateTime.now(zdt.getZone()); // Get the current time for this zone ID.
@@ -501,6 +501,7 @@ public class BarberBookingSystem {
 		return false;
 	}
 	
+ 	// Display the booked appointments for the given display limit.
 	private int displayBookings(DisplayMode display) {
 		
 		if(mBookings.size() > 0)
@@ -525,14 +526,17 @@ public class BarberBookingSystem {
 		return 0;
 	}
 	
+	// Add a new barber to the list.
 	public void addBarber(String barber) {
 		mBarbers.add(barber);
 	}
 	
+	// Remove a barber from the list.
 	public void removeBarber(String barber) {
 		mBarbers.remove(barber);
 	}
 	
+	// Select an available barber.
 	public int selectBarber() {
 		boolean repeat = true;
 		
@@ -579,30 +583,28 @@ public class BarberBookingSystem {
 		return 0;
 	}
 	
+	// Show available times for the currently selected barber.
 	private int showFreeTime() {
 		
 		System.out.print("Current unbooked time for " + mCurrentBarber + ":\n");
 		
 		ZonedDateTime zdt = ZonedDateTime.now();
 		Calendar cal = Calendar.getInstance();
-		
+
 		int limit = 1;
 		if(mDisplayMode == DisplayMode.Week)
-			limit = 7 - zdt.getDayOfWeek().getValue();
+			limit = 7 - cal.get(Calendar.DAY_OF_WEEK);
 		else if(mDisplayMode == DisplayMode.Month)
-			limit = zdt.getMonth().length(cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365) - zdt.getDayOfMonth();
+			limit = cal.getActualMaximum(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_MONTH);
 		else if(mDisplayMode == DisplayMode.Year) {
-			if(cal.getActualMaximum(Calendar.DAY_OF_YEAR) == 365)
-				limit = 365 - zdt.getDayOfYear();
-			else
-				limit = 366 - zdt.getDayOfYear();
+			limit = cal.getActualMaximum(Calendar.DAY_OF_YEAR) - cal.get(Calendar.DAY_OF_YEAR);
 		}
 		
 		mDisplayMode = DisplayMode.Day;
 		
 		for(int i = 0; i < limit; i++) {
 			// Assuming the list is in order.
-			System.out.print(zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() + " " + zdt.getMonth() + " " + zdt.getYear() + "\n08:00 - ");
+			System.out.print(zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() + " " + zdt.getMonth().toString() + " " + zdt.getYear() + "\n08:00 - ");
 			
 			Iterator<BookedTime> it = mBookings.iterator();
 			
@@ -626,6 +628,7 @@ public class BarberBookingSystem {
 		return 0;
 	}
 	
+	// Save the data.
 	private void save() {
 		
 		File file = new File("data/data.txt");
@@ -651,7 +654,9 @@ public class BarberBookingSystem {
 		
 	}
 	
+	// Load the data.
 	private void load() {
+		// Open the file containing the barber names.
 		File file = new File("data/barbers.txt");
 		
 		try {
@@ -675,6 +680,7 @@ public class BarberBookingSystem {
 			System.out.println("Error, failed to create the file! " + e.getMessage());
 		}
 		
+		// Open a new file to get the appointments data.
 		file = new File("data/data.txt");
 		
 		try {
