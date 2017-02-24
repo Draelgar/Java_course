@@ -11,6 +11,7 @@ public class BookedTime implements Comparable{
 	private Duration mDuration;
 	private String mCustomer;
 	private String mBarber;
+	private int mRecurring;
 	
 	public BookedTime() {
 		mStartTime = ZonedDateTime.now();
@@ -18,13 +19,27 @@ public class BookedTime implements Comparable{
 
 		mCustomer = "None";
 		mBarber = "None";
+		mRecurring = 0;
 	}
 	
-	public BookedTime(ZonedDateTime start, Duration duration, String customer, String barber) {
+	// Create a new BookedTime object from a data string.
+	public BookedTime(String data) {
+		String[] sarr = data.split(",");
+		
+		mBarber = sarr[0];
+		mCustomer = sarr[1];
+		mStartTime = ZonedDateTime.parse(sarr[2]);
+		mDuration = Duration.ofMinutes(Integer.parseInt(sarr[3]));
+		mRecurring = Integer.parseInt(sarr[4]);
+	}
+	
+	public BookedTime(ZonedDateTime start, Duration duration, String customer, String barber, int recurring) {
 		mStartTime = start;
 		mDuration = duration;
 		mCustomer = customer;
 		mBarber = barber;
+		
+		mRecurring = recurring;
 	}
 	
 	public void setTimeInterval(ZonedDateTime start, Duration duration) {
@@ -96,7 +111,7 @@ public class BookedTime implements Comparable{
 	
 	public void save(BufferedWriter bw) {
 		try {
-		bw.append(mBarber + "," + mCustomer + "," + mStartTime.toString() + "," + mDuration.toMinutes());
+		bw.append(mBarber + "," + mCustomer + "," + mStartTime.toString() + "," + mDuration.toMinutes() + "," + mRecurring);
 		bw.newLine();
 		
 		} catch(IOException e) {

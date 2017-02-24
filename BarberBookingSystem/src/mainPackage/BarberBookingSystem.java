@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Clock;
@@ -37,11 +38,17 @@ public class BarberBookingSystem {
 		
 		mDisplayMode = DisplayMode.Day;
 		
+		Init();
+	}
+	
+	private void Init() {
 		// Add some default barbers.
-		mBarbers.add("Lena");
-		mBarbers.add("Olof");
+		load();
 		
-		mCurrentBarber = "Lena";
+		if(mBarbers.size() <= 0)
+			mBarbers.add("Barber");
+			
+		mCurrentBarber = mBarbers.iterator().next();
 	}
 	
 	// Run the application loop.
@@ -104,10 +111,14 @@ public class BarberBookingSystem {
 		
 		String customer, barber = mCurrentBarber;
 		String response;
-		int year = -1, month = -1, day = -1, startH = -1, startM = -1, durationM = -1;
+		int year = -1, month = -1, day = -1, startH = -1, startM = -1, durationM = -1, recurring = 0;
 		
 		ZonedDateTime startTime;
+		ZonedDateTime newStartTime;
 		Duration duration;
+		
+		Calendar cal = Calendar.getInstance();
+		boolean leapyear = false;
 		
 		// Setting up the patterns.
 		Pattern patFour = Pattern.compile("(\\d{4})"), 
@@ -164,8 +175,11 @@ public class BarberBookingSystem {
 									repeat = false;
 								}
 								else {
+									cal.set(Calendar.YEAR, year);
+									leapyear = cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
+									
 									System.out.println(day + " is not a valid day! Only values between 01 and " + 
-																			ldt.getMonth().length(false) +" is accepted!");
+																			ldt.getMonth().length(leapyear) +" is accepted!");
 									day = -1;
 									repeat = true;
 								}
@@ -253,6 +267,19 @@ public class BarberBookingSystem {
 							if(startM >= 0 && startM <= 59) { // Is this a valid minute?
 								System.out.println(startH + ":" + startM);
 								repeat = false;
+								
+								System.out.println("Do you want this to be a recurring appointment? Type time intervall in weeks (0 = not recurring)");
+								response = scanner.nextLine().toLowerCase();
+								
+								if(response.equals("cancel"))
+									return 0;
+									
+								try{
+									recurring = Integer.parseInt(response);
+								} catch(Exception e) {
+									recurring = 0;
+								}
+								
 							}
 							else {
 								System.out.println(startM + " is not accepted! Only hours between 8 and 18 can be booked!");
@@ -293,7 +320,15 @@ public class BarberBookingSystem {
 				}
 				// Was the time acceptable?
 				if(!repeat) {
-					mBookings.add(new BookedTime(startTime, duration, customer, barber));
+					mBookings.add(new BookedTime(startTime, duration, customer, barber, recurring));
+					
+					if(recurring > 0) {
+						newStartTime = startTime;
+						while(newStartTime.getYear() == startTime.getYear()) {
+							newStartTime = newStartTime.plusWeeks(recurring);
+							mBookings.add(new BookedTime(newStartTime, duration, customer, barber, recurring));
+						}
+					}
 					
 					System.out.println("Appointment booked successfully!");
 					running = false;
@@ -387,12 +422,19 @@ public class BarberBookingSystem {
 		}
 	}
 	
- 	private boolean isIncluded(ZonedDateTime zdt)
+	private boolean isIncluded(ZonedDateTime zdt) {
+		return isIncluded(zdt, -1);
+	}
+ 	private boolean isIncluded(ZonedDateTime zdt, int i)
 	{
 		ZonedDateTime time = ZonedDateTime.now(zdt.getZone()); // Get the current time for this zone ID.
 		ZonedDateTime limit;
 		
 		int utcInt, zdtInt;
+		
+		if(i >= 0) {
+			time = time.plusDays(i);
+		}
 		
 		switch(mDisplayMode) {
 			case Day:
@@ -541,24 +583,45 @@ public class BarberBookingSystem {
 		
 		System.out.print("Current unbooked time for " + mCurrentBarber + ":\n");
 		
-		// Assuming the list is in order.
-		System.out.print("08:00 - ");
+		ZonedDateTime zdt = ZonedDateTime.now();
+		Calendar cal = Calendar.getInstance();
 		
-		Iterator<BookedTime> it = mBookings.iterator();
-		
-		while(it.hasNext()) {
-			BookedTime booking = it.next();
-			if(booking.getBarber().equals(mCurrentBarber))	
-				if(isIncluded(booking.getStartTime()) || isIncluded(booking.getEndTime())) {
-					
-					// Assuming the list is in order.
-					System.out.println(booking.getStartTime().minusMinutes(1).toLocalTime().toString());
-					System.out.print(booking.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ");
-					
-				}
+		int limit = 1;
+		if(mDisplayMode == DisplayMode.Week)
+			limit = 7 - zdt.getDayOfWeek().getValue();
+		else if(mDisplayMode == DisplayMode.Month)
+			limit = zdt.getMonth().length(cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365) - zdt.getDayOfMonth();
+		else if(mDisplayMode == DisplayMode.Year) {
+			if(cal.getActualMaximum(Calendar.DAY_OF_YEAR) == 365)
+				limit = 365 - zdt.getDayOfYear();
+			else
+				limit = 366 - zdt.getDayOfYear();
 		}
 		
-		System.out.println("18:00");
+		mDisplayMode = DisplayMode.Day;
+		
+		for(int i = 0; i < limit; i++) {
+			// Assuming the list is in order.
+			System.out.print(zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() + " " + zdt.getMonth() + " " + zdt.getYear() + "\n08:00 - ");
+			
+			Iterator<BookedTime> it = mBookings.iterator();
+			
+			while(it.hasNext()) {
+				BookedTime booking = it.next();
+				if(booking.getBarber().equals(mCurrentBarber))	
+					if(isIncluded(booking.getStartTime(), i) || isIncluded(booking.getEndTime(), i)) {
+						
+						// Assuming the list is in order.
+						System.out.println(booking.getStartTime().minusMinutes(1).toLocalTime().toString());
+						System.out.print(booking.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ");
+						
+					}
+			}
+			
+			zdt = zdt.plusDays(1);
+			
+			System.out.println("18:00");
+		}
 		
 		return 0;
 	}
@@ -586,6 +649,54 @@ public class BarberBookingSystem {
 			System.out.println("Error, failed to create the file! " + e.getMessage());
 		}
 		
+	}
+	
+	private void load() {
+		File file = new File("data/barbers.txt");
+		
+		try {
+			if(!file.exists()) // If the file does not exist, create a new one.
+				file.createNewFile();
+			
+			FileReader fr = new FileReader(file);
+			Scanner scanner = new Scanner(fr);
+			
+			String line = "";
+			
+			while(scanner.hasNext()) {
+				line = scanner.nextLine(); // Read 1 line of data.
+				
+				mBarbers.add(line);
+			}
+			
+			scanner.close();
+			
+		} catch (IOException e) {
+			System.out.println("Error, failed to create the file! " + e.getMessage());
+		}
+		
+		file = new File("data/data.txt");
+		
+		try {
+			if(!file.exists()) // If the file does not exist, create a new one.
+				file.createNewFile();
+			
+			FileReader fr = new FileReader(file);
+			Scanner scanner = new Scanner(fr);
+			
+			String line = "";
+			
+			while(scanner.hasNext()) {
+				line = scanner.nextLine(); // Read 1 line of data.
+				
+				mBookings.add(new BookedTime(line));
+			}
+			
+			scanner.close();
+			
+		} catch (IOException e) {
+			System.out.println("Error, failed to create the file! " + e.getMessage());
+		}
 	}
 
 }
