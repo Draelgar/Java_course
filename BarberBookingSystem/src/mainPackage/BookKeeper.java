@@ -165,25 +165,27 @@ public class BookKeeper {
 	
  	// Display the booked appointments for the given display limit.
 	public int displayBookings(DisplayMode display) {
+		String text = "";
 		
 		if(mBookings.size() > 0)
 		{
-			System.out.print("Current appointment for this " + display.toString() + " for " + mCurrentBarber + ":\n");
+			text = "Current appointment for this " + display.toString() + " for " + mCurrentBarber + ":\n\n";
 			
 			Iterator<BookedTime> it = mBookings.iterator();
 			while(it.hasNext()) {
 				BookedTime booking = it.next();
 				if(booking.getBarber().equals(mCurrentBarber))	
 					if(isIncluded(booking.getStartTime(), display) || isIncluded(booking.getEndTime(), display)) {
-						booking.print();
-						System.out.println(); // Add an extra empty row.
+						text += booking.print() + "\n";
 					}
 			}
 		}
 		else
 		{
-			System.out.println("There are no current bookings for " + mCurrentBarber + ".");
+			text = "There are no current bookings for " + mCurrentBarber + ".\n";
 		}
+		
+		System.out.print(text);
 		
 		return 0;
 	}

@@ -102,16 +102,19 @@ public class BookedTime implements Comparable{
 			return 1;
 	}
 	
-	public void print() {
-		System.out.println("Date: " + mStartTime.toLocalDate().toString());
-		System.out.println("Barber: " + mBarber);
-		System.out.println("Customer: " + mCustomer);
+	public String print() {
+		
+		String text = "Date: " + mStartTime.toLocalDate().toString() + "\n";
+		text += "Barber: " + mBarber + "\n";
+		text += "Customer: " + mCustomer + "\n";
 		
 		// Convert time to a string representation.
 		String start = mStartTime.toLocalTime().toString().substring(0);
 		String end = getEndTime().toLocalTime().toString().substring(0);
 		
-		System.out.println("Time: " + start + " - " + end);
+		text += "Time: " + start + " - " + end + "\n";
+		
+		return text;
 	}
 	
 	public void save(BufferedWriter bw) {
