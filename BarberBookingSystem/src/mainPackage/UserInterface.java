@@ -1,58 +1,29 @@
 package mainPackage;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TimeZone;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.time.Clock;
-import java.time.Duration;
 
-public class BarberBookingSystem {
-	private SortedSet<BookedTime> mBookings; // A set of bookings.
-	private Set<String> mBarbers; // A set of available barbers.
+public class UserInterface {
 	private DisplayMode mDisplayMode; // Determines which bookings that should be displayed.
-	private String mCurrentBarber; // The currently used barber.
-	
-	public static void main(String[] args) {
-		BarberBookingSystem bbs = new BarberBookingSystem();
-		bbs.run();
-	}
+	private BookKeeper mBookKeeper;
+	private String mBarber;
 	
 	// Default constructor.
-	public BarberBookingSystem() {
-		mBookings = new TreeSet<BookedTime>();
-		mBarbers = new HashSet<String>();
-		
+	public UserInterface() {		
 		mDisplayMode = DisplayMode.Day;
+		mBookKeeper = new BookKeeper();
+		mBarber = mBookKeeper.getBarber();
 		
-		init();
-	}
-	
-	// Initialize the system.
-	private void init() {
-		// Add some default barbers.
-		FileHandler.load(mBarbers, mBookings);
-		
-		if(mBarbers.size() <= 0)
-			mBarbers.add("Barber");
-			
-		mCurrentBarber = mBarbers.iterator().next();
 	}
 	
 	// Run the application loop.
 	public void run() {
 		int programMode = 0;
-		
-		TimeZone localTimeZone = Calendar.getInstance().getTimeZone(); // Get the local time zone.
-		Clock localClock = Clock.system(localTimeZone.toZoneId()); // Get the current clock in local time.
-		ZonedDateTime localZdt = ZonedDateTime.now(localClock); // Convert the local time to a more suitable format.
+		ZonedDateTime localZdt = ZonedDateTime.now(); // Convert the local time to a more suitable format.
 		
 		String time = localZdt.toLocalTime().toString(); // Get the current local time as a string.
 		time = time.substring(0, time.length() - 7); // Cut seconds and milliseconds from the end.
@@ -95,7 +66,7 @@ public class BarberBookingSystem {
 			}
 		}
 		
-		FileHandler.save(mBookings); // Save the data before exiting.
+		mBookKeeper.save();
 	}
 	
 	// Book a new time for the customer.
@@ -106,11 +77,10 @@ public class BarberBookingSystem {
 		Scanner scanner = new Scanner(System.in);
 		
 		// Create and initialize variables to use.
-		String customer, barber = mCurrentBarber;
+		String customer;
 		String response;
 		int year = -1, month = -1, day = -1, startH = -1, startM = -1, durationM = -1, recurring = 0;
 		ZonedDateTime startTime;
-		ZonedDateTime newStartTime;
 		Duration duration;
 		Calendar cal = Calendar.getInstance();
 		
@@ -301,40 +271,19 @@ public class BarberBookingSystem {
 				// Combine the data into a single ZonedDateTime object.
 				startTime = ZonedDateTime.of(year, month, day, startH, startM, 0, 0, Calendar.getInstance().getTimeZone().toZoneId());
 				
-				repeat = false; // Everything looks okay so far.
+				BookedTime bt = new BookedTime(startTime, duration, customer, mBarber, recurring);
 				
-				// Loop through the list.
-				Iterator<BookedTime> it = mBookings.iterator();
-				
-				while(it.hasNext()) {
-					BookedTime b = it.next();
-					
-					// Check for overlaps!
-					if(b.isOverlaping(mCurrentBarber, startTime, startTime.plusMinutes(duration.toMinutes()))) {
-						System.out.println("The selected time is already in use!");
-						repeat = true;
-						break;
-					}
-				}
+				repeat = mBookKeeper.checkOverlaps(bt);
+						
 				// Was the time acceptable?
 				if(!repeat) {
-					mBookings.add(new BookedTime(startTime, duration, customer, barber, recurring));
-					
-					// If recurring, add the remaining bookings for the whole year.
-					if(recurring > 0) {
-						newStartTime = startTime;
-						while(newStartTime.getYear() == startTime.getYear()) {
-							newStartTime = newStartTime.plusWeeks(recurring);
-							mBookings.add(new BookedTime(newStartTime, duration, customer, barber, recurring));
-						}
-					}
-					
-					System.out.println("Appointment booked successfully!");
-					running = false;
+					running = !mBookKeeper.bookTime(bt);
 				}
 			}
 			
 		}
+		
+		System.out.println("Appointment successfully booked!");
 		
 		return 0;
 	}
@@ -421,166 +370,47 @@ public class BarberBookingSystem {
 		}
 	}
 	
-	// Call isIncluded with default value.
-	private boolean isIncluded(ZonedDateTime zdt) {
-		return isIncluded(zdt, -1);
-	}
-	
-	// Check weather the given time is included in the limit.
- 	private boolean isIncluded(ZonedDateTime zdt, int i)
-	{
-		ZonedDateTime time = ZonedDateTime.now(zdt.getZone()); // Get the current time for this zone ID.
-		ZonedDateTime limit;
-		
-		int utcInt, zdtInt;
-		
-		if(i >= 0) {
-			time = time.plusDays(i);
-		}
-		
-		switch(mDisplayMode) {
-			case Day:
-			{
-				utcInt = time.getYear();
-				zdtInt = zdt.getYear();
-				if(utcInt == zdtInt) {
-					utcInt = time.getMonthValue();
-					zdtInt = zdt.getMonthValue();
-					if(utcInt == zdtInt) {
-						utcInt = time.getDayOfMonth();
-						zdtInt = zdt.getDayOfMonth();
-						if(utcInt == zdtInt)
-							return true;
-					}
-				}
-				break;
-			}
-			case Week:
-			{
-				utcInt = time.getYear();
-				zdtInt = zdt.getYear();
-				if(utcInt == zdtInt) {
-					utcInt = time.getMonthValue();
-					zdtInt = zdt.getMonthValue();
-					if(utcInt == zdtInt) {
-						// Calculate the time by the end of the the current week.
-						limit = time.plusDays(7 - time.getDayOfWeek().getValue());
-
-						// Is the booked time after the current day and on the same week?
-						if(zdt.isBefore(limit) && zdt.isAfter(time))
-							return true;
-					}
-				}
-				break;
-			}
-			case Month:
-			{
-				utcInt = time.getYear();
-				zdtInt = zdt.getYear();
-				if(utcInt == zdtInt) {
-					utcInt = time.getMonthValue();
-					zdtInt = zdt.getMonthValue();
-					if(utcInt == zdtInt)
-						return true;
-				}
-				break;
-			}
-			case Year:
-			{
-				utcInt = time.getYear();
-				zdtInt = zdt.getYear();
-				if(utcInt == zdtInt)
-					return true;
-				break;
-			}
-			default:
-			{
-				// Something went wrong, do nothing
-				break;
-			}
-		}
-		
-		return false;
-	}
-	
  	// Display the booked appointments for the given display limit.
 	private int displayBookings(DisplayMode display) {
 		
-		if(mBookings.size() > 0)
-		{
-			System.out.print("Current appointment for this " + mDisplayMode.toString() + " for " + mCurrentBarber + ":\n");
-			
-			Iterator<BookedTime> it = mBookings.iterator();
-			while(it.hasNext()) {
-				BookedTime booking = it.next();
-				if(booking.getBarber().equals(mCurrentBarber))	
-					if(isIncluded(booking.getStartTime()) || isIncluded(booking.getEndTime())) {
-						booking.print();
-						System.out.println(); // Add an extra empty row.
-					}
-			}
-		}
-		else
-		{
-			System.out.println("There are no current bookings.");
-		}
+		mBookKeeper.displayBookings(display);
 		
 		return 0;
 	}
 	
 	// Add a new barber to the list.
 	public void addBarber(String barber) {
-		mBarbers.add(barber);
+		mBookKeeper.addBarber(barber);
 	}
 	
 	// Remove a barber from the list.
 	public void removeBarber(String barber) {
-		mBarbers.remove(barber);
+		mBookKeeper.removeBarber(barber);
 	}
 	
 	// Select an available barber.
 	public int selectBarber() {
-		boolean repeat = true;
+		System.out.println("These are the barbers that work here:");
 		
-		while(repeat) {
-			System.out.println("These are the barbers that work here:");
+		mBookKeeper.listBarbers();
+		
+		System.out.println("\nWhich one do you pick?");
 			
-			Iterator<String> it = mBarbers.iterator();
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
+		
+		String barber = scanner.nextLine();
 			
-			while(it.hasNext()) {
-				System.out.println("\t-" + it.next());
-			}
-			
-			System.out.println("\nWhich one do you pick?");
-			
-			@SuppressWarnings("resource")
-			Scanner scanner = new Scanner(System.in);
-			
-			String barber = scanner.nextLine();
-			barber = barber.toLowerCase();
-			
-			if(barber.equals("cancel")) {
-				repeat = false;
-				break;
-			}
-			
-			it = mBarbers.iterator();
-			
-			while(it.hasNext()) {
-				String name = it.next();
-				
-				if(name.toLowerCase().equals(barber)) {
-					mCurrentBarber = name;
-					System.out.println(mCurrentBarber + " is now the active barber.");
-					
-					repeat = false;
-				}
-			}
-			
-			if(!mCurrentBarber.toLowerCase().equals(barber)) {
-				System.out.println("Barber does not exist! Going with " + mCurrentBarber + " instead!");
-			}
+		if(barber.equalsIgnoreCase("cancel")) {
+			return 0;
 		}
+			
+		if(mBookKeeper.selectBarber(barber))
+			System.out.println(mBookKeeper.getBarber() + " is now the active barber.");
+		else
+			System.out.println("Barber does not exist! Going with " + mBookKeeper.getBarber() + " instead!");
+		
+		mBarber = mBookKeeper.getBarber();
 		
 		return 0;
 	}
@@ -588,46 +418,10 @@ public class BarberBookingSystem {
 	// Show available times for the currently selected barber.
 	private int showFreeTime() {
 		
-		System.out.print("Current unbooked time for " + mCurrentBarber + ":\n");
+		System.out.print("Current unbooked time for " + mBookKeeper.getBarber() + ":\n");
 		
-		ZonedDateTime zdt = ZonedDateTime.now();
-		Calendar cal = Calendar.getInstance();
-
-		int limit = 1;
-		if(mDisplayMode == DisplayMode.Week)
-			limit = 7 - cal.get(Calendar.DAY_OF_WEEK);
-		else if(mDisplayMode == DisplayMode.Month)
-			limit = cal.getActualMaximum(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_MONTH);
-		else if(mDisplayMode == DisplayMode.Year) {
-			limit = cal.getActualMaximum(Calendar.DAY_OF_YEAR) - cal.get(Calendar.DAY_OF_YEAR);
-		}
-		
-		mDisplayMode = DisplayMode.Day;
-		
-		for(int i = 0; i < limit; i++) {
-			// Assuming the list is in order.
-			System.out.print(zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() + " " + zdt.getMonth().toString() + " " + zdt.getYear() + "\n08:00 - ");
-			
-			Iterator<BookedTime> it = mBookings.iterator();
-			
-			while(it.hasNext()) {
-				BookedTime booking = it.next();
-				if(booking.getBarber().equals(mCurrentBarber))	
-					if(isIncluded(booking.getStartTime(), i) || isIncluded(booking.getEndTime(), i)) {
-						
-						// Assuming the list is in order.
-						System.out.println(booking.getStartTime().minusMinutes(1).toLocalTime().toString());
-						System.out.print(booking.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ");
-						
-					}
-			}
-			
-			zdt = zdt.plusDays(1);
-			
-			System.out.println("18:00");
-		}
+		mBookKeeper.showFreeTime(mDisplayMode);
 		
 		return 0;
 	}
-
 }

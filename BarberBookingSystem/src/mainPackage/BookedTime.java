@@ -55,6 +55,10 @@ public class BookedTime implements Comparable{
 		mCustomer = customer;
 	}
 	
+	public int getRecurring() {
+		return mRecurring;
+	}
+	
 	public ZonedDateTime getStartTime() {
 		return mStartTime;
 	}
@@ -81,14 +85,10 @@ public class BookedTime implements Comparable{
 	// Check weather the given time interval overlaps the booked one.
 	public boolean isOverlaping(String barber, ZonedDateTime start, ZonedDateTime end) {
 		if(mBarber.equalsIgnoreCase(barber))
-			if((start.isAfter(mStartTime) && start.isBefore(getEndTime())) || 
-				(end.isAfter(mStartTime) && end.isBefore(getEndTime())) || 
-				end.isEqual(mStartTime) || end.isEqual(getEndTime()) || 
-				start.isEqual(mStartTime) || start.isEqual(getEndTime()) ||
-				(mStartTime.isAfter(start) && mStartTime.isBefore(end)) || 
-				(getEndTime().isAfter(start) && getEndTime().isBefore(end))){
+			if(start.isAfter(getEndTime()) || end.isBefore(mStartTime))
+				return false;
+			else
 				return true;
-			}
 		
 		return false;
 	}
