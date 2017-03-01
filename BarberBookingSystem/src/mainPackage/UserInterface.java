@@ -348,7 +348,7 @@ public class UserInterface {
 									
 								try{
 									recurring = Integer.parseInt(response);
-								} catch(Exception e) {
+								} catch(NumberFormatException e) {
 									recurring = 0;
 								}
 								

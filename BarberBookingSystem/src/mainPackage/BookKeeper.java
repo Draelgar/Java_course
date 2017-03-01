@@ -28,6 +28,8 @@ public class BookKeeper {
 		FileHandler.loadStaff(mBarbers, "data/barbers.txt");
 		FileHandler.load(mBookings, "data/data.txt");
 		
+		assert (mBookings != null); // Assume that the set isn't null!
+		
 		if(mBarbers.size() <= 0)
 			mBarbers.add("Barber");
 			
@@ -51,6 +53,7 @@ public class BookKeeper {
 		if(checkOverlaps(bt))
 			return false;
 		
+		assert (mBookings != null); // Assume that the set isn't null!
 		mBookings.add(bt);
 		
 		ZonedDateTime zdt = bt.getStartTime().plusWeeks(bt.getRecurring());
@@ -252,9 +255,7 @@ public class BookKeeper {
 		}
 		
 		for(int i = 0; i < limit; i++) {
-			// Assuming the list is in order.
-			System.out.print(zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() + " " + zdt.getMonth().toString() + " " + zdt.getYear() + "\n08:00 - ");
-			
+			System.out.print(zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() + " " + zdt.getMonth().toString() + " " + zdt.getYear() + "\n08:00 - ");		
 			Iterator<BookedTime> it = mBookings.iterator();
 			
 			while(it.hasNext()) {
