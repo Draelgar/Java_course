@@ -265,6 +265,8 @@ public class UserInterface {
 					}
 				}
 				
+				repeat = false;
+				
 				if(day == -1)
 				{
 					System.out.println("The date format was incorrect or the date lies in the past, please try again!");
