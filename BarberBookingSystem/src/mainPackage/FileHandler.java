@@ -1,86 +1,97 @@
 package mainPackage;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.Set;
 
 public class FileHandler {
 		// Save the data.
-		public static void save(Set<BookedTime> bookings) {
-			File file = new File("data/data.txt");
+		public static void save(Set<BookedTime> bookings, String path) throws IOException {
+			File file = new File(path);
+			FileWriter fw = null;
+			BufferedWriter bw = null;
 			
 			try {
 				if(!file.exists()) // If the file does not exist, create a new one.
 					file.createNewFile();
 				
-				FileWriter fw = new FileWriter(file);
-				BufferedWriter bw = new BufferedWriter(fw);
+				fw = new FileWriter(file); // Create the file writer and link it to the file.
+				bw = new BufferedWriter(fw); // Connect the file writer with the buffered writer.
 				
 				bw.write(""); // Overwrite the old data.
 				
+				// Save all booked appointments to the file.
 				for(BookedTime bt : bookings) {
 					bt.save(bw);
 				}
 				
-				bw.close();
-				
 			} catch (IOException e) {
-				System.out.println("Error, failed to create the file! " + e.getMessage());
-			}		
+				throw e;
+			} finally {
+				if(bw != null)
+					bw.close(); // Close the file.
+			}
+		}
+		
+		public static void loadStaff(Set<String> barbers, String path) throws IOException {
+			// Open the file containing the barber names.
+			File file = new File(path);
+			FileReader fr = null;
+			BufferedReader br = null;
+			
+			try {
+				fr = new FileReader(file);
+				br = new BufferedReader(fr);
+				
+				String line = "";
+
+				do {
+					line = br.readLine(); // Read 1 line of data.
+					
+					if(line != null)
+						barbers.add(line);
+					
+				} while(line != null);
+			} catch (IOException e) {
+				throw e;
+			}
+			finally {
+				if(br != null)
+					br.close();
+			}
 		}
 		
 		// Load the data.
-		public static void load(Set<String> barbers, Set<BookedTime> bookings) {
-			// Open the file containing the barber names.
-			File file = new File("data/barbers.txt");
-			
-			try {
-				if(!file.exists()) // If the file does not exist, create a new one.
-					file.createNewFile();
-				
-				FileReader fr = new FileReader(file);
-				Scanner scanner = new Scanner(fr);
-				
-				String line = "";
-				
-				while(scanner.hasNext()) {
-					line = scanner.nextLine(); // Read 1 line of data.
-					
-					barbers.add(line);
-				}
-				
-				scanner.close();
-				
-			} catch (IOException e) {
-				System.out.println("Error, failed to create the file! " + e.getMessage());
-			}
-			
+		public static void load(Set<BookedTime> bookings, String path) throws IOException{
 			// Open a new file to get the appointments data.
-			file = new File("data/data.txt");
+			File file = new File(path);
+			BufferedReader br = null;
+			FileReader fr = null;
 			
 			try {
-				if(!file.exists()) // If the file does not exist, create a new one.
-					file.createNewFile();
 				
-				FileReader fr = new FileReader(file);
-				Scanner scanner = new Scanner(fr);
+				fr = new FileReader(file);
+				br = new BufferedReader(fr);
 				
 				String line = "";
 				
-				while(scanner.hasNext()) {
-					line = scanner.nextLine(); // Read 1 line of data.
+				do {
+					line = br.readLine(); // Read 1 line of data.
 					
-					bookings.add(new BookedTime(line));
-				}
-				
-				scanner.close();
+					if(line != null)
+						bookings.add(new BookedTime(line));
+					
+				} while(line != null);
 				
 			} catch (IOException e) {
-				System.out.println("Error, failed to create the file! " + e.getMessage());
+				throw e;
+			} finally {
+				if(br != null)
+					br.close();
 			}
 		}
 }

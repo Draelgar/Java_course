@@ -1,5 +1,6 @@
 package mainPackage;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ public class BookKeeper {
 	private Set<String> mBarbers; // A set of available barbers.
 	private String mCurrentBarber; // The currently used barber.
 	
-	BookKeeper() {
+	BookKeeper() throws IOException{
 		mBookings = new TreeSet<BookedTime>();
 		mBarbers = new HashSet<String>();
 		
@@ -21,18 +22,23 @@ public class BookKeeper {
 	}
 	
 	// Initialize the system.
-	private void init() {
+	private void init() throws IOException{
 		// Add some default barbers.
-		FileHandler.load(mBarbers, mBookings);
+		FileHandler.loadStaff(mBarbers, "data/barbers.txt");
+		FileHandler.load(mBookings, "data/data.txt");
 		
 		if(mBarbers.size() <= 0)
 			mBarbers.add("Barber");
 			
 		mCurrentBarber = mBarbers.iterator().next();
 	}
+	
+	public void load(String path) throws IOException {
+		FileHandler.load(mBookings, path);
+	}
 
-	public void save() {
-		FileHandler.save(mBookings);
+	public void save(String path) throws IOException{
+		FileHandler.save(mBookings, path);
 	}
 	
 	public String getBarber() {

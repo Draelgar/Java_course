@@ -96,10 +96,19 @@ public class BookedTime implements Comparable{
 	public int compareTo(Object o) {
 		
 		BookedTime bt = (BookedTime)o;
-		if(bt.getStartTime().isAfter(mStartTime))
-			return -1;
-		else
-			return 1;
+		int barb = mBarber.compareToIgnoreCase(bt.mBarber);
+		
+		if(barb == 0) {
+			if(bt.getStartTime().isAfter(getEndTime()))
+				return -1;
+			else if(bt.getEndTime().isBefore(mStartTime))
+				return 1;
+			else
+				return 0;
+		}
+		else {
+			return barb;
+		}
 	}
 	
 	public String print() {

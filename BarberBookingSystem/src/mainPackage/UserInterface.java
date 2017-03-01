@@ -1,5 +1,6 @@
 package mainPackage;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -15,13 +16,21 @@ public class UserInterface {
 	// Default constructor.
 	public UserInterface() {		
 		mDisplayMode = DisplayMode.Day;
-		mBookKeeper = new BookKeeper();
-		mBarber = mBookKeeper.getBarber();
+		mBookKeeper = null;
+		mBarber = null;
 		
 	}
 	
 	// Run the application loop.
 	public void run() {
+		
+		try {
+			mBookKeeper = new BookKeeper();
+			mBarber = mBookKeeper.getBarber();
+		} catch (IOException e) {
+			System.out.println("Warning: " + e.getMessage());
+		}
+		
 		int programMode = 0;
 		ZonedDateTime localZdt = ZonedDateTime.now(); // Convert the local time to a more suitable format.
 		
@@ -58,6 +67,16 @@ public class UserInterface {
 					programMode = showFreeTime(); // Display times available for booking.
 					break;
 				}
+				case 5:
+				{
+					programMode = saveData(); // Save the data to a file.
+					break;
+				}
+				case 6:
+				{
+					programMode = loadData(); // Load data from a file.
+					break;
+				}
 				default:
 				{
 					programMode = -1; // If we reach this point, something went wrong, set mode to -1 to terminate the application!
@@ -66,7 +85,67 @@ public class UserInterface {
 			}
 		}
 		
-		mBookKeeper.save();
+		try {
+			mBookKeeper.save("data/data.txt");
+		} catch (IOException e) {
+			System.out.println("Warning: " + e.getMessage());
+		}
+	}
+	
+	private int loadData() {
+		boolean running = true;
+		
+		@SuppressWarnings("resource") // Can not close scanner as that will also close the console input stream.
+		Scanner scanner = new Scanner(System.in);
+		String path = "";
+		
+		while(running) {
+			System.out.println("Type the file path. (some-directory-/filename.txt)");
+			
+			path = scanner.nextLine();
+			
+			if(path.equalsIgnoreCase("cancel"))
+				return 0;
+			
+			try {
+				mBookKeeper.load(path);
+				System.out.println("List of appointments successfully loaded from " + path);
+				running = false;
+				
+			} catch (IOException e) {
+				System.out.println("Warning, something went wrong: " + e.getMessage() + "\nPlease try again!");
+			}
+		}
+		
+		return 0;
+	}
+	
+	private int saveData() {
+		boolean running = true;
+		
+		@SuppressWarnings("resource") // Can not close scanner as that will also close the console input stream.
+		Scanner scanner = new Scanner(System.in);
+		String path = "";
+		
+		while(running) {
+			System.out.println("Type the file path. (some-directory-/filename.txt)");
+			
+			path = scanner.nextLine();
+			
+			if(path.equalsIgnoreCase("cancel"))
+				return 0;
+			
+			try {
+				mBookKeeper.save(path);
+				System.out.println("List of appointments successfully saved to " + path);
+				running = false;
+				
+			} catch (IOException e) {
+				System.out.println("Warning, something went wrong: " + e.getMessage() + "\nPlease try again!");
+			}
+		}
+		
+		return 0;
 	}
 	
 	// Book a new time for the customer.
@@ -95,7 +174,7 @@ public class UserInterface {
 			customer = scanner.nextLine();
 			
 			// Did the user want to cancel the operation?
-			if(customer.toLowerCase().equals("cancel")) {
+			if(customer.equalsIgnoreCase("cancel")) {
 				return 0;
 			}
 			
@@ -105,7 +184,7 @@ public class UserInterface {
 				response = scanner.nextLine();
 				
 				// Did the user want to cancel the operation?
-				if(response.toLowerCase().equals("cancel")) {
+				if(response.equalsIgnoreCase("cancel")) {
 					return 0;
 				}
 					
@@ -177,7 +256,7 @@ public class UserInterface {
 				response = scanner.nextLine();
 				
 				// Did the user want to cancel the operation?
-				if(response.toLowerCase().equals("cancel")) {
+				if(response.equalsIgnoreCase("cancel")) {
 					return 0;
 				}
 				
@@ -214,7 +293,7 @@ public class UserInterface {
 				response = scanner.nextLine();
 				
 				// Did the user want to cancel the operation?
-				if(response.toLowerCase().equals("cancel")) {
+				if(response.equalsIgnoreCase("cancel")) {
 					return 0;
 				}
 					
@@ -237,9 +316,9 @@ public class UserInterface {
 								repeat = false;
 								
 								System.out.println("Do you want this to be a recurring appointment? Type time intervall in weeks (0 = not recurring)");
-								response = scanner.nextLine().toLowerCase();
+								response = scanner.nextLine();
 								
-								if(response.equals("cancel"))
+								if(response.equalsIgnoreCase("cancel"))
 									return 0;
 									
 								try{
@@ -296,37 +375,42 @@ public class UserInterface {
 		String response = "";
 		
 		// Display the options available.
-		System.out.println("What do you wish to do?\n-See current bookings (c)\n-See available time (a)\n" +
-				"-Book a new time (b)\n-Exit (exit)\n" + 
-				"-Select barber (s)\nYou can cancel at any time and go back here by typing (cancel)");
+		System.out.println("What do you wish to do?\n-See current bookings (current)\n-See available time (available)\n" +
+				"-Book a new time (book)\n-Load appointments from txt a file (load)\n-Save appointments to a txt file (save)\n-Exit (exit)\n" + 
+				"-Select barber (select)\nYou can cancel at any time and go back here by typing (cancel)");
 		
 		// Wait for input.
 		response = scanner.nextLine();
-		response = response.toLowerCase();
 		
 		// Translate the input.
 		if(response.length() > 0) {
-			if(response.startsWith("c")) {
+			if(response.equalsIgnoreCase("current")) {
 				setDisplayMode();
 				return 2;
 			}
-			else if(response.startsWith("a")) {
+			else if(response.equalsIgnoreCase("available")) {
 				setDisplayMode();
 				return 4;
 			}
-			else if(response.startsWith("b")) {
+			else if(response.equalsIgnoreCase("book")) {
 				return 1;
 			}
-			else if(response.startsWith("s")) {
+			else if(response.equalsIgnoreCase("select")) {
 				return 3;
 			}
-			else if(response.equals("exit")) {
+			else if(response.equalsIgnoreCase("load")) {
+				return 6;
+			}
+			else if(response.equalsIgnoreCase("save")) {
+				return 5;
+			}
+			else if(response.equalsIgnoreCase("exit")) {
 				return -1;
 			}
 		}
 		
 		// No valid option.
-		System.out.println(response + " is no valid option, try again!");
+		System.out.println(response + " is not a valid option, try again!");
 		return 0;
 	}
 	
@@ -339,31 +423,30 @@ public class UserInterface {
 		String response = "";
 		
 		while(repeat) {
-			System.out.println("For which time do you wich to see?\n-Today (d)\n-This week (w)\n-This month(m)\n"
-					+ "-This year (y)\nYou can cancel at any time and go back here by typing (cancel)");
+			System.out.println("For which time do you wich to see?\n-Today (day)\n-This week (week)\n-This month(month)\n"
+					+ "-This year (year)\nYou can cancel at any time and go back here by typing (cancel)");
 			
 			response = scanner.nextLine();
-			response = response.toLowerCase();
 			
-			if(response.equals("cancel"))
+			if(response.equalsIgnoreCase("cancel"))
 				return;
 			
 			if(response.length() > 0) {
 				repeat = false;
-				if(response.startsWith("d")) {
+				if(response.equalsIgnoreCase("day")) {
 					mDisplayMode = DisplayMode.Day;
 				}
-				else if(response.startsWith("w")) {
+				else if(response.equalsIgnoreCase("week")) {
 					mDisplayMode = DisplayMode.Week;
 				}
-				else if(response.startsWith("m")) {
+				else if(response.equalsIgnoreCase("month")) {
 					mDisplayMode = DisplayMode.Month;
 				}
-				else if(response.startsWith("y")) {
+				else if(response.equalsIgnoreCase("year")) {
 					mDisplayMode = DisplayMode.Year;
 				}
 				else {
-					System.out.println("Invalid option!");
+					System.out.println(response + " is not avalid option. \nPlease try again!");
 					repeat = true;
 				}
 			}
@@ -408,7 +491,7 @@ public class UserInterface {
 		if(mBookKeeper.selectBarber(barber))
 			System.out.println(mBookKeeper.getBarber() + " is now the active barber.");
 		else
-			System.out.println("Barber does not exist! Going with " + mBookKeeper.getBarber() + " instead!");
+			System.out.println("Barber does not exist. \nSelecting " + mBookKeeper.getBarber() + " instead!");
 		
 		mBarber = mBookKeeper.getBarber();
 		
