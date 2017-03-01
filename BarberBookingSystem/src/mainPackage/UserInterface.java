@@ -3,6 +3,7 @@ package mainPackage;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -29,6 +30,12 @@ public class UserInterface {
 			mBarber = mBookKeeper.getBarber();
 		} catch (IOException e) {
 			System.out.println("Warning: " + e.getMessage());
+		} catch (DateTimeParseException e) {
+			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
+		} catch (NumberFormatException e) {
+			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
 		}
 		
 		int programMode = 0;
@@ -89,6 +96,12 @@ public class UserInterface {
 			mBookKeeper.save("data/data.txt");
 		} catch (IOException e) {
 			System.out.println("Warning: " + e.getMessage());
+		}catch (DateTimeParseException e) {
+			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
+		} catch (NumberFormatException e) {
+			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
 		}
 	}
 	
@@ -113,6 +126,12 @@ public class UserInterface {
 				running = false;
 				
 			} catch (IOException e) {
+				System.out.println("Warning, something went wrong: " + e.getMessage() + "\nPlease try again!");
+			} catch (DateTimeParseException e) {
+				System.out.println("Warning, the date time format is wrong: " + e.getMessage() + "\nPlease try again!");
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Warning, too few parameters per line in the file: " + e.getMessage() + "\nPlease try again!");
+			} catch (NumberFormatException e) {
 				System.out.println("Warning, something went wrong: " + e.getMessage() + "\nPlease try again!");
 			}
 		}
@@ -141,6 +160,12 @@ public class UserInterface {
 				running = false;
 				
 			} catch (IOException e) {
+				System.out.println("Warning, something went wrong: " + e.getMessage() + "\nPlease try again!");
+			} catch (DateTimeParseException e) {
+				System.out.println("Warning, the date time format is wrong: " + e.getMessage() + "\nPlease try again!");
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Warning, too few parameters per line in the file: " + e.getMessage() + "\nPlease try again!");
+			} catch (NumberFormatException e) {
 				System.out.println("Warning, something went wrong: " + e.getMessage() + "\nPlease try again!");
 			}
 		}

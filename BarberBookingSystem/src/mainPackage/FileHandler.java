@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.Set;
 
 public class FileHandler {
@@ -51,6 +52,8 @@ public class FileHandler {
 
 				do {
 					line = br.readLine(); // Read 1 line of data.
+					if(line != null && line.contains(","))
+						line = line.substring(line.indexOf(','));
 					
 					if(line != null)
 						barbers.add(line);
@@ -66,7 +69,7 @@ public class FileHandler {
 		}
 		
 		// Load the data.
-		public static void load(Set<BookedTime> bookings, String path) throws IOException{
+		public static void load(Set<BookedTime> bookings, String path) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
 			// Open a new file to get the appointments data.
 			File file = new File(path);
 			BufferedReader br = null;

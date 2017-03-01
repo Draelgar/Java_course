@@ -2,6 +2,7 @@ package mainPackage;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,7 +23,7 @@ public class BookKeeper {
 	}
 	
 	// Initialize the system.
-	private void init() throws IOException{
+	private void init() throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
 		// Add some default barbers.
 		FileHandler.loadStaff(mBarbers, "data/barbers.txt");
 		FileHandler.load(mBookings, "data/data.txt");
@@ -33,7 +34,7 @@ public class BookKeeper {
 		mCurrentBarber = mBarbers.iterator().next();
 	}
 	
-	public void load(String path) throws IOException {
+	public void load(String path) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
 		FileHandler.load(mBookings, path);
 	}
 

@@ -4,6 +4,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("rawtypes")
 public class BookedTime implements Comparable{
@@ -23,14 +26,31 @@ public class BookedTime implements Comparable{
 	}
 	
 	// Create a new BookedTime object from a data string.
-	public BookedTime(String data) {
+	public BookedTime(String data) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException {
 		String[] sarr = data.split(",");
+		Pattern pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}\\+\\d{2}:\\d{2}.+$");
+		Matcher matcher = pattern.matcher(sarr[2]);
 		
-		mBarber = sarr[0];
-		mCustomer = sarr[1];
-		mStartTime = ZonedDateTime.parse(sarr[2]);
-		mDuration = Duration.ofMinutes(Integer.parseInt(sarr[3]));
-		mRecurring = Integer.parseInt(sarr[4]);
+		try {
+			mBarber = sarr[0];
+			mCustomer = sarr[1];
+			if(matcher.find()) {
+				mStartTime = ZonedDateTime.parse(sarr[2]);
+			}
+			else{
+				throw new IOException("Zoned date time " + sarr[2] + " is in an incorrect format!");
+			}
+			mDuration = Duration.ofMinutes(Integer.parseInt(sarr[3]));
+			mRecurring = Integer.parseInt(sarr[4]);
+		} catch (IOException e) {
+			throw e;
+		} catch (DateTimeParseException e) {
+			throw e;
+		} catch (ArrayIndexOutOfBoundsException e){
+			throw e;
+		} catch (NumberFormatException e) {
+			throw e;
+		}
 	}
 	
 	public BookedTime(ZonedDateTime start, Duration duration, String customer, String barber, int recurring) {
