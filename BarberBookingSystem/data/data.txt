@@ -47,3 +47,4 @@ Olof,Gustaf,2017-02-24T16:20+01:00[Europe/Berlin],20,0
 Olof,Jonas,2017-06-28T10:40+02:00[Europe/Berlin],60,0
 Olof,Olle,2017-06-30T10:45+02:00[Europe/Berlin],60,0
 Olof,Per,2017-12-15T09:16+01:00[Europe/Berlin],45,0
+Olof,Peter,2019-03-28T08:30+01:00[Europe/Berlin],20,0
