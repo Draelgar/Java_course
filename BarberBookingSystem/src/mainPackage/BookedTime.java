@@ -28,6 +28,8 @@ public class BookedTime implements Comparable{
 	// Create a new BookedTime object from a data string.
 	public BookedTime(String data) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException {
 		String[] sarr = data.split(",");
+		
+		// Setup a pattern to check so that the date time is in the correct format.
 		Pattern pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}\\+\\d{2}:\\d{2}.+$");
 		Matcher matcher = pattern.matcher(sarr[2]);
 		
