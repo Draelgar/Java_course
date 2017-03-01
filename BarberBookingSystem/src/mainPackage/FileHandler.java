@@ -2,26 +2,20 @@ package mainPackage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.format.DateTimeParseException;
 import java.util.Set;
 
 public class FileHandler {
 		// Save the data.
 		public static void save(Set<BookedTime> bookings, String path) throws IOException {
-			File file = new File(path);
-			FileWriter fw = null;
 			BufferedWriter bw = null;
 			
 			try {
-				if(!file.exists()) // If the file does not exist, create a new one.
-					file.createNewFile();
-				
-				fw = new FileWriter(file); // Create the file writer and link it to the file.
-				bw = new BufferedWriter(fw); // Connect the file writer with the buffered writer.
+				bw = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8);
 				
 				bw.write(""); // Overwrite the old data.
 				
@@ -40,13 +34,10 @@ public class FileHandler {
 		
 		public static void loadStaff(Set<String> barbers, String path) throws IOException {
 			// Open the file containing the barber names.
-			File file = new File(path);
-			FileReader fr = null;
 			BufferedReader br = null;
 			
 			try {
-				fr = new FileReader(file);
-				br = new BufferedReader(fr);
+				br = Files.newBufferedReader(Paths.get(path), StandardCharsets.UTF_8);
 				
 				String line = "";
 
@@ -71,14 +62,11 @@ public class FileHandler {
 		// Load the data.
 		public static void load(Set<BookedTime> bookings, String path) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
 			// Open a new file to get the appointments data.
-			File file = new File(path);
 			BufferedReader br = null;
-			FileReader fr = null;
 			
 			try {
 				
-				fr = new FileReader(file);
-				br = new BufferedReader(fr);
+				br = Files.newBufferedReader(Paths.get(path), StandardCharsets.UTF_8);
 				
 				String line = "";
 				
