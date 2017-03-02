@@ -1,0 +1,26 @@
+body {
+    background-color: aliceblue;
+}
+
+h1 {
+    color: blue;
+}
+
+p {
+    color: red;
+    border:1px solid powderBlue;
+    padding: 30px;
+    margin: 50px;
+}
+
+#p01 {
+	color: Orange
+}
+
+ins.someClass {
+	color: Cyan
+}
+
+del.someClass {
+	color: Cyan
+}
