@@ -116,6 +116,7 @@ public class BookedTime implements Comparable{
 	}
 	
 	public int compareTo(Object o) {
+		assert(o.getClass() == BookedTime.class); // Assume that the object is of the BookedTime class.
 		
 		BookedTime bt = (BookedTime)o;
 		int barb = mBarber.compareToIgnoreCase(bt.mBarber);
