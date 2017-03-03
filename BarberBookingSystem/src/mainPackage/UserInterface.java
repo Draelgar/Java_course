@@ -298,7 +298,7 @@ public class UserInterface {
 						repeat = false;
 					}
 					else {
-						System.out.println("The duration was not long enough or too long!");
+						System.out.println("The duration was not long enough or too long. Please try again.");
 						repeat = true;
 					}
 				}
