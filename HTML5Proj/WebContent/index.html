@@ -8,80 +8,30 @@
 		<link rel="stylesheet" href="styles.css"/>
 	</head>
 	<body>
-		<h1 style="color:blue;
-					font-family:verdana;
-					text-align:center;">Heading of the day</h1>
-		<h6>Least Important heading!</h6>
-		<p title="Tooltip">First Paragraph</p>
-		<p style="font_family:courier;" id="p01"><b>Second Bold Paragraph</b></p>
-		First line, Common text...<hr/>
-		Second line, <b>Bold text</b><br/>
-		Third line, <q style="font-size:300%;">A quote</q><br/>
-		Fourth line, <a href="http://localhost:8080/HTML5Proj/">This is a link!</a><hr/>
-		<i>Itallic text!</i><br/>
-		<strong>Strong important text!</strong><sub>subscript!</sub><br/>
-		<em>Emphasized important text!</em><sup>superscript</sup><br/>
-		<small>Small text!</small><br/>
-		<del class="someClass">Deleted text!</del><br/>
-		An abbreviation <b><abbr title="Artificial Intelligence">AI</abbr></b><br/>
-		<ins class="someClass">inserted text!</ins><br/>
-		<mark style="background-color:red;color:rgb(255,255,0)">Marked Text!</mark><hr/>
+		<!-- The main headline. -->
+		<h1 id="h1">My Own Web Site</h1>
 		
-		<!-- A simple comment! -->
+		<div class="floatingDiv">
+			<ul>
+				<li>First Item</li>
+				<li>Second Item</li>
+				<li>Third Item</li>
+				<li>Fourth Item</li>
+				<li>Fifth Item</li>
+			</ul>
+		</div>
+		<div class="floatingDiv">
+			<button type="button" class="vertButton">First Button</button><br/>
+			<button type="button" class="vertButton">Second Button</button><br/>
+			<button type="button" class="vertButton">Third Button</button><br/>
+		</div>
+		<div class="floatingDiv">
+			<iframe src="subpage.html" height="200" width="300"></iframe>
+		</div><br/>
 		
-		<pre style="color:green;">
-			Fixed font text that
-			
-			will store empty spaces,
-			
-			tabs and line breaks!
-		</pre>
-		<p>
-			<a href="http://localhost:8080/HTML5Proj/">
-				<img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com" width="104" height="142"/>
-			</a>
-			
-			<p><img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Smiley face" style="float:right;width:42px;height:42px;">
-			The image will float to the right of the text.
-			</p>
-
-			<p><img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Smiley face" style="float:left;width:42px;height:42px;">
-			The image will float to the left of the text.
-			</p>
-
-			<img src="Jellyfish.jpg" alt="Jellyfish" style="width:600px;height:800px;"/>
-
-		<iframe src="subpage.html" height="600" width="800"></iframe>
-		<address>
-			Written by Peter Hultgren<br/>
-			Some webpage<br/>
-			some address<br/>
-			city
-		</address>
-		<cite>
-			Some work
-		</cite> by author X<br/>
-		<bdo dir="rtl">This text will be written from right to left</bdo><br/>
-		<pre><code>
-			var x = 5;
-			var y = 6;
-			document.getElementById("demo").innerHTML = x + y;
-		</code>
-		<kbd>File | Open...</kbd>
-		<samp>
-			demo.example.com login: Apr 12 09:10:17
-			Linux 2.6.10-grsec+gg3+e+fhs6b+nfs+gr0501+++p3+c4a+gr2b-reslog-v6.189
-		</samp></pre>
-		Einstein wrote: <var>E</var> = <var>m</var><var>c</var><sup>2</sup>.
-		<p id="demo">What?</p>
-		
-		<button type="button" onclick="hello()" style="width:100px;height:50px;">hello</button>
-		<button type="button" onclick="bye()" style="width:100px;height:50px;">bye</button>
-		
-		<div data-ng-app="ajsModule">
-			<div data-ng-controller="MainController">
-				<h1>{{message}}</h1>
-			</div>
+		<div>
+			<a href="http://localhost:8080/HTML5Proj/index.html">A link to this page.</a>
+			<a href="http://localhost:8080/HTML5Proj/subpage.html">A link to the subpage.</a>
 		</div>
 		
 		<!-- All scripts should be loaded at the end to avoid page load delays.  -->

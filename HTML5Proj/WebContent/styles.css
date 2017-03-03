@@ -2,25 +2,26 @@ body {
     background-color: aliceblue;
 }
 
-h1 {
-    color: blue;
+#h1 {
+	text-align: center;
+	color: green;
 }
 
-p {
-    color: red;
-    border:1px solid powderBlue;
-    padding: 30px;
-    margin: 50px;
+ul {
+	list-style-type: circle;
+	margin: 5px;
 }
 
-#p01 {
-	color: Orange
+div.floatingDiv {
+	float: left;
+	margin: 10px;
+	border-style: solid;
+	border-width: 5px;
+	border-color: powderBlue;
 }
 
-ins.someClass {
-	color: Cyan
-}
-
-del.someClass {
-	color: Cyan
+button.vertButton {
+	width: 100px;
+	height: 60px;
+	margin: 5px;
 }
