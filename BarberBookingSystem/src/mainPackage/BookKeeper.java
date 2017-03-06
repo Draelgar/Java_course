@@ -42,6 +42,10 @@ public class BookKeeper {
 		FileHandler.save(mBookings, path);
 	}
 	
+	public Set<String> getBarbers() {
+		return mBarbers;
+	}
+	
 	public String getBarber() {
 		return mCurrentBarber;
 	}
@@ -226,10 +230,9 @@ public class BookKeeper {
 	}
 	
 	// Show available times for the currently selected barber.
-	public int showFreeTime(DisplayMode displayMode) {
+	public String showFreeTime(DisplayMode displayMode) {
 		
-		System.out.print("Current unbooked time for " + mCurrentBarber + ":\n");
-		
+		String information = "";
 		ZonedDateTime zdt = ZonedDateTime.now();
 		Calendar cal = Calendar.getInstance();
 
@@ -243,7 +246,10 @@ public class BookKeeper {
 		}
 		
 		for(int i = 0; i < limit; i++) {
-			System.out.print(zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() + " " + zdt.getMonth().toString() + " " + zdt.getYear() + "\n08:00 - ");		
+			information = zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() 
+							+ " " + zdt.getMonth().toString() + " " 
+							+ zdt.getYear() + "\n08:00 - ";
+			
 			Iterator<BookedTime> it = mBookings.iterator();
 			
 			while(it.hasNext()) {
@@ -252,18 +258,18 @@ public class BookKeeper {
 					if(isIncluded(booking.getStartTime(), i, DisplayMode.Day) || isIncluded(booking.getEndTime(), i, DisplayMode.Day)) {
 						
 						// Assuming the list is in order.
-						System.out.println(booking.getStartTime().minusMinutes(1).toLocalTime().toString());
-						System.out.print(booking.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ");
+						information += booking.getStartTime().minusMinutes(1).toLocalTime().toString() + "\n";
+						information += booking.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ";
 						
 					}
 			}
 			
 			zdt = zdt.plusDays(1);
 			
-			System.out.println("18:00");
+			information += "18:00\n";
 		}
 		
-		return 0;
+		return information;
 	}
 	
 	public boolean foundCollision() {
