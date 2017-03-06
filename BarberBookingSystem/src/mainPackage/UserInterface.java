@@ -27,6 +27,7 @@ public class UserInterface {
 		
 		try {
 			mBookKeeper = new BookKeeper();
+			mBookKeeper.init();
 			mBarber = mBookKeeper.getBarber();
 		} catch (IOException e) {
 			System.out.println("Warning: " + e.getMessage());
@@ -378,13 +379,13 @@ public class UserInterface {
 				startTime = ZonedDateTime.of(year, month, day, startH, startM, 0, 0, Calendar.getInstance().getTimeZone().toZoneId());
 				
 				BookedTime bt = new BookedTime(startTime, duration, customer, mBarber, recurring);
+
+				repeat = !mBookKeeper.bookTime(bt);
 				
-				repeat = mBookKeeper.checkOverlaps(bt);
-						
-				// Was the time acceptable?
-				if(!repeat) {
-					running = !mBookKeeper.bookTime(bt);
-				}
+				if(!repeat)
+					running = false;
+				else
+					System.out.println("The selected time is already booked, please select another time or try with another barber.");
 			}
 			
 		}
