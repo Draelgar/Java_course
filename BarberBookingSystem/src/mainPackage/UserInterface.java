@@ -26,17 +26,19 @@ public class UserInterface {
 	public void run() {
 		
 		try {
+			
 			mBookKeeper = new BookKeeper();
-			mBookKeeper.init();
+			mBookKeeper.init(); // Make sure to initialize the book keeper.
 			mBarber = mBookKeeper.getBarber();
+			
 		} catch (IOException e) {
 			System.out.println("Warning: " + e.getMessage());
 		} catch (DateTimeParseException e) {
-			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
+			System.out.println("Warning: " + e.getMessage());
 		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
+			System.out.println("Warning: " + e.getMessage());
 		} catch (NumberFormatException e) {
-			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
+			System.out.println("Warning: " + e.getMessage());
 		}
 		
 		int programMode = 0;
@@ -97,12 +99,6 @@ public class UserInterface {
 			mBookKeeper.save("data/data.txt");
 		} catch (IOException e) {
 			System.out.println("Warning: " + e.getMessage());
-		}catch (DateTimeParseException e) {
-			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
-		} catch (NumberFormatException e) {
-			System.out.println("Warning: " + e.getMessage() + "\nPlease try again!");
 		}
 	}
 	
@@ -161,12 +157,6 @@ public class UserInterface {
 				running = false;
 				
 			} catch (IOException e) {
-				System.out.println("Warning, something went wrong: " + e.getMessage() + "\nPlease try again!");
-			} catch (DateTimeParseException e) {
-				System.out.println("Warning, the date time format is wrong: " + e.getMessage() + "\nPlease try again!");
-			} catch (ArrayIndexOutOfBoundsException e) {
-				System.out.println("Warning, too few parameters per line in the file: " + e.getMessage() + "\nPlease try again!");
-			} catch (NumberFormatException e) {
 				System.out.println("Warning, something went wrong: " + e.getMessage() + "\nPlease try again!");
 			}
 		}
@@ -474,7 +464,7 @@ public class UserInterface {
 					mDisplayMode = DisplayMode.Year;
 				}
 				else {
-					System.out.println(response + " is not avalid option. \nPlease try again!");
+					System.out.println(response + " is not a valid option. \nPlease try again!");
 					repeat = true;
 				}
 			}
