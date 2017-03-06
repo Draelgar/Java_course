@@ -16,6 +16,8 @@ public class BookedTime implements Comparable{
 	private String mBarber;
 	private int mRecurring;
 	
+	private static boolean mCollision = false;
+	
 	public BookedTime() {
 		mStartTime = ZonedDateTime.now();
 		mDuration = Duration.ofHours(1);
@@ -43,7 +45,7 @@ public class BookedTime implements Comparable{
 				throw new IOException("Zoned date time " + sarr[2] + " is in an incorrect format!");
 			}
 			mDuration = Duration.ofMinutes(Integer.parseInt(sarr[3]));
-			mRecurring = Integer.parseInt(sarr[4]);
+			mRecurring = 0;
 		} catch (IOException e) {
 			throw e;
 		} catch (DateTimeParseException e) {
@@ -104,33 +106,24 @@ public class BookedTime implements Comparable{
 		return mBarber;
 	}
 	
-	// Check weather the given time interval overlaps the booked one.
-	public boolean isOverlaping(String barber, ZonedDateTime start, ZonedDateTime end) {
-		if(mBarber.equalsIgnoreCase(barber))
-			if(start.isAfter(getEndTime()) || end.isBefore(mStartTime))
-				return false;
-			else
-				return true;
-		
-		return false;
-	}
-	
 	public int compareTo(Object o) {
 		assert(o.getClass() == BookedTime.class); // Assume that the object is of the BookedTime class.
 		
 		BookedTime bt = (BookedTime)o;
 		int barb = mBarber.compareToIgnoreCase(bt.mBarber);
 		
-		if(barb == 0) {
-			if(bt.getStartTime().isAfter(getEndTime()))
-				return -1;
-			else if(bt.getEndTime().isBefore(mStartTime))
-				return 1;
-			else
-				return 0;
-		}
+		if(bt.getStartTime().isAfter(getEndTime()))
+			return -1;
+		else if(bt.getEndTime().isBefore(mStartTime))
+			return 1;
 		else {
-			return barb;
+			if(barb == 0) {
+				mCollision = true;
+				return 0;
+			}
+			else {
+				return barb;
+			}
 		}
 	}
 	
@@ -151,11 +144,18 @@ public class BookedTime implements Comparable{
 	
 	public void save(BufferedWriter bw) {
 		try {
-			bw.append(mBarber + "," + mCustomer + "," + mStartTime.toString() + "," + mDuration.toMinutes() + "," + mRecurring);
+			bw.append(mBarber + "," + mCustomer + "," + mStartTime.toString() + "," + mDuration.toMinutes());
 			bw.newLine();
 		
 		} catch(IOException e) {
 			System.out.println("Error! " + e.getMessage());
 		}
+	}
+	
+	public static boolean foundCollision() {
+		boolean status = mCollision;
+		mCollision = false;
+		
+		return status;
 	}
 }
