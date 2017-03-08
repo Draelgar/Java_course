@@ -68,6 +68,9 @@ public class UserInterface {
 			else if(response.equalsIgnoreCase("cart")) {
 				return AppMode.CART;
 			}
+			else {
+				return AppMode.NONE;
+			}
 		}
 	}
 	
