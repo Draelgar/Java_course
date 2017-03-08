@@ -174,8 +174,11 @@ public class Program{
 			list.add(targetArray[i]);
 		}
 		
-		// Get the list index of the first appearance of the selected value and remove it..
-		list.remove(list.indexOf(value));
+		// Get the list index of the first appearance of the selected value and remove it.
+		int index = list.indexOf(value);
+		
+		if(index >= 0)
+			list.remove(index);
 		
 		// Convert the List to Integer array.
 		Integer integerArray[] = new Integer[0];

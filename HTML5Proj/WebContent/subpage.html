@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
+		<meta charset="UTF-8"/>
+		<meta name="author" content="Gustaf Peter Hultgren"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<title>Subpage</title>
+		<link rel="stylesheet" href="src/styles.css"/>
 	</head>
 	<body>
-		<a href="http://localhost:8080/HTML5Proj/index.html">A link to the main page.</a>
-		<img src="Images/Jellyfish.jpg" alt="jellyfish" style="width=1200px;height=1024px;"/>
+		<div class="flex-container">
+			<div class="floatingDiv">
+				<textarea rows="1" cols="30" id="calc"></textarea>
+				<button type="button" class="vertButton" onclick="calc()">Calculate</button>
+				<label for="calc" id="sum">0</label>
+			</div>
+			<a href="http://localhost:8080/HTML5Proj/index.html">A link to the main page.</a>
+			<img src="Images/Jellyfish.jpg" alt="jellyfish" style="width=1200px;height=1024px;"/>
+			
+			<!-- All scripts should be loaded at the end to avoid page load delays.  -->
+			<!-- Load the angularJS scripts. -->
+			<script data-require="angular.js@*" data-semver="1.3.0-beta.5" src="https://code.angularjs.org/1.3.0-beta.5/angular.js"></script>
+			
+			<!-- Load the local javaScript file. -->
+			<script src="src/script.js"></script>
+			
+			<!-- If javaScript is disabled, show a message. -->
+			<noscript>Sorry, javaScript is disabled on your browser!</noscript>
+		</div>
 	</body>
 </html>
