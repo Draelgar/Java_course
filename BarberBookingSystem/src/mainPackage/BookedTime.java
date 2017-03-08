@@ -142,14 +142,9 @@ public class BookedTime implements Comparable{
 		return text;
 	}
 	
-	public void save(BufferedWriter bw) {
-		try {
-			bw.append(mBarber + "," + mCustomer + "," + mStartTime.toString() + "," + mDuration.toMinutes());
-			bw.newLine();
-		
-		} catch(IOException e) {
-			System.out.println("Error! " + e.getMessage());
-		}
+	public void save(BufferedWriter bw) throws IOException {
+		bw.append(mBarber + "," + mCustomer + "," + mStartTime.toString() + "," + mDuration.toMinutes());
+		bw.newLine();
 	}
 	
 	public static boolean foundCollision() {

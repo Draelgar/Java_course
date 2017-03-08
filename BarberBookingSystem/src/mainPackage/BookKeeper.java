@@ -166,7 +166,7 @@ public class BookKeeper {
 	}
 	
  	// Display the booked appointments for the given display limit.
-	public int displayBookings(DisplayMode display) {
+	public String displayBookings(DisplayMode display) {
 		String text = "";
 		
 		if(mBookings.size() > 0)
@@ -187,9 +187,7 @@ public class BookKeeper {
 			text = "There are no current bookings for " + mCurrentBarber + ".\n";
 		}
 		
-		System.out.print(text);
-		
-		return 0;
+		return text;
 	}
 	
 	// Add a new barber to the list.
@@ -202,14 +200,15 @@ public class BookKeeper {
 		mBarbers.remove(barber);
 	}
 	
-	public void listBarbers() {
-		System.out.println("These are the barbers that work here:");
-		
+	public String listBarbers() {
+		String string = "";
 		Iterator<String> it = mBarbers.iterator();
 		
 		while(it.hasNext()) {
-			System.out.println("\t-" + it.next());
+			string += "\t-" + it.next() + "\n";
 		}
+		
+		return string;
 	}
 	
 	// Select an available barber.
