@@ -5,7 +5,7 @@
 		<meta name="author" content="Gustaf Peter Hultgren"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<title>My First HTML Page</title>
-		<link rel="stylesheet" href="styles.css"/>
+		<link rel="stylesheet" href="src/styles.css"/>
 	</head>
 	<body>
 		<!-- The main headline. -->
@@ -21,17 +21,28 @@
 			</ul>
 		</div>
 		<div class="floatingDiv">
-			<button type="button" class="vertButton">First Button</button><br/>
-			<button type="button" class="vertButton">Second Button</button><br/>
-			<button type="button" class="vertButton">Third Button</button><br/>
+			<button type="button" class="vertButton" onclick="first()">First Button</button><br/>
+			<button type="button" class="vertButton" onclick="second()">Second Button</button><br/>
+			<button type="button" class="vertButton" onclick="third()">Third Button</button><br/>
 		</div>
 		<div class="floatingDiv">
 			<iframe src="subpage.html" height="200" width="300"></iframe>
-		</div><br/>
+		</div>
 		
-		<div>
-			<a href="http://localhost:8080/HTML5Proj/index.html">A link to this page.</a>
+		<div class="floatingDiv">
+			<a href="http://localhost:8080/HTML5Proj/index.html">A link to this page.</a><br/>
 			<a href="http://localhost:8080/HTML5Proj/subpage.html">A link to the subpage.</a>
+			<div id="demo">
+			</div>
+		</div>
+		
+		<div class="floatingDiv">
+			<button type="button" class="vertButton" onclick="submit()">First Button</button><br/>
+			<form>
+				Name:<br>
+				<input type="text" name="name" id="name"><br>
+				<label for="name" id="output"></label>
+			</form>
 		</div>
 		
 		<!-- All scripts should be loaded at the end to avoid page load delays.  -->
@@ -39,7 +50,7 @@
 		<script data-require="angular.js@*" data-semver="1.3.0-beta.5" src="https://code.angularjs.org/1.3.0-beta.5/angular.js"></script>
 		
 		<!-- Load the local javaScript file. -->
-		<script src="script.js"></script>
+		<script src="src/script.js"></script>
 		
 		<!-- If javaScript is disabled, show a message. -->
 		<noscript>Sorry, javaScript is disabled on your browser!</noscript>
