@@ -1,6 +1,6 @@
 package shopPackage;
 
-public class Item {
+public class Item implements Cloneable{
 	private long mArticleNumber;
 	private double mPrice;
 	private String mDescription;
@@ -64,5 +64,12 @@ public class Item {
 	
 	public void subtract(int amount) {
 		mCount -= amount;
+	}
+	
+	@Override
+	public Item clone() throws CloneNotSupportedException {
+		Item item = (Item)super.clone();
+		item.subtract(item.getCount() - 1);	
+		return item;
 	}
 }
