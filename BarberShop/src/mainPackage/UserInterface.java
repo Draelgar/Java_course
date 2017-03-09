@@ -1,6 +1,5 @@
 package mainPackage;
 
-import java.time.ZonedDateTime;
 import java.util.Scanner;
 
 public class UserInterface {
