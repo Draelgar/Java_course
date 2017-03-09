@@ -107,7 +107,7 @@ public class Program {
 					break;
 				}
 				default: {
-					mode = ProgramMode.NONE;
+					mode = ProgramMode.MAIN_MENU;
 					break;
 				}
 			}
@@ -120,6 +120,7 @@ public class Program {
 	
 	/** The main method of this application. **/
 	public static void main(String[] args) {
-		
+		Program program = new Program();
+		program.run();
 	}
 }
