@@ -39,7 +39,7 @@ public class Storage<T> {
 	}
 	
 	// Find an item by its article number.
-	public T find(Item item) {
+	public T find(T item) {
 		for(T e : mItems) {
 			if(e.equals(item)) {
 				return e;
