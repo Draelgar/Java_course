@@ -8,7 +8,7 @@ public class UserInterface {
 	public static ProgramMode showMenu() {		
 		println("What do you wish to do?\n"
 				+ "-See current bookings (current)\n"
-				+ "-See available time (available)\n "
+				+ "-See available time (available)\n"
 				+ "-Book a new time (book)\n"
 				+ "-Load appointments from txt a file (load)\n"
 				+ "-Save appointments to a txt file (save)\n"
