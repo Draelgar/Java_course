@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -19,10 +20,12 @@ public class FileHandler {
 			BufferedWriter bw = null;
 			
 			try {
-				bw = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8);
-				
-				if(overwrite)
-					bw.write(""); // Overwrite the old data.
+				if(overwrite) {
+					Files.delete(Paths.get(path));
+					bw = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+				}
+				else
+					bw = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
 				
 				// Save all booked appointments to the file.
 				for(String s : info) {

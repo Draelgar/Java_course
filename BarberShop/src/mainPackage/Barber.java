@@ -2,6 +2,7 @@ package mainPackage;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -47,12 +48,16 @@ public class Barber {
 	/** Create a new instance of this class from a string array containing the barber's name followed by
 	 * all his or her booked appointments.
 	 * @param info -The array with all the information needed. **/
-	public Barber(String[] info) throws DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException, IOException {
-		mName = info[0];
+	public Barber(String name, String[] info) throws DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException, IOException {
+		mAppointments = new TreeSet<Appointment>();
+		mName = name;
 		
-		for(String s : info) {
-			addAppointment(new Appointment(s));
+		for(int i = 0; i < info.length; i++) {
+			addAppointment(new Appointment(info[i]));
 		}
+		
+		mStartOfDay = LocalTime.of(8, 0);
+		mEndOfDay = LocalTime.of(17, 0);
 	}
 	
 	/** Get the name of this barber. 
@@ -66,7 +71,8 @@ public class Barber {
 	 * @return True if the appointment was added, false if it collided or was outside of the barber's work day. **/
 	public boolean addAppointment(Appointment appointment) {
 		if(appointment.getStartTime().toLocalTime().isAfter(mStartOfDay) 
-				&& appointment.getEndTime().toLocalTime().isBefore(mEndOfDay))
+				&& appointment.getEndTime().toLocalTime().isBefore(mEndOfDay)
+				&& appointment.getStartTime().isAfter(ZonedDateTime.now()))
 			return mAppointments.add(appointment);
 		
 		return false;
@@ -113,9 +119,10 @@ public class Barber {
 		String strings[] = new String[mAppointments.size() + 1];
 		int index = 1;
 		
-		strings[0] = mName;
+		strings[0] = mName + "\n";
 		for(Appointment appointment : mAppointments) {
 			strings[index] = appointment.toFileString();
+			index++;
 		}
 		
 		return strings;
@@ -124,8 +131,10 @@ public class Barber {
 	/** Return an array of strings representing the contents of the booked appointments set in a user friendly format. 
 	 * @return An array of strings, where each element represents an appointment booked for this barber.**/
 	public String[] appointmentsToString() {
-		String[] strings = new String[mAppointments.size()];
-		int index = 0;
+		String[] strings = new String[mAppointments.size() + 1];
+		strings[0] = "Appointments for " + mName + ":\n";
+		
+		int index = 1;
 		
 		for(Appointment appointment : mAppointments) {
 			strings[index] = appointment.toString();
@@ -142,6 +151,8 @@ public class Barber {
 	public Queue<String> getAppointments(ZonedDateTime start, ZonedDateTime end) {
 		Queue<String> queue = new LinkedList<String>();
 		
+		queue.add("Appointments for " + mName + ":\n");
+		
 		for(Appointment appointment : mAppointments) {
 			if(appointment.getStartTime().isAfter(start) && appointment.getEndTime().isBefore(end))
 				queue.add(appointment.toString());
@@ -154,10 +165,12 @@ public class Barber {
 	public void removeOldAppointments() {
 		ZonedDateTime present = ZonedDateTime.now();
 		
-		Iterator<Appointment> iterator = mAppointments.iterator();
-		while(iterator.hasNext()) {
-			if(iterator.next().getStartTime().isBefore(present)) // Does the appointment start in the past?
-				iterator.remove(); // Remove the object from the set.
+		if(mAppointments.size() > 0) {
+			Iterator<Appointment> iterator = mAppointments.iterator();
+			while(iterator.hasNext()) {
+				if(iterator.next().getStartTime().isBefore(present)) // Does the appointment start in the past?
+					iterator.remove(); // Remove the object from the set.
+			}
 		}
 	}
 	
@@ -167,22 +180,45 @@ public class Barber {
 	 * @return A queue of strings representing time intervals free for bookings.**/
 	public Queue<String> showFreeTime(ZonedDateTime start, ZonedDateTime end) {
 		Queue<String> queue = new LinkedList<String>();
+		LocalDate date = start.toLocalDate();
+		String timeInterval = "";
 		
-		String timeInterval = mStartOfDay.toString() + " - ";
-		for(Appointment appointment : mAppointments) {
-			if(appointment.getStartTime().isAfter(start) && appointment.getEndTime().isBefore(end)) {
-				// Add the time to the current line and add the line to the queue.
-				timeInterval += appointment.getStartTime().minusMinutes(1).toLocalTime().toString();
-				queue.add(new String(timeInterval));
-				
-				// Start a new line
-				timeInterval = appointment.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ";
+		queue.add("Available free time for " + mName + ":\n");
+		
+		while(date.isBefore(end.toLocalDate())) {
+			Queue<String> tempQueue = new LinkedList<String>();
+			
+			tempQueue.add(date.toString());
+			timeInterval = mStartOfDay.toString() + " - ";
+			for(Appointment appointment : mAppointments) {
+				if(appointment.getStartTime().getDayOfMonth() == date.getDayOfMonth())	
+					if(appointment.getStartTime().isAfter(start) && appointment.getEndTime().isBefore(end)) {
+						// Add the time to the current line and add the line to the queue.
+						timeInterval += appointment.getStartTime().minusMinutes(1).toLocalTime().toString();
+						tempQueue.add(timeInterval);
+						
+						// Start a new line
+						timeInterval = appointment.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ";
+					}
 			}
+			
+			// Add the end of the day to the last line.
+			timeInterval += mEndOfDay.toString();
+			tempQueue.add(timeInterval + "\n");
+			
+			if(tempQueue.size() > 1) {
+				String top = null;
+				
+				while(!tempQueue.isEmpty()){
+					top = tempQueue.poll();
+					
+					if(top != null)
+						queue.add(top);
+				}
+			}
+			
+			date = date.plusDays(1);
 		}
-		
-		// Add the end of the day to the last line.
-		timeInterval += mEndOfDay.toString();
-		queue.add(new String(timeInterval));
 		
 		return queue;
 	}
