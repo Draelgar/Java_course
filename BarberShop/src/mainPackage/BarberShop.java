@@ -12,37 +12,40 @@ import java.util.Queue;
 /** This class is for handling a barber shop. 
  * @author Peter Hultgren
  * @version 1.0 **/
-public class BarberShopHandler {
+public class BarberShop {
 	/** A list of the barbers that work here. **/
 	private List<Barber> mBarbers;
 	/** A reference to the currently selected barber. **/
 	private Barber mCurrentBarber;
+	/** The base price per minute that this shop charges. **/
+	private double mBasePrice;
 	
 	/** Default constructor. **/
-	public BarberShopHandler() {
+	public BarberShop() {
 		mBarbers = new LinkedList<Barber>();
 		mCurrentBarber = null;
+		mBasePrice = 4.5;
 	}
 	
 	/** Create a new instance of this class from a file.
 	 * @param filePath -The path to the file. **/
-	public BarberShopHandler(String filePath) throws IOException{
+	public BarberShop(String filePath) throws IOException{
 		mBarbers = new LinkedList<Barber>();
 		mCurrentBarber = null;
+		mBasePrice = 4.5;
 		
 		// Load the file.
 		String[] strings = FileHandler.load(filePath);
-		Queue<String> appointments = null;
+		Barber currentBarber = null;
 		
 		for(String string : strings) {
 			if(!string.contains(",")) { // Is this a barber name?
-				if(appointments != null)
-					mBarbers.add(new Barber(appointments.toArray(new String[0]))); // Create the barber from the queue.
-				
-				appointments = new LinkedList<String>(); // Create a new queue
+					Barber barber = new Barber(string);
+					currentBarber = barber;
+					mBarbers.add(barber); // Create the barber.
 			}
-			else {
-				appointments.add(string); // Add information to the queue.
+			else if(currentBarber != null) {
+				currentBarber.addAppointment(new Appointment(string));
 			}
 		}
 		
@@ -69,14 +72,15 @@ public class BarberShopHandler {
 		for(int i = 0; i < iterations; i++) {
 			if(mCurrentBarber.getBookedTime(start) != null)
 				return false;
-		}
 		
-		Appointment appointment = new Appointment(start, duration, customer, price);
+			Appointment appointment = new Appointment(start, duration, customer, price);
 		
-		for(int i = 0; i < iterations; i++) {
-			mCurrentBarber.addAppointment(new Appointment(appointment));
-			appointment = new Appointment();
+			if(!mCurrentBarber.addAppointment(new Appointment(appointment)))
+				return false;
+				
+			appointment = new Appointment(start, duration, customer, price);
 			appointment.setTimeInterval(appointment.getStartTime().plusWeeks(i * recurring), appointment.getEndTime().plusWeeks(i * recurring));
+			
 		}
 		
 		return true;
@@ -99,6 +103,7 @@ public class BarberShopHandler {
 		
 		for(Barber barber : mBarbers) {
 			strings[index] = barber.getName();
+			index++;
 		}
 		
 		return strings;
@@ -108,7 +113,7 @@ public class BarberShopHandler {
 	 * @param dateTime -Date and time occupied by the appointment to cancel. 
 	 * @return True if the appointment was removed, false if it didn't exist. **/
 	public boolean cancelAppointment(ZonedDateTime dateTime) {
-		return mCurrentBarber.removeBooking(new Appointment(dateTime, null, null, 0.0));
+		return mCurrentBarber.removeBooking(new Appointment(dateTime, Duration.ofHours(1), null, 0.0));
 	}
 	
 	/** Pick a barber to work with.
@@ -217,48 +222,34 @@ public class BarberShopHandler {
 	 * @throws ArrayIndexOutOfBoundsException
 	 * @throws DateTimeParseException**/
 	public void load(String path) throws DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException, IOException {
-		String[] strings = FileHandler.load(path);
-		
-		Queue<String> appointments = null;
+		String[] strings = FileHandler.load(path);	
+		Barber currentBarber = null;
 		
 		for(String string : strings) {
 			if(!string.contains(",")) { // Is this a barber name?
-				if(appointments != null)
-					mBarbers.add(new Barber(appointments.toArray(new String[0]))); // Create the barber from the queue.
-				
-				appointments = new LinkedList<String>(); // Create a new queue
-			}
-			else {
-				appointments.add(string); // Add information to the queue.
-			}
-		
-			Barber currentBarber = null;
-			Appointment appointment = null;
-			
-			// Loop until the queue is empty.
-			do {
-				String top = appointments.poll();
-				if(!top.contains(",") && currentBarber != null) { // Is this not a barber name?
-					// Add appointment to current barber.
-					appointment = new Appointment(top);
-					currentBarber.addAppointment(appointment);
-				}
-				else { // Its a barber name.
-					currentBarber = null;
+					Barber barber = new Barber(string);
+					currentBarber = barber;
+					mBarbers.add(barber); // Create the barber.
 					
-					// Find barber or add new one.
-					for(Barber barber : mBarbers)
-						if(barber.getName().equalsIgnoreCase(top)) {
-							currentBarber = barber;
-							break;
-						}
-					
-					if(currentBarber == null) {
-						mBarbers.add(new Barber(top));
-						currentBarber = mBarbers.get(mBarbers.size() - 1);
-					}
-				}
-			} while(!appointments.isEmpty());
+					if(mCurrentBarber == null)
+						mCurrentBarber = currentBarber;
+			}
+			else if(currentBarber != null) {
+				currentBarber.addAppointment(new Appointment(string));
+			}
 		}
+		
+	}
+	
+	/** Set the base price that this shop charges per booked minute.
+	 * @param price -The base price value in SEK. **/
+	public void setPrice(double price) {
+		mBasePrice = price;
+	}
+	
+	/** Get the base price that this shop charges per booked minute.
+	 * @return The base price in SEK. **/
+	public double getPrice() {
+		return mBasePrice;
 	}
 }

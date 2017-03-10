@@ -30,7 +30,7 @@ public class Appointment implements Comparable<Appointment>{
 	 * @throws IOException
 	 * @throws DateTimeParseException
 	 * @throws ArrayIndexOutOfBoundsException
-	 * @throws NumberFormatException**/
+	 * @throws NumberFormatException **/
 	public Appointment(String data) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException {
 		String[] sarr = data.split(",");
 		
@@ -159,6 +159,7 @@ public class Appointment implements Comparable<Appointment>{
 		String end = mEndTime.toLocalTime().toString();
 		
 		text += "Time: " + start + " - " + end + "\n";
+		text += "Price: " + mPrice + "kr\n";
 		
 		return text;
 	}
