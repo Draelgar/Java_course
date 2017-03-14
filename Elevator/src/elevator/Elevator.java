@@ -4,7 +4,7 @@ import java.util.PriorityQueue;
 
 /** This class represents an elevator and will run on its own thread.
  * @author Gustaf Peter Hultgren
- * @version 1.0.1 **/
+ * @version 1.0.2 **/
 public class Elevator extends Thread {
 	/** The number of the current floor. **/
 	private int mCurrentFloor;
@@ -19,6 +19,7 @@ public class Elevator extends Thread {
 	/** A direction flag. **/
 	private boolean mUp;
 	
+	// TODO add a lock while this elevator is moving, and add all external calls to a separate list during this time.
 	
 	/** Create a new elevator.
 	 * @param floorCount -The total amount of floors covered by this elevator, base floor not included. **/
@@ -33,12 +34,15 @@ public class Elevator extends Thread {
 	
 	/** Run the thread. **/
 	public void run() {
+		System.out.println("Elevator is initialized");
+		
 		while(true) {
 			if(mPriorityQueue.size() > 0) {
 				// Are we on a requested floor?
 				if(mPriorityQueue.peek().getIntegerValue() == mCurrentFloor) {
 					openDoor();
 					try {
+						// TODO add all passengers that want off to the selected floor.
 						sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -46,12 +50,20 @@ public class Elevator extends Thread {
 					closeDoor();
 				}
 				else if(mUp) {
+					if(isOpen())
+						closeDoor();
+					
 					moveUp(); // Move up one floor.
 				}
 				else {
+					if(isOpen())
+						closeDoor();
+					
 					moveDown(); // Move down one floor.
 				}
 			}
+			
+			System.out.println("Elevator is idle");
 			
 			try {
 				sleep(1000);
@@ -64,11 +76,13 @@ public class Elevator extends Thread {
 	/** Close the elevator doors. **/
 	public void closeDoor() {
 		mDoorOpen = false;
+		System.out.println("Opening doors");
 	}
 	
 	/** Open the elevator doors. **/
 	public void openDoor() {
 		mDoorOpen = true;
+		System.out.println("Closing doors");
 	}
 	
 	/** Check weather the elevator doors are open.
@@ -90,19 +104,23 @@ public class Elevator extends Thread {
 	}
 	
 	/** Move the elevator up 1 floor. **/
-	public void moveUp() {
-		if(mCurrentFloor > mFloorCount)
+	private void moveUp() {
+		if(mCurrentFloor < mFloorCount)
 			mCurrentFloor++;
 		else if(mCurrentFloor == mFloorCount)
 			changeDirection();
+		
+		System.out.println("The elevator is now on floor " + mCurrentFloor + " and is moving up");
 	}
 	
 	/** Move the elevator down 1 floor.**/
-	public void moveDown() {
+	private void moveDown() {
 		if(mCurrentFloor > 0)
 			mCurrentFloor--;
 		else if(mCurrentFloor == 0)
 			changeDirection();
+		
+		System.out.println("The elevator is now on floor " + mCurrentFloor + " and is moving down");
 	}
 	
 	/** Externally call the elevator from a floor.
@@ -122,6 +140,7 @@ public class Elevator extends Thread {
 		
 		// Add the call to the priority queue.
 		mPriorityQueue.add(new PriorityInteger(floor, priority));
+		System.out.println("Elevator called to floor " + floor);
 	}
 	
 	/** Internal call to the elevator to go to the selected floor.
@@ -141,6 +160,7 @@ public class Elevator extends Thread {
 		
 		// Add selected value to the queue.
 		mPriorityQueue.add(new PriorityInteger(floor, priority));
+		System.out.println("Elevator floor selected " + floor);
 	}
 	
 	/** Add a new passenger if there's room enough.
@@ -150,6 +170,10 @@ public class Elevator extends Thread {
 		if(mPassengers.size() < 8) {
 			mPassengers.add(person);
 			pickFloor(person.getDestination());
+			
+			System.out.println(person.getName() + " entered the elevator and wants to go to floor " 
+								+ person.getDestination());
+			
 			return true;
 		}
 		else
@@ -188,5 +212,21 @@ public class Elevator extends Thread {
 		}
 		
 		mUp = !mUp;
+	}
+	
+	/** Check weather the elevator still has some room for more passengers.
+	 * 	@return The number of passengers that still can fit in the elevator. **/
+	public int hasRoom() {
+		return 8 - mPassengers.size();
+	}
+	
+	/** Check the destination of the first passenger in line. 
+	 * @return The floor number that this passenger is headed to, or -1 if there's no passengers. **/
+	public int getDestination() {
+		Person person = mPassengers.peek();
+		if(person != null)
+			return person.getDestination();
+		else
+			return -1;
 	}
 }

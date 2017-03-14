@@ -4,7 +4,7 @@ import java.util.Random;
 
 /** This class represents a building with multiple floors and an elevator.
  * @author Gustaf Peter Hultgren
- * @version 1.0.1 **/
+ * @version 1.0.2 **/
 public class Building {
 	/** The floors of the building **/
 	private Floor mFloors[];
@@ -29,6 +29,7 @@ public class Building {
 	public void addPerson(String name) {
 		int destination = mRandom.nextInt(mFloors.length) + 1;
 		mFloors[0].personEnter(new Person(name, destination));
+		System.out.println(name + " entered the building and wants to go to floor " + destination);
 	}
 	
 	/** Run the building thread loop. **/
@@ -40,12 +41,46 @@ public class Building {
 			for(Floor floor : mFloors) {
 				destination = floor.getPersonDestination();
 				if(destination >= 0) {
-					// TODO:
-					// - call elevator to floor.getFloorNumber();
-					// - Load all people (max 8) onto the elevator once the doors open.
+					if(mElevator.getCurrentFloor() != floor.getFloorNumber()) {
+						mElevator.callElevator(floor.getFloorNumber());
+					}
+					else {
+						if(!mElevator.isOpen())
+							mElevator.openDoor();
+						
+						int room = mElevator.hasRoom();
+						for(int i = 0; i < room; i++) {
+							Person person = floor.personExit();
+							if(person != null)
+								mElevator.addPerson(person);
+						}
+					}
 				}
+			}
+			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 		
+	}
+	
+	/** The main entry point of this program. **/
+	public static void main(String[] args) {
+		Building building = new Building(8);
+		
+		building.addPerson("Lars");
+		building.addPerson("Peter");
+		building.addPerson("Erick");
+		building.addPerson("Torsten");
+		building.addPerson("Eva");
+		building.addPerson("Maria");
+		building.addPerson("Lisa");
+		building.addPerson("Berit");
+		building.addPerson("Sara");
+		
+		building.run();
 	}
 }
