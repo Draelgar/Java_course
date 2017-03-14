@@ -4,7 +4,7 @@ import java.util.Random;
 
 /** This class represents a building with multiple floors and an elevator.
  * @author Gustaf Peter Hultgren
- * @version 1.0 **/
+ * @version 1.0.1 **/
 public class Building {
 	/** The floors of the building **/
 	private Floor mFloors[];
@@ -33,6 +33,19 @@ public class Building {
 	
 	/** Run the building thread loop. **/
 	public void run() {
-		// TODO handle the building.
+		mElevator.start();
+		int destination = -1;
+		
+		while(true) {
+			for(Floor floor : mFloors) {
+				destination = floor.getPersonDestination();
+				if(destination >= 0) {
+					// TODO:
+					// - call elevator to floor.getFloorNumber();
+					// - Load all people (max 8) onto the elevator once the doors open.
+				}
+			}
+		}
+		
 	}
 }

@@ -4,7 +4,7 @@ import java.util.PriorityQueue;
 
 /** This class represents an elevator and will run on its own thread.
  * @author Gustaf Peter Hultgren
- * @version 1.0 **/
+ * @version 1.0.1 **/
 public class Elevator extends Thread {
 	/** The number of the current floor. **/
 	private int mCurrentFloor;
@@ -35,7 +35,22 @@ public class Elevator extends Thread {
 	public void run() {
 		while(true) {
 			if(mPriorityQueue.size() > 0) {
-				// TODO Run the elevator loop.
+				// Are we on a requested floor?
+				if(mPriorityQueue.peek().getIntegerValue() == mCurrentFloor) {
+					openDoor();
+					try {
+						sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					closeDoor();
+				}
+				else if(mUp) {
+					moveUp(); // Move up one floor.
+				}
+				else {
+					moveDown(); // Move down one floor.
+				}
 			}
 			
 			try {
@@ -79,7 +94,7 @@ public class Elevator extends Thread {
 		if(mCurrentFloor > mFloorCount)
 			mCurrentFloor++;
 		else if(mCurrentFloor == mFloorCount)
-			mUp = false;
+			changeDirection();
 	}
 	
 	/** Move the elevator down 1 floor.**/
@@ -87,7 +102,7 @@ public class Elevator extends Thread {
 		if(mCurrentFloor > 0)
 			mCurrentFloor--;
 		else if(mCurrentFloor == 0)
-			mUp = true;
+			changeDirection();
 	}
 	
 	/** Externally call the elevator from a floor.
@@ -98,8 +113,12 @@ public class Elevator extends Thread {
 		
 		if((mUp && floor > mCurrentFloor) || (!mUp && floor < mCurrentFloor))
 			priority = 1; // Calls to floors along the current rout is priority 1.
-		else 
+		else {
 			priority = 2; // Calls to floors already passed is priority 2.
+			
+			if(mPriorityQueue.size() < 1)
+				changeDirection();
+		}
 		
 		// Add the call to the priority queue.
 		mPriorityQueue.add(new PriorityInteger(floor, priority));
@@ -113,8 +132,12 @@ public class Elevator extends Thread {
 		
 		if((mUp && floor > mCurrentFloor) || (!mUp && floor < mCurrentFloor))
 			priority = 1; // Calls to floors along the current rout is priority 1.
-		else 
+		else {
 			priority = 2; // Calls to floors already passed is priority 2.
+			
+			if(mPriorityQueue.size() < 1)
+				changeDirection();
+		}
 		
 		// Add selected value to the queue.
 		mPriorityQueue.add(new PriorityInteger(floor, priority));
