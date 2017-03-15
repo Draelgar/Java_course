@@ -16,14 +16,14 @@ public class PriorityComparatorReverse<T extends PriorityData<T>> implements Com
 			if(o1.getData() == o2.getData())
 				return 0;
 			else if(o1.getData() > o2.getData())
-				return 1;
-			else
 				return -1;
+			else
+				return 1;
 		}
 		else if(o1.getPriority() < o2.getPriority())
-			return 1;
-		else
 			return -1;
+		else
+			return 1;
 		
 	}
 }

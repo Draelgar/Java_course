@@ -9,6 +9,10 @@ import java.util.Queue;
 public class Floor {
 	/** A queue of people who wants to use the elevator. **/
 	private Queue<Person> mQueue;
+	/** A queue with new persons that should wait until they call the elevator. **/
+	private Queue<Person> mNewQueue;
+	/** A flag to stop the ceaseless spamming! **/
+	private boolean mCalledElevator;
 	/** The floor number. **/
 	private int mFloorNumber;
 	
@@ -17,12 +21,34 @@ public class Floor {
 	public Floor(int floorNumber) {
 		mFloorNumber = floorNumber;
 		mQueue = new LinkedList<Person>();
+		mCalledElevator = false;
+		mNewQueue = new LinkedList<Person>();
+	}
+	
+	/** Tell the floor weather it has already called the elevator or not.
+	 * @param status -True or false. **/
+	public void call(boolean status) {
+		mCalledElevator = status;
+	}
+	
+	/** Check weather the floor has called the elevator.
+	 * @return True or false. **/
+	public boolean hasCalled() {
+		return mCalledElevator;
 	}
 	
 	/** Accept a new person onto the floor.
 	 * @param person -The person in question. **/
 	public void personEnter(Person person) {
-		mQueue.add(person);
+		mNewQueue.add(person);
+	}
+	
+	/** Update the floor by moving all new people from the entrance queue to the main queue. **/
+	public void update() {
+		while(!mNewQueue.isEmpty())
+			mQueue.add(mNewQueue.poll());
+		
+		mCalledElevator = false;
 	}
 	
 	/** Let the next person in line leave the floor. 

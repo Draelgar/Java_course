@@ -2,8 +2,8 @@ package elevator;
 
 /** This class represents a parson.
  * @author Gustaf Peter Hultgren
- * @version 1.0 **/
-public class Person implements Comparable<Person> {
+ * @version 1.1 **/
+public class Person implements PriorityData<Person> {
 	/** The name of the person. **/
 	private String mName;
 	/** The destination of the person. **/
@@ -50,5 +50,17 @@ public class Person implements Comparable<Person> {
 		else
 			return -1;
 		
+	}
+
+	/** Return the destination. **/
+	@Override
+	public int getData() {
+		return mDestination;
+	}
+
+	/** Return priority 1. **/
+	@Override
+	public int getPriority() {
+		return 1;
 	}
 }
