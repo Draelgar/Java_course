@@ -1,0 +1,90 @@
+/* Assign settings for all article objects. */
+article {
+	background: rgb(202, 144, 32); /*#CA9020;*/ /* Set the background color on all nav object. */
+	color: white; /* Set the text color within all nav objects. */
+	float: left;
+	width: 100%;
+	font-family: Impact, Charcoal, sans-serif;
+	text-align: center;
+}
+
+h1 {
+	font-family: Impact, Charcoal, sans-serif;
+}
+
+/* Assign settings for all navigation objects. */
+nav {
+	background: #CA4820; /* Set the background color on all nav object. */
+	color: white; /* Set the text color within all nav objects. */
+	float: left;
+	width: 100%;
+	text-align: center;
+}
+
+/* Assign settings for all footers. */
+footer {
+	background: rgb(79%, 29%, 13%); /*rgb(202, 72, 32);*/ /*#CA4820;*/ /* Three ways to define a color. */
+	color: white; /* Use a predefined color. */
+	float: left;
+	width: 100%;
+	text-align: center;
+	font-family: fantasy;
+}
+
+/* Define settings for all image objects of class banner. */
+img.banner {
+	float: left;
+	width: 100%;
+}
+
+/* Define settings for all video objects of class video. */
+video.video {
+	float: left;
+	width: 100%;
+}
+
+/* Define settings for objects of class divFrame. */
+.divFrame {
+	margin-left: 2%;
+	margin-right: 2%;
+	float: left;
+	width: 96%;
+}
+
+#footerDiv {
+	width: 100%;
+	height: 100%;
+}
+
+#info {
+	list-style-type: none;
+}
+
+/* Alter settings for all hyper-links. */
+a {
+	color: #C6C6FF;
+}
+
+/* Setup the main container. */
+div.container {
+	margin-left: 1%;
+	margin-right: 1%;
+}
+
+/* Hide list marks and print the list horizontally. */
+#links {
+	list-style-type: none;
+	display: inline;
+}
+
+/* List the links horizontally. */
+li.horizontal {
+	float: left;
+	margin-left: 10px;
+}
+
+/* Push the film info towards the center. */
+.text {
+	margin-left: 20%;
+	margin-right: 20%;
+}
