@@ -1,0 +1,102 @@
+/* All header objects. */
+header {
+	float: left;	/* This object will float to the left to meet up with other objects. */
+	text-align: center;	/* The text within this object should appear centralized. */
+	background: hsl(233, 100%, 25%); /* Set the background of the header to a dark blue. */
+	color: white;	/* Set the text color within the header to white. */
+	width: 100%;	/* This header will utilize the maximum area allowed by the main container. */
+}
+
+/* All navigation objects. */
+nav, footer {
+	float: left;
+	text-align: center;
+	width: 100%;
+	background: hsl(233, 40%, 42%); /* Set the background color to a grey-blue color. */
+	color: white;
+}
+
+/* All article objects. */
+article {
+	float: left;
+	text-align: center;
+	background: linear-gradient(hsl(233, 100%, 71%), hsl(233, 100%, 95%)); /* Setup a linear gradient from the top and down. */
+	/*background: hsl(233, 100%, 83%);*/
+	color: black;
+	width: 100%;
+	height: 400px;
+}
+
+/* Settings for the first article on this web page. */
+#begin {
+	background: hsl(233, 100%, 71%);
+	height: 1024px;
+}
+
+/* Settings for the last article on this web page. */
+#end {
+	background: hsl(233, 100%, 95%);
+}
+
+/* Settings for visited hyper-links. */
+a:visited {
+	color: hsl(233, 100%, 83%);
+}
+
+/* Settings for untouched hyper-links. */
+a {
+	color: hsl(233, 100%, 83%);
+}
+
+/* All div containers. */
+div {
+	float: left;
+	text-align: center;
+	width: 100%;
+}
+
+/* All div containers of class mainContainer. Overrides settings from more generalized calls. */
+div.mainContainer {
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%
+}
+/* Settings for the image with ID "greeting" */
+#greeting {
+	margin: 2%;
+	width: 20%;
+	height: 20%;
+}
+/* Settings for the image with ID "greetingsp". Only used in the single page variant of this web page. */
+#greetingsp {
+	margin: 2%;
+	width: 50%;
+	height: 50%;
+}
+
+ul {
+	display: inline-block; /* Follow the parent's layout model. */
+	list-style-type: none; /* Remove the annoying list markers. */
+	font-size: 18px; /* Set the font size. */
+	font-family: arial, helvetica, sans-serif; /* Set the font. */
+}
+
+li.link {
+	margin: 15px;
+	display: inline;
+}
+
+.bean {
+	width: 10%;
+	height: 10%;
+}
+/* Settings for form tags. */
+label {
+	border-radius: 5px;
+	padding: 20px;
+}
+/* Settings for input tags. */
+input {
+	border-radius: 5px;
+	margin: 20px;
+}
