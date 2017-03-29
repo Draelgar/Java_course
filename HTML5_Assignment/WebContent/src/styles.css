@@ -1,6 +1,8 @@
 /* Assign settings for all article objects. */
 article {
-	background: rgb(202, 144, 32); /*#CA9020;*/ /* Set the background color on all nav object. */
+	background: linear-gradient(hsl(10, 80%, 40%), hsl(50, 80%, 50%));
+	
+	/*background: hsla(15, 60%, 50%, 1); *//*#CA9020;*/ /* Set the background color on all nav object. */
 	color: white; /* Set the text color within all nav objects. */
 	float: left;
 	width: 100%;
@@ -14,7 +16,7 @@ h1 {
 
 /* Assign settings for all navigation objects. */
 nav {
-	background: #CA4820; /* Set the background color on all nav object. */
+	background: hsla(0, 0%, 0%, 1); /* Set the background color on all nav object. HSL = Hue, Saturation and Light. */
 	color: white; /* Set the text color within all nav objects. */
 	float: left;
 	width: 100%;
@@ -23,7 +25,7 @@ nav {
 
 /* Assign settings for all footers. */
 footer {
-	background: rgb(79%, 29%, 13%); /*rgb(202, 72, 32);*/ /*#CA4820;*/ /* Three ways to define a color. */
+	background: rgb(0, 0, 0); /*rgb(79%, 29%, 13%);*/ /*rgb(202, 72, 32);*/ /*#CA4820;*/ /* Three ways to define a color. */
 	color: white; /* Use a predefined color. */
 	float: left;
 	width: 100%;
