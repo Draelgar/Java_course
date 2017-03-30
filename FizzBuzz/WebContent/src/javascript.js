@@ -5,6 +5,14 @@
 /* Checks the value and returns it or returns fizz, buzz or fizzbuzz 
  * if the value can be divided by any or both of the given parameters.*/
 fizz_buzz = function(value, fizz, buzz) {
+	var fizzString = document.getElementById("newfizz").value;
+	if(fizzString == "")
+		fizzString = document.getElementById("newfizz").placeholder;
+	
+	var buzzString = document.getElementById("newbuzz").value;
+	if(buzzString == "")
+		buzzString = document.getElementById("newbuzz").placeholder;
+	
 	var result = 0;
 	if(value % fizz == 0)
 		result++;
@@ -12,11 +20,11 @@ fizz_buzz = function(value, fizz, buzz) {
 		result+=2;
 	
 	if(result == 3)
-		return "FizzBuzz";
+		return fizzString + buzzString;
 	else if(result == 2)
-		return "Buzz";
+		return buzzString;
 	else if(result == 1)
-		return "Fizz";
+		return fizzString;
 	else
 		return value.toString();
 }
@@ -73,5 +81,3 @@ document.getElementById("button").onclick = function() {
 	// Display the results.
 	document.getElementById("results").innerHTML = list;
 }
-
-

@@ -21,14 +21,16 @@
 							<label for="end">End</label><br>
 							<label for="fizz">Fizz Value</label><br>
 							<label for="buzz">Buzz Value</label><br>
-							<label for="fizzreplace">Fizz Replacement</label><br>
+							<label for="newfizz">Fizz Replacement</label><br>
+							<label for="newbuzz">Buzz Replacement</label><br>
 						</div>
 						<div class="flexrow">
 							<input type="number" id="start" name="startnumber" placeholder="1"><br>	
 							<input type="number" id="end" name="endnumber" placeholder="100"><br>	
 							<input type="number" id="fizz" name="fizzvalue" placeholder="3"><br>	
 							<input type="number" id="buzz" name="buzzvalue" placeholder="4"><br>
-							<input type="text" id="fizzreplace" name="newfizz" placeholder="fizz"><br>
+							<input type="text" id="newfizz" name="newfizzvalue" placeholder="Fizz"><br>
+							<input type="text" id="newbuzz" name="newbuzzvalue" placeholder="Buzz"><br>
 						</div>
 					
 						<div class="flexpadding"></div>
@@ -36,6 +38,8 @@
 					<br>
 					<!-- Create the button to start the program. -->
 					<input type="button" value="start" id="button">
+					<!-- Create the button to start the program. -->
+					<input type="button" value="fibonacci" id="fibonacci">
 				</form>
 				<h2>Results:</h2><br>
 				<div id="results">
@@ -49,5 +53,7 @@
 		
 		<!-- Load the local javaScript file. -->
 		<script src="src/javascript.js"></script>
+		<!-- Load the local javaScript file. -->
+		<script src="src/fibonacci.js"></script>
 	</body>
 </html>
