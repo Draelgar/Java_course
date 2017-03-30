@@ -1,79 +1,78 @@
-/* All header objects. */
+/* Header specific settings. */
 header {
-	float: left;	/* This object will float to the left to meet up with other objects. */
-	text-align: center;	/* The text within this object should appear centralized. */
 	background: hsl(233, 100%, 25%); /* Set the background of the header to a dark blue. */
 	color: white;	/* Set the text color within the header to white. */
-	width: 100%;	/* This header will utilize the maximum area allowed by the main container. */
 }
 
-/* All navigation objects. */
+/* Shared settings. */
+header, nav, footer, article, div {
+	float: left;	/* Tell the component to "float" left and close any spaces between other blocks. */
+	text-align: center; /* All text will appear centralized in this component. */
+	width: 100%; /* The component will fill the 100% of the parent container's width. */
+}
+
+/* Settings shared by both footer and navigation. */
 nav, footer {
-	float: left;
-	text-align: center;
-	width: 100%;
 	background: hsl(233, 40%, 42%); /* Set the background color to a grey-blue color. */
-	color: white;
+	color: white; /* Set the text color within the component to white. */
 }
 
-/* All article objects. */
+/* Footer specific settings. */
+footer {
+	font-size: 10px; /* The font size is set to 10 pixels. */
+}
+
+/* Article specific settings. */
 article {
-	float: left;
-	text-align: center;
 	background: linear-gradient(hsl(233, 100%, 71%), hsl(233, 100%, 95%)); /* Setup a linear gradient from the top and down. */
 	/*background: hsl(233, 100%, 83%);*/
-	color: black;
-	width: 100%;
-	height: 400px;
+	color: black; /* Set the text color within the article to black. */
+	min-height: 400px; /* Set the article to never be smaller than 400 pixels. */
 }
 
 /* Settings for the first article on this web page. */
 #begin {
-	background: hsl(233, 100%, 71%);
-	height: 1024px;
+	background: hsl(233, 100%, 71%); /* Set a fixed background color. */
+	min-height: 1024px; /* Force the height to be 1024 pixels or larger. */
 }
 
 /* Settings for the last article on this web page. */
 #end {
-	background: hsl(233, 100%, 95%);
+	background: hsl(233, 100%, 95%); /* Set a fixed background color. */
 }
 
 /* Settings for visited hyper-links. */
 a:visited {
-	color: hsl(233, 100%, 83%);
+	color: hsl(233, 100%, 83%); /* Override the default red color of visited links to a more comfortable blue color. */
 }
 
 /* Settings for untouched hyper-links. */
 a {
-	color: hsl(233, 100%, 83%);
+	color: hsl(233, 100%, 83%); /* Set the color of all unused links. */
 }
 
-/* All div containers. */
-div {
-	float: left;
-	text-align: center;
-	width: 100%;
-}
-
-/* All div containers of class mainContainer. Overrides settings from more generalized calls. */
+/* Settings for div containers of class mainContainer. Overrides settings from more generalized calls. */
 div.mainContainer {
-	margin-left: 5%;
-	margin-right: 5%;
-	width: 90%
+	margin-left: 5%; /* The margin to the left is 5% of the device display width. */
+	margin-right: 5%; /* The margin to the right is 5% of the device display width. */
+	width: 90% /* The width of the main container is 90% of the device display width. */
 }
+
 /* Settings for the image with ID "greeting" */
 #greeting {
-	margin: 2%;
-	width: 20%;
-	height: 20%;
-}
-/* Settings for the image with ID "greetingsp". Only used in the single page variant of this web page. */
-#greetingsp {
-	margin: 2%;
-	width: 50%;
-	height: 50%;
+	margin: 2%; /* Add a margin in every direction relative to the parent's box. */
+	width: 20%; /* Set the width of the image relative to parent's box. */
+	height: 20%; /* Set the height of the image relatively to parent's box. */
 }
 
+/* Settings for the image with ID "greetingsp". Only used in the single page variant of this web page. */
+#greetingsp {
+	margin: 2%; /* Add a margin in every direction relative to the parent's box. */
+	width: 50%; /* Set the width of the image relative to parent's box. */
+	height: 50%; /* Set the height of the image relatively to parent's box. */
+}
+
+/* Settings for unordered lists. */
 ul {
 	display: inline-block; /* Follow the parent's layout model. */
 	list-style-type: none; /* Remove the annoying list markers. */
@@ -81,22 +80,28 @@ ul {
 	font-family: arial, helvetica, sans-serif; /* Set the font. */
 }
 
+/* Settings for list items of class "link". */
 li.link {
-	margin: 15px;
-	display: inline;
+	margin: 15px; /* Add a fixed margin of 15 pixels around this list item. */
+	display: inline; /* Set the item to follow parent's rules. */
 }
 
+/* Settings for objects of class "bean". */
 .bean {
-	width: 10%;
-	height: 10%;
+	width: 10%; /* The width of the object. */
+	height: 10%; /* The height of the object. */
 }
+
+label, input {
+	border-radius: 5px; /* The currently invisible border's width. */
+}
+
 /* Settings for form tags. */
 label {
-	border-radius: 5px;
-	padding: 20px;
+	padding: 10px; /* Text padding. */
 }
+
 /* Settings for input tags. */
 input {
-	border-radius: 5px;
-	margin: 20px;
+	margin: 20px; /* Text padding. */
 }
