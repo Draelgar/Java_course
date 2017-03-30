@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div id="myDiv"></div>
+	<form action="http://localhost:8080/HTML5_Assignment/Test.jsp">
+		<input type="submit" value="click me!" id="myBtn"/>
+		<input type="text" id="text" name="textfield" required/>
+	</form>
+	<div class="divClass">aaa</div>
+	<div class="divClass">bbb</div>
+	<script type="text/javascript">
+		/* var namn = prompt("Ange namn.", placeholder="Peter");
+		document.getElementById("myDiv").innerHTML = "Välkommen " + namn; */
+		document.getElementById("myBtn").onclick = 
+			function() {
+				var txt = document.getElementById("text").value;
+				
+				if(txt != "" && document.getElementById("text").required) {
+					var nodes = document.getElementsByClassName("divClass");
+					for(i = 0; i < nodes.length; i++)
+						nodes[i].innerHTML = txt + " " + i;
+				}
+			}
+		/* var nodes = document.getElementsByClassName("divClass");
+		for(i = 0; i < nodes.length; i++)
+			nodes[i].innerHTML = namn + " " + i; */
+	</script>
+</body>
+</html>
