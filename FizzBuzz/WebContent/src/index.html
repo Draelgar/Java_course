@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FizzBuzz</title>
+<link rel="stylesheet" href="src/style.css">
+<meta name="viewport" content="width: device-width, initial-scale=1.0">
+</head>
+	<body>
+		<div id="main_container">
+			<header>
+				<h1>FizzBuzz Generator</h1>
+			</header>
+			<article>
+				<form>
+					<div id="flex-container">
+						<div class="flexpadding"></div>
+						<!-- Create labels and numeric input fields. -->
+						<div class="flexrow">
+							<label for="start">Start</label><br>
+							<label for="end">End</label><br>
+							<label for="fizz">Fizz Value</label><br>
+							<label for="buzz">Buzz Value</label><br>
+							<label for="fizzreplace">Fizz Replacement</label><br>
+						</div>
+						<div class="flexrow">
+							<input type="number" id="start" name="startnumber" placeholder="1"><br>	
+							<input type="number" id="end" name="endnumber" placeholder="100"><br>	
+							<input type="number" id="fizz" name="fizzvalue" placeholder="3"><br>	
+							<input type="number" id="buzz" name="buzzvalue" placeholder="4"><br>
+							<input type="text" id="fizzreplace" name="newfizz" placeholder="fizz"><br>
+						</div>
+					
+						<div class="flexpadding"></div>
+					</div>
+					<br>
+					<!-- Create the button to start the program. -->
+					<input type="button" value="start" id="button">
+				</form>
+				<h2>Results:</h2><br>
+				<div id="results">
+					<h3 id="results"></h3>
+				</div>
+			</article>
+			<footer>
+				<p>&copy 2017, Gustaf Peter Hultgren</p>
+			</footer>
+		</div>
+		
+		<!-- Load the local javaScript file. -->
+		<script src="src/javascript.js"></script>
+	</body>
+</html>

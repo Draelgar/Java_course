@@ -1,0 +1,71 @@
+@CHARSET "UTF-8";
+
+#main_container {
+	/* Flexbox settings. */
+	display: flex;
+	flex-flow: column wrap;
+	
+	/* Regular settings. */
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+}
+
+header, footer, article {
+	text-align: center;
+	color: hsl(240, 0%, 100%);
+	flex: 1;
+	justify-content: center;
+}
+
+header {
+	background: hsl(240, 100%, 30%);
+}
+
+footer {
+	background: hsl(240, 30%, 60%);
+	font-size: 10px;
+}
+
+article {
+	background: linear-gradient(hsl(240, 100%, 60%), hsl(240, 100%, 85%));
+}
+
+#results {
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-bottom: 5%;
+	font-size: 20px;
+	font-family: Arial, Charcoal, sans-serif;
+}
+label {
+	padding: 20px;
+	margin-top: 30px;
+	line-height: 21px;
+}
+input {
+	border-radius: 10px; /* Rounded text fields and buttons. */
+}
+
+#flex-container {
+	display: flex;
+	margin: 10px;
+	flex-flow: row wrap;
+}
+
+.flexrow {
+	flex: 1;
+}
+
+.flexpadding {
+	flex: 2;
+}
+
+#button {
+	width: 60px;
+	height: 40px;
+	font-size: 20px;
+	font-family: Impact, Charcoal, sans-serif;
+	color: hsl(0, 0%, 100%);
+	background: hsl(240, 100%, 30%);
+}
