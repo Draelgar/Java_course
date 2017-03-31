@@ -124,7 +124,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log." suffix=".txt"/>
 
-      <Context docBase="HTML5Proj" path="/HTML5Proj" reloadable="true" source="org.eclipse.jst.jee.server:HTML5Proj"/><Context docBase="HTML5_Assignment" path="/HTML5_Assignment" reloadable="true" source="org.eclipse.jst.jee.server:HTML5_Assignment"/><Context docBase="Kaffeshop" path="/Kaffeshop" reloadable="true" source="org.eclipse.jst.jee.server:Kaffeshop"/><Context docBase="FizzBuzz" path="/FizzBuzz" reloadable="true" source="org.eclipse.jst.jee.server:FizzBuzz"/></Host>
+      <Context docBase="HTML5Proj" path="/HTML5Proj" reloadable="true" source="org.eclipse.jst.jee.server:HTML5Proj"/><Context docBase="HTML5_Assignment" path="/HTML5_Assignment" reloadable="true" source="org.eclipse.jst.jee.server:HTML5_Assignment"/><Context docBase="Kaffeshop" path="/Kaffeshop" reloadable="true" source="org.eclipse.jst.jee.server:Kaffeshop"/><Context docBase="FizzBuzz" path="/FizzBuzz" reloadable="true" source="org.eclipse.jst.jee.server:FizzBuzz"/><Context docBase="ServletCodealong" path="/ServletCodealong" reloadable="true" source="org.eclipse.jst.jee.server:ServletCodealong"/></Host>
     </Engine>
   </Service>
 </Server>

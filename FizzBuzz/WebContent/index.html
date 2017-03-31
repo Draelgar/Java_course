@@ -9,20 +9,28 @@
 	<body>
 		<div id="main_container">
 			<header>
-				<h1>FizzBuzz Generator</h1>
+				<h1>FizzBuzz & Fibonacci Generator</h1>
 			</header>
+			<nav>
+				<div id="navdiv">
+					<a href="http://localhost:8080/FizzBuzz/wordlettercounter.html">Word & Letter Counter</a>
+					, 
+					<a href="http://localhost:8080/FizzBuzz/calculator.html">Calculator</a>
+				</div>
+			</nav>
 			<article>
 				<form>
 					<div id="flex-container">
 						<div class="flexpadding"></div>
 						<!-- Create labels and numeric input fields. -->
 						<div class="flexrow">
-							<label for="start">Start</label><br>
-							<label for="end">End</label><br>
+							<label for="start">FizzBuzz Start Value</label><br>
+							<label for="end">FizzBuzz End Value</label><br>
 							<label for="fizz">Fizz Value</label><br>
 							<label for="buzz">Buzz Value</label><br>
 							<label for="newfizz">Fizz Replacement</label><br>
 							<label for="newbuzz">Buzz Replacement</label><br>
+							<label for="fibit">Fibonacci Iterations</label><br>
 						</div>
 						<div class="flexrow">
 							<input type="number" id="start" name="startnumber" placeholder="1"><br>	
@@ -31,6 +39,7 @@
 							<input type="number" id="buzz" name="buzzvalue" placeholder="4"><br>
 							<input type="text" id="newfizz" name="newfizzvalue" placeholder="Fizz"><br>
 							<input type="text" id="newbuzz" name="newbuzzvalue" placeholder="Buzz"><br>
+							<input type="number" id="fibit" name="fibonacciiterations" placeholder="102"><br>
 						</div>
 					
 						<div class="flexpadding"></div>
