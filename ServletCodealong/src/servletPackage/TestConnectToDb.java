@@ -29,24 +29,29 @@ public class TestConnectToDb {
 	@SuppressWarnings("unused")
 	private static final String remove = "DELETE FROM employee WHERE lastname = ?;";
 	
-	public static void insert(String name) {
+	public static void insert(String id, String name, String surname, String date) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null; // Use this for occasional query to the database.
 		
-		try {			
+		try {
+			String driver = "com.mysql.jdbc.Driver";
+			Class.forName(driver);
+			 
 			connection = DriverManager.getConnection(dbUri, user, password);
 			System.out.println("Connection Established.");
 			preparedStatement = connection.prepareStatement(addNew);
-			preparedStatement.setByte(1, (byte)20);
+			preparedStatement.setByte(1, Byte.parseByte(id));
 			preparedStatement.setString(2, name);
-			preparedStatement.setString(3, name);
-			preparedStatement.setDate(4, Date.valueOf(LocalDate.now()));
+			preparedStatement.setString(3, surname);
+			preparedStatement.setDate(4, Date.valueOf(date));
 
 			System.out.println(preparedStatement.executeUpdate());
 			  
 		 } catch (SQLException e) {
 			 System.out.println(e.getMessage());
-		 } finally {
+		 } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
 			 try {
 				 if(preparedStatement != null)
 					 preparedStatement.close();
@@ -56,44 +61,6 @@ public class TestConnectToDb {
 				 System.out.println("Connection Terminated.");
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
-			}
-		 }
-	}
-	
-	public static void main(String[] args) {
-		 Connection connection = null;
-		 // Statement statement = null; // Use this for occasional query to the database.
-		 // CallableStatement callableStatement = null; // Use this for calling stored procedures in the database.
-		 PreparedStatement preparedStatement = null; // Use this for multiple queries to the database.
-		 ResultSet resultSet = null;
-		 
-		 try {
-			 connection = DriverManager.getConnection(dbUri, user, password);
-			 System.out.println("Connection Established.");
-			 preparedStatement = connection.prepareStatement(fetchWhere);
-			 preparedStatement.setByte(1, (byte) 3);
-			 resultSet = preparedStatement.executeQuery();
-			 
-			 while(resultSet.next()) {
-				 System.out.println(resultSet.getString("firstname") + ", " + resultSet.getString("lastname"));
-			 }
-			 
-			 
-		 } catch (SQLException e) {
-			 System.out.println(e.getMessage());
-			 e.printStackTrace();
-		 } finally {
-			 try {
-				 if(resultSet != null)
-					 resultSet.close();
-				 if(preparedStatement != null)
-					 preparedStatement.close();
-				 if(connection != null)
-					 connection.close();
-
-				 System.out.println("Connection Terminated.");
-			} catch (SQLException e) {
-				e.printStackTrace();
 			}
 		 }
 	}

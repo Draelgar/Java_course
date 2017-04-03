@@ -35,8 +35,12 @@ public class TestServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = request.getParameter("name");
-		response.sendRedirect("svar.jsp?name=Fredag, Välkommen " + name);
-		TestConnectToDb.insert(name);
+		String surname = request.getParameter("surname");
+		String date = request.getParameter("birthdate");
+		String id = request.getParameter("id");
+		
+		response.sendRedirect("svar.jsp?name=Fredag, Välkommen " + name + " " + surname);
+		TestConnectToDb.insert(id, name, surname, date);
 	}
 
 }
