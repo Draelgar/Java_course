@@ -2,6 +2,8 @@ package bankSystemTest;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import bankSystem.BankAccount;
@@ -10,6 +12,20 @@ import bankSystem.BankAccount;
  * @author Gustaf Peter Hultgren
  * @version 1.0 **/
 public class BankAccountTest {
+	// Static @BeforeClass & @AfterClass
+	// @Test(expected=Exception.class)
+	// @Test(timeout=100)
+	private BankAccount mAccount = null;
+	@Before
+	public void prepare() {
+		mAccount = new BankAccount();
+	}
+	
+	@After
+	public void cleanup() {
+		mAccount = null;
+	}
+	
 	@Test
 	public void create() {
 		// Given
