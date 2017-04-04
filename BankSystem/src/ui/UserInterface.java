@@ -1,4 +1,4 @@
-package bankSystem;
+package ui;
 
 import java.io.InputStream;
 import java.util.LinkedList;
@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import commands.*;
+import program.Program;
 
 public class UserInterface implements Runnable{
 	private Scanner mScanner;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import bankSystem.Bank;
 import bankSystem.TransactionInfo;
-import bankSystem.UserInterface;
+import ui.UserInterface;
 
 /** This class represents a call to get the transaction history of a specific account.
  * @author Gustaf Peter Hultgren

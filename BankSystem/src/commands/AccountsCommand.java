@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import bankSystem.Bank;
-import bankSystem.UserInterface;
+import ui.UserInterface;
 
 /** This class represents a call to get the names of the accounts.
  * @author Gustaf Peter Hultgren

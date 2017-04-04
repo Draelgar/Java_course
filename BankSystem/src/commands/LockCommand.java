@@ -1,7 +1,7 @@
 package commands;
 
 import bankSystem.Bank;
-import bankSystem.UserInterface;
+import ui.UserInterface;
 
 /** This class represents a call to lock or unlock a specific account.
  * @author Gustaf Peter Hultgren

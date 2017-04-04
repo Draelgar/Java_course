@@ -1,7 +1,7 @@
 package commands;
 
 import bankSystem.Bank;
-import bankSystem.UserInterface;
+import ui.UserInterface;
 
 /** This class represents a call to transfer a sum of money between two accounts.
  * @author Gustaf Peter Hultgren

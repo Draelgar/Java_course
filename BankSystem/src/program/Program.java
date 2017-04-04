@@ -1,10 +1,12 @@
-package bankSystem;
+package program;
 
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import bankSystem.Bank;
 import commands.Command;
+import ui.UserInterface;
 
 public class Program {
 	private static Program mInstance = null;

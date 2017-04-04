@@ -1,4 +1,4 @@
-package bankSystem;
+package ui;
 
 /** Used for menu selection.
  * @author Gustaf Peter Hultgren
