@@ -8,19 +8,21 @@ import bankSystem.UserInterface;
  * @version 1.0 **/
 public class BalanceCommand implements Command{
 	private String mBankAccountName;
+	private UserInterface mUi = null;
 	
 	/** Create a new command. **/
-	public BalanceCommand(String bankAccountName) {
+	public BalanceCommand(UserInterface ui, String bankAccountName) {
 		mBankAccountName = bankAccountName;
+		mUi = ui;
 	}
 	
 	@Override
 	public void execute(CustomerAccount ca) {
 		double balance = ca.getBankAccountBalance(mBankAccountName);
 		if(balance == Double.NEGATIVE_INFINITY)
-			UserInterface.getSingleton().print("The account does not exist!\n\n");
+			mUi.print("The account does not exist!\n\n");
 		else
-			UserInterface.getSingleton().print("\"" + mBankAccountName + "\"" + " : " + balance + "kr\n\n");
+			mUi.print("\"" + mBankAccountName + "\"" + " : " + balance + "kr\n\n");
 	}
 
 }

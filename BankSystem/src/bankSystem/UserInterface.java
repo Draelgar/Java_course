@@ -9,6 +9,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import commands.AccountsCommand;
 import commands.AllBalanceCommand;
 import commands.BalanceCommand;
+import commands.HistoryCommand;
+import commands.LockCommand;
 
 public class UserInterface implements Runnable{
 	private Scanner mScanner;
@@ -145,17 +147,27 @@ public class UserInterface implements Runnable{
 	
 	/** Lists the accounts associated by the current customer. **/
 	private void listAccounts() {
-		Program.getSingleton().addCommand(new AccountsCommand());
+		Program.getSingleton().addCommand(new AccountsCommand(this));
 	}
 	
 	/** List the account balances. **/
 	private void listAccountBalance() {
-		Program.getSingleton().addCommand(new AllBalanceCommand());
+		Program.getSingleton().addCommand(new AllBalanceCommand(this));
 	}
 	
 	/** Display the balance for a specific account. **/
 	private void displayBalance() {
-		Program.getSingleton().addCommand(new BalanceCommand(mBankAccountName));
+		Program.getSingleton().addCommand(new BalanceCommand(this, mBankAccountName));
+	}
+	
+	/** Display the transaction history for a specific account. **/
+	private void displayHistory() {
+		Program.getSingleton().addCommand(new HistoryCommand(this, mBankAccountName));
+	}
+	
+	/** Lock or unlock a bank account. **/
+	private void lockBankAccount(boolean lock) {
+		Program.getSingleton().addCommand(new LockCommand(this, mBankAccountName, lock));
 	}
 	
 	/** Run the user interface. **/
@@ -180,43 +192,39 @@ public class UserInterface implements Runnable{
 				case BALANCE: {
 					selectBankAccountName();
 					displayBalance();
-					// Create a command taking the account name as input.
 					break;
 				}
 				case HISTORY: {
 					selectBankAccountName();
-					// Create a command taking the account name as input.
+					displayHistory();
 					break;
 				}
 				case INSERT: {
 					selectBankAccountName();
 					// Create a command with the following inputs:
-					//	- Account name.
 					// 	- Sum to add.
 					break;
 				}
 				case LOCK: {
 					selectBankAccountName();
-					// Create a command taking the account name as input.
+					lockBankAccount(true);
 					break;
 				}
 				case TRANSFER: {
 					selectBankAccountName();
 					// Create a command with the following inputs:
-					//	- Source account name.
 					//	- Destination account name.
 					// 	- Sum to add.
 					break;
 				}
 				case UNLOCK: {
 					selectBankAccountName();
-					// Create a command taking the account name as input.
+					lockBankAccount(false);
 					break;
 				}
 				case WITHDRAW: {
 					selectBankAccountName();
 					// Create a command with the following inputs:
-					//	- Account name.
 					// 	- Sum to subtract.
 					break;
 				}
