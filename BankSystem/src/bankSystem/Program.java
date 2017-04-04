@@ -8,15 +8,17 @@ import commands.Command;
 
 public class Program {
 	private static Program mInstance = null;
-	private CustomerAccount mCustomerAccount;
+	private Bank mBank;
 	private Thread mUIThread;
 	private ReentrantReadWriteLock mLock;
 	private Queue<Command> mCommands;
 	
 	private Program() {
-		mCustomerAccount = new CustomerAccount("6554-2,55674542-3");
-		mCustomerAccount.addBankAccount("6554-2,76349274-3");
-		mCustomerAccount.addBankAccount("6554-2,83527453-3");
+		mBank = new Bank();
+		mBank.addCustomer("6554-2", "55674542-3");
+		mBank.addBankAccount("6554-2", "76349274-3");
+		mBank.addBankAccount("6554-2", "83527453-3");
+		
 		mCommands = new LinkedList<Command>();
 		mLock = new ReentrantReadWriteLock();
 	};
@@ -37,7 +39,7 @@ public class Program {
 
 		while(mUIThread.isAlive()) {
 			if(!mCommands.isEmpty())
-				mCommands.poll().execute(mCustomerAccount);
+				mCommands.poll().execute(mBank);
 		}
 	}
 	

@@ -2,7 +2,7 @@ package commands;
 
 import java.util.ArrayList;
 
-import bankSystem.CustomerAccount;
+import bankSystem.Bank;
 import bankSystem.TransactionInfo;
 import bankSystem.UserInterface;
 
@@ -12,16 +12,18 @@ import bankSystem.UserInterface;
 public class HistoryCommand implements Command {
 	private String mBankAccountName;
 	private UserInterface mUi = null;
+	private String mCustomer;
 	
 	/** Create a new command to get the transaction history. **/
-	public HistoryCommand(UserInterface ui, String bankAccountName) {
+	public HistoryCommand(UserInterface ui, String customer, String bankAccountName) {
 		mBankAccountName = bankAccountName;
 		mUi = ui;
+		mCustomer = customer;
 	}
 	
 	@Override
-	public void execute(CustomerAccount ca) {
-		ArrayList<TransactionInfo> history = ca.getBankAccountHistory(mBankAccountName);
+	public void execute(Bank bank) {
+		ArrayList<TransactionInfo> history = bank.history(mCustomer, mBankAccountName);
 		String string = "";
 		
 		if(history != null) {
@@ -31,7 +33,8 @@ public class HistoryCommand implements Command {
 			mUi.print(string);
 		}
 		else
-			mUi.print("The account does not exist!\n");
+			mUi.print("Account " + mBankAccountName + " does not exist for customer " 
+					+ mCustomer + "!\n");
 	}
 
 }

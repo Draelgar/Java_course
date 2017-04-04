@@ -1,6 +1,6 @@
 package commands;
 
-import bankSystem.CustomerAccount;
+import bankSystem.Bank;
 import bankSystem.UserInterface;
 
 /** This class represents a call to lock or unlock a specific account.
@@ -10,24 +10,26 @@ public class LockCommand implements Command{
 	private String mBankAccountName;
 	private UserInterface mUi = null;
 	private boolean mLock;
+	private String mCustomer;
 	
 	/** Create a new command to lock/unlock an account. **/
-	public LockCommand(UserInterface ui, String bankAccountName, boolean lock) {
+	public LockCommand(UserInterface ui, String customer, String bankAccountName, boolean lock) {
 		mBankAccountName = bankAccountName;
 		mUi = ui;
 		mLock = lock;
+		mCustomer = customer;
 	}
 	
 	@Override
-	public void execute(CustomerAccount ca) {
+	public void execute(Bank bank) {
 		if(mLock) {
-			if(ca.lockBankAccount(mBankAccountName))
+			if(bank.lock(mCustomer, mBankAccountName))
 				mUi.print("The account has been locked.\n");
 			else
 				mUi.print("The account doesn't exist!\n");
 		}
 		else {
-			if(ca.unlockBankAccount(mBankAccountName))
+			if(bank.unlock(mCustomer, mBankAccountName))
 				mUi.print("The account has been unlocked.\n");
 			else
 				mUi.print("The account doesn't exist!\n");

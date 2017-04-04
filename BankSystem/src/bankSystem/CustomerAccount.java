@@ -143,4 +143,16 @@ public class CustomerAccount {
 	public boolean bankAccountExist(String bankAccountName) {
 		return mBankAccounts.containsKey(bankAccountName);
 	}
+	
+	/** Get a list of all bank accounts. **/
+	public ArrayList<String> getBankAccounts() {
+		ArrayList<String> list = new ArrayList<String>();
+		Iterator<Entry<String, BankAccount>> it = mBankAccounts.entrySet().iterator();
+		
+		while(it.hasNext()) {
+			list.add(it.next().getKey());
+		}
+		
+		return list;
+	}
 }

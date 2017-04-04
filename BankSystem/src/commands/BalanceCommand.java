@@ -1,6 +1,6 @@
 package commands;
 
-import bankSystem.CustomerAccount;
+import bankSystem.Bank;
 import bankSystem.UserInterface;
 
 /** This class represents a call to get the balance of a specific account.
@@ -9,16 +9,18 @@ import bankSystem.UserInterface;
 public class BalanceCommand implements Command{
 	private String mBankAccountName;
 	private UserInterface mUi = null;
+	String mCustomer;
 	
 	/** Create a new command. **/
-	public BalanceCommand(UserInterface ui, String bankAccountName) {
+	public BalanceCommand(UserInterface ui, String customer, String bankAccountName) {
 		mBankAccountName = bankAccountName;
 		mUi = ui;
+		mCustomer = customer;
 	}
 	
 	@Override
-	public void execute(CustomerAccount ca) {
-		double balance = ca.getBankAccountBalance(mBankAccountName);
+	public void execute(Bank bank) {
+		double balance = bank.balance(mCustomer, mBankAccountName);
 		if(balance == Double.NEGATIVE_INFINITY)
 			mUi.print("The account does not exist!\n\n");
 		else

@@ -14,6 +14,7 @@ public class UserInterface implements Runnable{
 	private Queue<String> mPrinterQueue;
 	private ReentrantReadWriteLock mLock;
 	private String mBankAccountName = "";
+	private String mCustomerNumber = "6554-2";
 	
 	/** Create a new instance of this class. **/
 	private UserInterface() {
@@ -61,9 +62,9 @@ public class UserInterface implements Runnable{
 					+ "5 - Withdraw a sum of money from a specific account.\n"
 					+ "6 - Transfer a sum of money between two accounts.\n"
 					+ "7 - Lock the specified account. The account no longer"
-					+ "accepts withdrawals.\n"
+					+ " accepts withdrawals.\n"
 					+ "8 - Unlock a specified account. The account now accepts"
-					+ "withdrawals again.\n"
+					+ " withdrawals again.\n"
 					+ "9 - Exit the application.\n\n");
 		
 		MenuSelection selection = MenuSelection.NONE;
@@ -124,7 +125,11 @@ public class UserInterface implements Runnable{
 		if(mBankAccountName == "") {
 			System.out.println("Please type the name of the bank account.");
 			String bankAccountName = mScanner.nextLine();
-			mBankAccountName = bankAccountName;
+			
+			if(bankAccountName.contains(","))
+				mBankAccountName = bankAccountName.substring(bankAccountName.indexOf(",") + 1);
+			else
+				mBankAccountName = bankAccountName;
 		}
 		else {
 			System.out.println("Please type the name of the bank account. "
@@ -132,7 +137,10 @@ public class UserInterface implements Runnable{
 
 			String bankAccountName = mScanner.nextLine();
 			if(bankAccountName != "")
-				mBankAccountName = bankAccountName;
+				if(bankAccountName.contains(","))
+					mBankAccountName = bankAccountName.substring(bankAccountName.indexOf(",") + 1);
+				else
+					mBankAccountName = bankAccountName;
 		}
 	}
 	
@@ -143,43 +151,43 @@ public class UserInterface implements Runnable{
 	
 	/** Lists the accounts associated by the current customer. **/
 	private void listAccounts() {
-		Program.getSingleton().addCommand(new AccountsCommand(this));
+		Program.getSingleton().addCommand(new AccountsCommand(this, mCustomerNumber));
 	}
 	
 	/** List the account balances. **/
 	private void listAccountBalance() {
-		Program.getSingleton().addCommand(new AllBalanceCommand(this));
+		Program.getSingleton().addCommand(new AllBalanceCommand(this, mCustomerNumber));
 	}
 	
 	/** Display the balance for a specific account. **/
 	private void displayBalance() {
-		Program.getSingleton().addCommand(new BalanceCommand(this, mBankAccountName));
+		Program.getSingleton().addCommand(new BalanceCommand(this, mCustomerNumber, mBankAccountName));
 	}
 	
 	/** Display the transaction history for a specific account. **/
 	private void displayHistory() {
-		Program.getSingleton().addCommand(new HistoryCommand(this, mBankAccountName));
+		Program.getSingleton().addCommand(new HistoryCommand(this, mCustomerNumber, mBankAccountName));
 	}
 	
 	/** Lock or unlock a bank account. **/
 	private void lockBankAccount(boolean lock) {
-		Program.getSingleton().addCommand(new LockCommand(this, mBankAccountName, lock));
+		Program.getSingleton().addCommand(new LockCommand(this, mCustomerNumber, mBankAccountName, lock));
 	}
 	
 	/** Insert a sum to the specified account. **/
 	private void insert(double sum) {
-		Program.getSingleton().addCommand(new InsertCommand(this, mBankAccountName, sum));
+		Program.getSingleton().addCommand(new InsertCommand(this, mCustomerNumber, mBankAccountName, sum));
 	}
 	
 	/** Withdraw a sum from the specified account. **/
 	private void withdraw(double sum) {
-		Program.getSingleton().addCommand(new WithdrawCommand(this, mBankAccountName, sum));
+		Program.getSingleton().addCommand(new WithdrawCommand(this, mCustomerNumber, mBankAccountName, sum));
 	}
 	
 	/** Transfer a sum of money between two bank accounts. **/
 	private void transfer(String targetBankAccountName, double sum) {
 		Program.getSingleton().addCommand(
-				new TransferCommand(this, mBankAccountName, targetBankAccountName, sum));
+				new TransferCommand(this, mCustomerNumber, mBankAccountName, targetBankAccountName, sum));
 	}
 	
 	/** Get a sum from the user. **/
@@ -200,7 +208,12 @@ public class UserInterface implements Runnable{
 	/** Get the name of the target bank account. **/
 	private String getTarget() {
 		System.out.println("Please type the name of the target bank account.");
-		return mScanner.nextLine();
+		String target = mScanner.nextLine();
+		
+		if(target.contains(","))
+			return target.substring(target.indexOf(",") + 1);
+		else
+			return target;
 	}
 	
 	/** Run the user interface. **/

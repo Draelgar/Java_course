@@ -54,7 +54,7 @@ public class BankAccount {
 		if(!mLocked) {
 			if(money >= 0.0) {
 				double withdrawal = money;
-				if(mBalance > withdrawal) {
+				if(mBalance >= withdrawal) {
 					mBalance -= withdrawal;
 					mHistory.add(new TransactionInfo(-money, mBalance));
 					return true;
