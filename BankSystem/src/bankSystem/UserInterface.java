@@ -6,11 +6,7 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import commands.AccountsCommand;
-import commands.AllBalanceCommand;
-import commands.BalanceCommand;
-import commands.HistoryCommand;
-import commands.LockCommand;
+import commands.*;
 
 public class UserInterface implements Runnable{
 	private Scanner mScanner;
@@ -170,6 +166,43 @@ public class UserInterface implements Runnable{
 		Program.getSingleton().addCommand(new LockCommand(this, mBankAccountName, lock));
 	}
 	
+	/** Insert a sum to the specified account. **/
+	private void insert(double sum) {
+		Program.getSingleton().addCommand(new InsertCommand(this, mBankAccountName, sum));
+	}
+	
+	/** Withdraw a sum from the specified account. **/
+	private void withdraw(double sum) {
+		Program.getSingleton().addCommand(new WithdrawCommand(this, mBankAccountName, sum));
+	}
+	
+	/** Transfer a sum of money between two bank accounts. **/
+	private void transfer(String targetBankAccountName, double sum) {
+		Program.getSingleton().addCommand(
+				new TransferCommand(this, mBankAccountName, targetBankAccountName, sum));
+	}
+	
+	/** Get a sum from the user. **/
+	private double getSum() {
+		System.out.println("Please type the sum of money this transaction will handle.\n");
+		String response = mScanner.nextLine();
+		
+		try {
+			double sum = Double.parseDouble(response);
+			return sum;
+		} catch(NumberFormatException e) {
+			System.out.println("The sum was not a number. " + e.getMessage());
+		}
+		
+		return Double.NaN;
+	}
+	
+	/** Get the name of the target bank account. **/
+	private String getTarget() {
+		System.out.println("Please type the name of the target bank account.");
+		return mScanner.nextLine();
+	}
+	
 	/** Run the user interface. **/
 	public void run() {
 		init(System.in);
@@ -201,8 +234,9 @@ public class UserInterface implements Runnable{
 				}
 				case INSERT: {
 					selectBankAccountName();
-					// Create a command with the following inputs:
-					// 	- Sum to add.
+					double sum = getSum();
+					if(sum != Double.NaN)
+						insert(sum);
 					break;
 				}
 				case LOCK: {
@@ -212,9 +246,11 @@ public class UserInterface implements Runnable{
 				}
 				case TRANSFER: {
 					selectBankAccountName();
-					// Create a command with the following inputs:
-					//	- Destination account name.
-					// 	- Sum to add.
+					double sum = getSum();
+					if(sum != Double.NaN) {
+						String target = getTarget();
+						transfer(target, sum);
+					}
 					break;
 				}
 				case UNLOCK: {
@@ -224,8 +260,9 @@ public class UserInterface implements Runnable{
 				}
 				case WITHDRAW: {
 					selectBankAccountName();
-					// Create a command with the following inputs:
-					// 	- Sum to subtract.
+					double sum = getSum();
+					if(sum != Double.NaN)
+						withdraw(sum);
 					break;
 				}
 				default: {
