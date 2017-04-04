@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import bankSystem.Bank;
 
+/** A class for testing the Bank class.
+ * @author Gustaf Peter Hultgren 
+ * @version 1.0 **/
 public class BankTest {
 	private Bank mBank;
 	
