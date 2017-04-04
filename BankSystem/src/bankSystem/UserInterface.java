@@ -6,23 +6,31 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import commands.AccountsCommand;
+import commands.AllBalanceCommand;
+import commands.BalanceCommand;
+
 public class UserInterface implements Runnable{
 	private Scanner mScanner;
 	private static UserInterface mInstance = null;
 	private Queue<String> mPrinterQueue;
 	private ReentrantReadWriteLock mLock;
+	private String mBankAccountName = "";
 	
+	/** Create a new instance of this class. **/
 	private UserInterface() {
 		mPrinterQueue = new LinkedList<String>();
 		mLock = new ReentrantReadWriteLock();
 	};
 	
+	/** Add a new entry to the print queue. **/
 	public void print(String string) {
 		mLock.writeLock().lock();
 		mPrinterQueue.add(string);
 		mLock.writeLock().unlock();
 	}
 	
+	/** Get the singleton object of this class. **/
 	public static UserInterface getSingleton() {
 		if(mInstance != null)
 			return mInstance;
@@ -46,19 +54,19 @@ public class UserInterface implements Runnable{
 	
 	/** Show the menu. **/
 	private MenuSelection menu() {
-		System.out.println("Please select what to do:"
-					+ "0 - List all accounts."
-					+ "1 - Show the balance for all accounts."
-					+ "2 - Show the balance for a specific account."
-					+ "3 - Show the history for a specific account."
-					+ "4 - Add a sum of money to a specific account."
-					+ "5 - Withdraw a sum of money from a specific account."
-					+ "6 - Transfer a sum of money between two accounts."
+		System.out.println("Please select what to do:\n"
+					+ "0 - List all accounts.\n"
+					+ "1 - Show the balance for all accounts.\n"
+					+ "2 - Show the balance for a specific account.\n"
+					+ "3 - Show the history for a specific account.\n"
+					+ "4 - Add a sum of money to a specific account.\n"
+					+ "5 - Withdraw a sum of money from a specific account.\n"
+					+ "6 - Transfer a sum of money between two accounts.\n"
 					+ "7 - Lock the specified account. The account no longer"
-					+ "accepts withdrawals."
+					+ "accepts withdrawals.\n"
 					+ "8 - Unlock a specified account. The account now accepts"
-					+ "withdrawals again."
-					+ "9 - Exit the application.");
+					+ "withdrawals again.\n"
+					+ "9 - Exit the application.\n\n");
 		
 		MenuSelection selection = MenuSelection.NONE;
 		String response = "";
@@ -113,6 +121,23 @@ public class UserInterface implements Runnable{
 		return MenuSelection.NONE;
 	}
 	
+	/** Select a bank account name. **/
+	private void selectBankAccountName() {
+		if(mBankAccountName == "") {
+			System.out.println("Please type the name of the bank account.");
+			String bankAccountName = mScanner.nextLine();
+			mBankAccountName = bankAccountName;
+		}
+		else {
+			System.out.println("Please type the name of the bank account. "
+					+ "Or just press enter to keep the previously selected name.");
+
+			String bankAccountName = mScanner.nextLine();
+			if(bankAccountName != "")
+				mBankAccountName = bankAccountName;
+		}
+	}
+	
 	/** Close the used resources. **/
 	private void close() {
 		mScanner.close();
@@ -126,6 +151,11 @@ public class UserInterface implements Runnable{
 	/** List the account balances. **/
 	private void listAccountBalance() {
 		Program.getSingleton().addCommand(new AllBalanceCommand());
+	}
+	
+	/** Display the balance for a specific account. **/
+	private void displayBalance() {
+		Program.getSingleton().addCommand(new BalanceCommand(mBankAccountName));
 	}
 	
 	/** Run the user interface. **/
@@ -148,24 +178,30 @@ public class UserInterface implements Runnable{
 					break;
 				}
 				case BALANCE: {
+					selectBankAccountName();
+					displayBalance();
 					// Create a command taking the account name as input.
 					break;
 				}
 				case HISTORY: {
+					selectBankAccountName();
 					// Create a command taking the account name as input.
 					break;
 				}
 				case INSERT: {
+					selectBankAccountName();
 					// Create a command with the following inputs:
 					//	- Account name.
 					// 	- Sum to add.
 					break;
 				}
 				case LOCK: {
+					selectBankAccountName();
 					// Create a command taking the account name as input.
 					break;
 				}
 				case TRANSFER: {
+					selectBankAccountName();
 					// Create a command with the following inputs:
 					//	- Source account name.
 					//	- Destination account name.
@@ -173,10 +209,12 @@ public class UserInterface implements Runnable{
 					break;
 				}
 				case UNLOCK: {
+					selectBankAccountName();
 					// Create a command taking the account name as input.
 					break;
 				}
 				case WITHDRAW: {
+					selectBankAccountName();
 					// Create a command with the following inputs:
 					//	- Account name.
 					// 	- Sum to subtract.

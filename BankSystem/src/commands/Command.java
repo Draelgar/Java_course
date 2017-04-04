@@ -1,4 +1,6 @@
-package bankSystem;
+package commands;
+
+import bankSystem.CustomerAccount;
 
 /** This interface is for simple containers for commands from the UI.
  * @author Gustaf Peter Hultgren

@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import commands.Command;
+
 public class Program {
 	private static Program mInstance = null;
 	private CustomerAccount mCustomerAccount;

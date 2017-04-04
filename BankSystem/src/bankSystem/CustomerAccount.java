@@ -52,7 +52,7 @@ public class CustomerAccount {
 		return false;
 	}
 	
-	/** Lock the selected bank acount from withdrawals.
+	/** Lock the selected bank account from withdrawals.
 	 * @param bankAccountName -The name for the account.
 	 * @return True if the account exists, else false. **/
 	public boolean lockBankAccount(String bankAccountName) {
@@ -124,21 +124,6 @@ public class CustomerAccount {
 		return false;
 	}
 	
-	/** Get the transaction history for all accounts. **/
-	public Map<String, ArrayList<TransactionInfo>> getAllBankAccountHistory() {
-		Map<String, ArrayList<TransactionInfo>> history = 
-				new HashMap<String, ArrayList<TransactionInfo>>(); 
-		
-		Iterator<Entry<String, BankAccount>> it = mBankAccounts.entrySet().iterator();
-		
-		while (it.hasNext()) {
-			Entry<String, BankAccount> element = it.next();
-			history.put(element.getKey(), element.getValue().history());
-		}
-		
-		return history;
-	}
-	
 	/** Get the balance for all bank accounts. **/
 	public Map<String, Double> getAllBankAccountBalance() {
 		Map<String, Double> balance = 
@@ -152,5 +137,10 @@ public class CustomerAccount {
 		}
 		
 		return balance;
+	}
+	
+	/** Check weather a specific bank account exists. **/
+	public boolean bankAccountExist(String bankAccountName) {
+		return mBankAccounts.containsKey(bankAccountName);
 	}
 }

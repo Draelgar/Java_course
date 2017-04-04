@@ -32,21 +32,33 @@ public class BankAccount {
 		mLocked = false;
 	}
 	
+	/** Check weather this account is locked or not. **/
+	public boolean isLocked() {
+		return mLocked;
+	}
+	
 	/** Insert money into this account- **/
-	public void insert(double money) {
-		mBalance += Math.abs(money);
-		mHistory.add(new TransactionInfo(money, mBalance));
+	public boolean insert(double money) {
+		if(money >= 0.0) {
+			mBalance += money;
+			mHistory.add(new TransactionInfo(money, mBalance));
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/** Withdraw money from this account. 
 	 * @return True if the account had the money, else false. **/
 	public boolean withdraw(double money) {
 		if(!mLocked) {
-			double withdrawal = Math.abs(money);
-			if(mBalance > withdrawal) {
-				mBalance -= withdrawal;
-				mHistory.add(new TransactionInfo(-money, mBalance));
-				return true;
+			if(money >= 0.0) {
+				double withdrawal = money;
+				if(mBalance > withdrawal) {
+					mBalance -= withdrawal;
+					mHistory.add(new TransactionInfo(-money, mBalance));
+					return true;
+				}
 			}
 		}
 		
@@ -54,7 +66,7 @@ public class BankAccount {
 	}
 	
 	/** Get the transaction history for this account. **/
-	ArrayList<TransactionInfo> history() {
+	public ArrayList<TransactionInfo> history() {
 		return mHistory;
 	}
 }
