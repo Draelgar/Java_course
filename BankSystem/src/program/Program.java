@@ -8,6 +8,9 @@ import bankSystem.Bank;
 import commands.Command;
 import ui.UserInterface;
 
+/** This class handles the communication between the user interface and the bank system.
+ * @author Gustaf Peter Hultgren 
+ * @version 1.0 **/
 public class Program {
 	private static Program mInstance = null;
 	private Bank mBank;
@@ -15,6 +18,7 @@ public class Program {
 	private ReentrantReadWriteLock mLock;
 	private Queue<Command> mCommands;
 	
+	/** Create a new program object. **/
 	private Program() {
 		mBank = new Bank();
 		mBank.addCustomer("6554-2", "55674542-3");
@@ -35,6 +39,7 @@ public class Program {
 		}
 	}
 	
+	/** Run the program. **/
 	public void run() {
 		mUIThread = new Thread(UserInterface.getSingleton());
 		mUIThread.start();
@@ -45,12 +50,14 @@ public class Program {
 		}
 	}
 	
+	/** Add a command from the user interface. **/
 	public void addCommand(Command command) {
 		mLock.writeLock().lock();
 		mCommands.add(command);
 		mLock.writeLock().unlock();
 	}
 	
+	/** The main function of this application. **/
 	public static void main(String args[]) {
 		Program.getSingleton().run();
 	}
