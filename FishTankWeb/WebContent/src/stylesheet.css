@@ -1,0 +1,50 @@
+@CHARSET "UTF-8";
+
+#main_box {
+	display: flex;
+	flex-flow: column wrap;
+	
+	/*background: hsl(228, 100%, 82%);*/
+	background: radial-gradient(circle, hsl(228, 100%, 92%), hsl(228, 100%, 72%));
+	text-align: center;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+}
+
+#flex_box {
+	flex: 3;
+	display: flex;
+	flex-flow: row wrap;
+	margin: 2%;
+	margin-top: 5%;
+	margin-bottom: 10%;
+}
+
+article {
+	flex: 1;
+	justify-content: center;
+	margin: 0.5%;
+}
+
+header {
+	flex: 1;
+	justify-content: center;
+	background: hsl(228, 100%, 42%);
+	color: white;
+}
+
+footer {
+	flex: 1;
+	justify-content: center;
+	background: hsl(228, 42%, 62%);
+	color: white;
+}
+
+label {
+	margin: 5px;
+}
+
+input[type="number"], input[type="text"] {
+	border-radius: 10px; /* Rounded text fields and buttons. */
+}
