@@ -30,4 +30,6 @@ public interface Fish {
 	public double length();
 	/** Add some meters to this fish's length. **/
 	public void addLength(double additionalMeters);
+	/** Calculates an index unique to this setup of variables. **/
+	public int calculateIndex();
 }

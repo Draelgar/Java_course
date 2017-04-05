@@ -3,30 +3,38 @@
  */
 package aquarium;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+
+import database.SQLManager;
 
 /**
  * @author Gustaf Peter Hultgren **/
 public class Aquarium {
-	private ArrayList<Fish> mFishes;
+	private SQLManager mSqlManager;
 	
 	public Aquarium() {
-		mFishes = new ArrayList<Fish>();
+		mSqlManager = new SQLManager();
+		try {
+			mSqlManager.initialize();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void addFish(Fish fish) {
-		mFishes.add(fish);
-	}
-	
-	public void printFish() {
-		for(Fish fish : mFishes)
-			System.out.println(fish.name());
-	}
-	
-	public static void main(String args[]) {
-		Aquarium fishtank = new Aquarium();
-		fishtank.addFish(new Shark("Sharky", 5.3, 1.5, 6, true));
-		fishtank.addFish(new Eel("Sparky", 5.3, 1.5, 6, false));
-		fishtank.printFish();
+		try {
+			mSqlManager.updateDatabase("INSERT INTO fish VALUES("
+					+ fish.calculateIndex() + ",'"
+					+ fish.fishType().toString() + "','"
+					+ fish.name() + "',"
+					+ fish.weight() + ","
+					+ fish.length() + ","
+					+ fish.age() + ","
+					+ (int)((fish.isMale()) ? 1 : 0) + ",'"
+					+ fish.fishClass().toString() + "');");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

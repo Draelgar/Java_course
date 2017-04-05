@@ -77,4 +77,33 @@ public abstract class FishBase implements Fish{
 	public void addLength(double additionalMeters) {
 		mLength += additionalMeters;
 	}
+	
+	/** Calculates an index unique to this setup of variables. **/
+	public int calculateIndex() {
+		String value = "";
+		
+		//byte characters[] = mNickName.getBytes();	
+		//ByteBuffer byteBuffer = ByteBuffer.wrap(characters);
+		//while(byteBuffer.hasRemaining()) {
+			//value += byteBuffer.getInt();
+		//}
+		//for(byte c : characters) {
+			//value += c;
+		//}
+		
+		value += mType.ordinal();
+		value += mClass.ordinal();
+		
+		int index = Integer.parseInt(value, 10);
+		index *= mNickName.length();
+		value = Integer.toString(index);
+		
+		value += (int)Math.round((mWeight / mLength) * 100.0) + mAge;
+		index = Integer.parseInt(value, 10);
+		
+		if(!mMale)
+			index *= -1;
+		
+		return index;
+	}
 }
