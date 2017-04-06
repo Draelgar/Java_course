@@ -37,9 +37,27 @@
 			</article>
 			<article>
 				<h1>Aquarium Contents</h1>
+				<div ng-app="fish_app" ng-controller="fish_controller">
+					<table>
+						<tr ng-repeat="x in fishes">
+							<td>{{ x.name }}</td>
+							<td>{{ x.type }}</td>
+						</tr>
+					</table>
+				</div>
 			</article>
 		</div>
 		<footer> &copy; 2017, Gustaf Peter Hultgren, No Rights Reserved. </footer>
 	</div>
+	
+	<!-- All scripts should be loaded at the end to avoid page load delays.  -->
+	<!-- Load the angularJS scripts. -->
+	<script data-require="angular.js@*" data-semver="1.3.0-beta.5" src="https://code.angularjs.org/1.3.0-beta.5/angular.js"></script>
+
+	<!-- Load the local javaScript file. -->
+	<script src="src/display.js"></script>
+	
+	<!-- If javaScript is disabled, show a message. -->
+	<noscript>Sorry, javaScript is disabled on your browser!</noscript>
 </body>
 </html>

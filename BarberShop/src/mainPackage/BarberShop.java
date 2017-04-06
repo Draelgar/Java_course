@@ -143,7 +143,7 @@ public class BarberShop {
 	/** Get the correct end date & time for the given start date, time & time mode.
 	 * @param timeMode -Defines how far into the future the end time should be.
 	 * @param start -The start time. 
-	 * @return The end time, or null if the selected time mode does not exist.**/
+	 * @return The end time, or null if the selected time mode does not exist. **/
 	private ZonedDateTime getEndTime(TimeMode timeMode, ZonedDateTime start) {
 		ZonedDateTime end = null;
 		
