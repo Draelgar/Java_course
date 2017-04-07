@@ -99,3 +99,7 @@ iframe {
 	text-align: center;
 }
 
+table {
+	border-collapse: collapse; /* Remove the borders from the table cells. */
+}
+
