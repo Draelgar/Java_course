@@ -60,3 +60,42 @@ input[type="submit"] {
 tr {
 	text-align: left;
 }
+.padding {
+	flex: 1;
+}
+#table_div {
+	flex: 1;
+}
+#flex_article {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+}
+
+
+th {
+	background: hsl(228, 100%, 40%);
+	color: hsl(228, 0%, 100%);
+	font-size: 18px;
+}
+
+td, th {
+	padding: 10px;
+}
+
+tr {
+	background: hsl(228, 0%, 100%);
+	color: hsl(228, 0%, 0%);
+}
+
+tr:nth-child(odd) {
+	background: hsl(228, 100%, 60%);
+	color: hsl(228, 0%, 100%);
+}
+
+iframe {
+	width: 350px;
+	height: 200px;
+	text-align: center;
+}
+

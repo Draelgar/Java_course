@@ -46,10 +46,33 @@ public class AquariumServlet extends HttpServlet {
 		if(genderString.equalsIgnoreCase("male"))
 			gender = true;
 		
-		if(type.equalsIgnoreCase("Shark"))
-			mAquarium.addFish(new Shark(name, weight, length, age, gender));
-		else if(type.equalsIgnoreCase("Eel"))
-			mAquarium.addFish(new Eel(name, weight, length, age, gender));
+		FishType fishType = FishType.valueOf(type.toUpperCase());
+		
+		switch(fishType) {
+			case SHARK: {
+				mAquarium.addFish(new Shark(name, weight, length, age, gender));
+				break;
+			}
+			case EEL: {
+				mAquarium.addFish(new Eel(name, weight, length, age, gender));
+				break;
+			}
+			case PIKE: {
+				mAquarium.addFish(new Pike(name, weight, length, age, gender));
+				break;
+			}
+			case CLOWNFISH: {
+				mAquarium.addFish(new Clownfish(name, weight, length, age, gender));
+				break;
+			}
+			case BASS: {
+				mAquarium.addFish(new Bass(name, weight, length, age, gender));
+				break;
+			}
+			default: {
+				
+			}
+		}
 		
 		response.sendRedirect("index.html");
 	}

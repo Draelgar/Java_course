@@ -18,6 +18,9 @@
 					<select name="type">
 						<option value="shark">Shark</option>
 						<option value="eel">Eel</option>
+						<option value="pike">Pike</option>
+						<option value="clownfish">Clownfish</option>
+						<option value="bass">Bass</option>
 					</select><br>
 					<!-- Name input. -->
 					<label for="name">Name</label>
@@ -37,13 +40,27 @@
 			</article>
 			<article>
 				<h1>Aquarium Contents</h1>
-				<div ng-app="fish_app" ng-controller="fish_controller">
-					<table>
-						<tr ng-repeat="x in fishes">
-							<td>{{ x.name }}</td>
-							<td>{{ x.type }}</td>
-						</tr>
-					</table>
+				<div id="flex_article">
+					<div class="padding"></div>
+					<div ng-app="fish_app" ng-controller="fish_controller" id="table_div">
+						<table id="table">
+							<tr>
+								<th><b>Name</b></th>
+								<th><b>Type</b></th>
+								<th><b>Age</b></th>
+								<th><b>Weight</b></th>
+								<th><b>Length</b></th>
+							</tr>
+							<tr ng-repeat="x in fishes">
+								<td>{{ x.name }}</td>
+								<td>{{ x.type }}</td>
+								<td>{{ x.age }}</td>
+								<td>{{ x.weight }}</td>
+								<td>{{ x.length }}</td>
+							</tr>
+						</table>
+					</div>
+					<div class="padding"></div>
 				</div>
 			</article>
 		</div>
