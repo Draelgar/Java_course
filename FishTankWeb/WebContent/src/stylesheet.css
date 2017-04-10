@@ -60,18 +60,20 @@ input[type="submit"] {
 tr {
 	text-align: left;
 }
+
 .padding {
 	flex: 1;
 }
+
 #table_div {
 	flex: 1;
 }
+
 #flex_article {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
 }
-
 
 th {
 	background: hsl(228, 100%, 40%);
@@ -102,4 +104,3 @@ iframe {
 table {
 	border-collapse: collapse; /* Remove the borders from the table cells. */
 }
-
