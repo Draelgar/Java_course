@@ -1,0 +1,49 @@
+@CHARSET "UTF-8";
+
+/* Body settings. */
+* {
+	margin-top: 0px;
+	padding: 0px;
+	text-align: center;
+}
+
+header {
+	background: hsl(113, 100%, 42%);
+	color: white;
+}
+
+footer {
+	background: hsl(113, 60%, 60%);
+	color: white;
+}
+
+#main_container {
+	margin-top: 0px;
+	margin-left: 10%;
+	margin-right: 10%;
+	width: 80%;
+	background: hsl(113, 100%, 75%);
+}
+
+#sub_container {
+	min-height: 450px;
+}
+
+form {
+	padding-top: 5%;
+}
+
+input {
+	margin-top: 5px;
+}
+
+input[type="submit"] {
+	width: 120px;
+	height: 40px;
+	background: hsl(293, 75%, 50%);
+	color: white;
+}
+
+.book_link, .book_link:active {
+	color: hsl(293, 100%, 45%);
+}
