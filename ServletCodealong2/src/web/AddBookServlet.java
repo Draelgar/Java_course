@@ -1,6 +1,7 @@
 package web;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -38,6 +39,12 @@ public class AddBookServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String title = request.getParameter("title");
 		String author = request.getParameter("author");
+		
+		byte[] bytes = title.getBytes(StandardCharsets.ISO_8859_1);
+		title = new String(bytes, StandardCharsets.UTF_8);
+		
+		bytes = author.getBytes(StandardCharsets.ISO_8859_1);
+		author = new String(bytes, StandardCharsets.UTF_8);
 		
 		DatabaseHandler db = new DatabaseHandler();
 		try {
