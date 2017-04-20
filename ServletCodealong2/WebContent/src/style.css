@@ -10,11 +10,15 @@
 header {
 	background: hsl(113, 100%, 42%);
 	color: white;
+	flex: 1;
 }
 
-footer {
+footer, nav {
 	background: hsl(113, 60%, 60%);
 	color: white;
+	flex: 1;
+	min-height: 30px;
+	vertical-align: middle;
 }
 
 #main_container {
@@ -23,10 +27,15 @@ footer {
 	margin-right: 10%;
 	width: 80%;
 	background: hsl(113, 100%, 75%);
+	
+	display: flex;
+	flex-flow: column wrap;
+	justify-content: center;
 }
 
-#sub_container {
-	min-height: 450px;
+article {
+	flex: 1;
+	min-height: 480px;
 }
 
 form {
@@ -37,13 +46,26 @@ input {
 	margin-top: 5px;
 }
 
+input[type="text"] {
+	text-align: left;
+}
+
 input[type="submit"] {
 	width: 120px;
 	height: 40px;
 	background: hsl(293, 75%, 50%);
 	color: white;
+	margin-bottom: 30px;
 }
 
 .book_link, .book_link:active {
 	color: hsl(293, 100%, 45%);
+}
+
+#delete {
+	margin-top: 0px;
+}
+
+#delete_button {
+	margin-top: 0px;
 }

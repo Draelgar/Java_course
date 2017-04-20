@@ -41,16 +41,20 @@ public class AlterBookServlet extends HttpServlet {
 		
 		int id = Integer.parseInt(request.getParameter("id"));
 		String title = request.getParameter("title");
-		String author = request.getParameter("author");
+		String firstName = request.getParameter("first_name");
+		String lastName = request.getParameter("last_name");
 		
 		byte[] bytes = title.getBytes(StandardCharsets.ISO_8859_1);
 		title = new String(bytes, StandardCharsets.UTF_8);
 		
-		bytes = author.getBytes(StandardCharsets.ISO_8859_1);
-		author = new String(bytes, StandardCharsets.UTF_8);
+		bytes = firstName.getBytes(StandardCharsets.ISO_8859_1);
+		firstName = new String(bytes, StandardCharsets.UTF_8);
+		
+		bytes = lastName.getBytes(StandardCharsets.ISO_8859_1);
+		lastName = new String(bytes, StandardCharsets.UTF_8);
 		
 		try {
-			db.alterBook(id, title, author);
+			db.alterBook(id, title, firstName, lastName);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

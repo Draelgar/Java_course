@@ -1,28 +1,30 @@
 package web;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import book.Book;
 import database.DatabaseHandler;
 
 /**
- * Servlet implementation class AddBookServlet
+ * Servlet implementation class FindBooksServlet
  */
-@WebServlet("/AddBook")
-public class AddBookServlet extends HttpServlet {
+@WebServlet("/FindBooks")
+public class FindBooksServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddBookServlet() {
+    public FindBooksServlet() {
         super();
     }
 
@@ -30,34 +32,32 @@ public class AddBookServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DatabaseHandler db = new DatabaseHandler();
+		String title = request.getParameter("title");
+		String author = request.getParameter("author");
 		
+		try {
+			List<Book> books = db.getBooks(title, author);
+			request.setAttribute("books", books.toArray());
+			
+			// Send to JSP.
+			RequestDispatcher dispatcher = request
+                     .getRequestDispatcher("WEB-INF/books.jsp");  
+			if (dispatcher != null){  
+			   dispatcher.forward(request, response);  
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String title = request.getParameter("title");
-		String firstName = request.getParameter("first_name");
-		String lastName = request.getParameter("last_name");
-		
-		byte[] bytes = title.getBytes(StandardCharsets.ISO_8859_1);
-		title = new String(bytes, StandardCharsets.UTF_8);
-		
-		bytes = firstName.getBytes(StandardCharsets.ISO_8859_1);
-		firstName = new String(bytes, StandardCharsets.UTF_8);
-		
-		bytes = lastName.getBytes(StandardCharsets.ISO_8859_1);
-		lastName = new String(bytes, StandardCharsets.UTF_8);
-		
-		DatabaseHandler db = new DatabaseHandler();
-		try {
-			db.addBook(title, firstName, lastName);
-		} catch (ClassNotFoundException e) {
-		} catch (SQLException e) {
-		}
-		
-		response.sendRedirect("Books");
+		doGet(request, response);
 	}
 
 }

@@ -8,18 +8,27 @@ package book;
 public class Book {
 	private int id;
 	private String title;
-	private String author;
+	private String authorFirstName;
+	private String authorLastName;
 	
 	public Book() {
 		id = 0;
 		title = "";
-		author = "";
+		authorFirstName = "";
+		authorLastName = "";
 	}
 	
 	public Book(int id, String title, String author) {
 		this.id = id;
 		this.title = title;
-		this.author = author;
+		this.authorFirstName = author;
+	}
+	
+	public Book(int id, String title, String firstName, String lastName) {
+		this.id = id;
+		this.title = title;
+		this.authorFirstName = firstName;
+		this.authorLastName = lastName;
 	}
 	
 	/**
@@ -50,13 +59,29 @@ public class Book {
 	 * @return the author
 	 */
 	public String getAuthor() {
-		return author;
+		return authorFirstName;
 	}
 	/**
 	 * @param author the author to set
 	 */
 	public void setAuthor(String author) {
-		this.author = author;
+		this.authorFirstName = author;
+	}
+	
+	public void setAuthorFirstName(String firstName) {
+		this.authorFirstName = firstName;
+	}
+	
+	public void setAuthorLastName(String lastName) {
+		this.authorLastName = lastName;
+	}
+	
+	public String getAuthorFirstName() {
+		return authorFirstName;
+	}
+	
+	public String getAuthorLastName() {
+		return authorLastName;
 	}
 	
 }

@@ -13,21 +13,30 @@
 <body>
 	<div id="main_container">
 		<%@include file="/WEB-INF/header.jsp" %>
-		<div id="sub_container">
+		<nav>
+			<a href="Books">See Library</a>
+		</nav>
+		<article>
 			<h2>
 				<c:out value="${book.title}, "/>
-				<c:out value="${book.author}"/>
+				<c:out value="${book.authorFirstName} "/>
+				<c:out value="${book.authorLastName}"/>
 			</h2>
 			<form method="POST" action="AlterBook">
 				<input type="hidden" name="id" value="${book.id}"><br>
 				<label for="title">Title</label>
 				<input type="text" name="title"><br>
-				<label for="author">Author</label>
-				<input type="text" name="author"><br>
-				<input type="submit" value="update database">
+				<label for="first_name">Author First Name</label>
+				<input type="text" name="first_name"><br>
+				<label for="last_name">Author Last Name</label>
+				<input type="text" name="last_name"><br>
+				<input type="submit" value="alter book">
 			</form>
-			<a href="Books">See Library</a>
-		</div>
+			<form method="POST" action="DeleteBook" id="delete">
+				<input type="hidden" name="id" value="${book.id}"><br>
+				<input type="submit" value="delete book" id="delete_button">
+			</form>
+		</article>
 		<%@include file="/WEB-INF/footer.jsp" %>
 	</div>
 </body>
