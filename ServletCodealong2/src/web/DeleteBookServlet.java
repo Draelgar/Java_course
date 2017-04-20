@@ -37,6 +37,8 @@ public class DeleteBookServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DatabaseHandler db = new DatabaseHandler();
+		request.setCharacterEncoding("UTF-8");
+		
 		int id = Integer.parseInt(request.getParameter("id"));
 		try {
 			db.deleteBook(id);

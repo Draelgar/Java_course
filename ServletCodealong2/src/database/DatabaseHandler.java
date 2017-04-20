@@ -18,7 +18,7 @@ import book.Book;
 public class DatabaseHandler {
 	public String user = "root";
 	public String password = "root";
-	public String dbUri = "jdbc:mysql://localhost:3306/servlet_codealong?useSSL=false";
+	public String dbUri = "jdbc:mysql://localhost:3306/servlet_codealong?useSSL=false&useUnicode=true&amp;amp;characterEncoding=UTF-8";
 	
 	/** Establish a connection to the database. 
 	 * @throws ClassNotFoundException 
@@ -284,15 +284,15 @@ public class DatabaseHandler {
 		List<Book> books = new ArrayList<Book>();
 				
 		if(title.length() > 0 && author.length() > 0) {
-			query += " WHERE title LIKE ? AND (last_name LIKE ? OR first_name LIKE ?) ORDER BY title ASC;";
+			query += " WHERE title LIKE ? AND (last_name LIKE ? OR first_name LIKE ?) COLLATE utf8_swedish_ci ORDER BY title ASC;";
 			both = true;
 		} 
 		else if(title.length() > 0) {
-			query += " WHERE title LIKE ? ORDER BY title ASC;";
+			query += " WHERE title LIKE ? COLLATE utf8_swedish_ci ORDER BY title ASC;";
 			data = "%" + title + "%";
 		} 
 		else if(author.length() > 0){
-			query += " WHERE last_name LIKE ? OR first_name LIKE ? ORDER BY title ASC;";
+			query += " WHERE last_name LIKE ? OR first_name LIKE ? COLLATE utf8_swedish_ci ORDER BY title ASC;";
 			data = "%" + author + "%";
 		} 
 		else {

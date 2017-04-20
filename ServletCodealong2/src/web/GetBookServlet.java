@@ -25,7 +25,6 @@ public class GetBookServlet extends HttpServlet {
      */
     public GetBookServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**

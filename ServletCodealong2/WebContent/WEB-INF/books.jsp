@@ -29,7 +29,7 @@
 				</a>
 			</h2>
 			</c:forEach>
-			<form method="GET" action="FindBooks">
+			<form method="GET" action="FindBooks" accept-charset="UTF-8">
 				<label for="title">Title filter</label>
 				<input type="text" name="title"><br>
 				<label for="author">Author filter</label>

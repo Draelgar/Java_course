@@ -34,6 +34,8 @@ public class BooksServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DatabaseHandler db = new DatabaseHandler();
 		try {
+			request.setCharacterEncoding("UTF-8");
+			
 			List<Book> books = db.getBooks();
 			request.setAttribute("books", books.toArray());
 			

@@ -22,7 +22,7 @@
 				<c:out value="${book.authorFirstName} "/>
 				<c:out value="${book.authorLastName}"/>
 			</h2>
-			<form method="POST" action="AlterBook">
+			<form method="POST" action="AlterBook" accept-charset="UTF-8">
 				<input type="hidden" name="id" value="${book.id}"><br>
 				<label for="title">Title</label>
 				<input type="text" name="title"><br>
@@ -32,7 +32,7 @@
 				<input type="text" name="last_name"><br>
 				<input type="submit" value="alter book">
 			</form>
-			<form method="POST" action="DeleteBook" id="delete">
+			<form method="POST" action="DeleteBook" id="delete" accept-charset="UTF-8">
 				<input type="hidden" name="id" value="${book.id}"><br>
 				<input type="submit" value="delete book" id="delete_button">
 			</form>
