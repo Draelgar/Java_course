@@ -8,10 +8,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import book.Book;
+import book.Film;
+import book.Game;
 
 /**
  * @author Gustaf Peter Hultgren **/
@@ -334,6 +338,373 @@ public class DatabaseHandler {
 		}
 		
 		return books;
+	}
+	
+	/** Add a new film to the database. 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException **/
+	public boolean addFilm(String title, String genre, LocalTime duration, int pgi, String bookTitle) throws ClassNotFoundException, SQLException {
+		Connection con = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
+		boolean success = false;
+		
+		try {
+			con = getConnection();
+			statement = con.prepareStatement("SELECT id FROM books WHERE title LIKE ? COLLATE utf8_swedish_ci;");
+			statement.setString(1, bookTitle);
+			
+			results = statement.executeQuery();
+			
+			// Get the book ID.
+			int bookId = -1;
+			if(results.next())
+				bookId = results.getInt("id");
+			
+			// Close the used resources in preparation for the next step.
+			results.close();
+			statement.close();
+			
+			// Did the book exist?
+			if(bookId != -1) {
+				
+				// Add the film.
+				statement = con.prepareStatement("INSERT INTO films VALUES(NULL,?,?,?,?,?);");
+				statement.setString(1, title);
+				Time time = Time.valueOf(duration);
+				statement.setTime(2, time);
+				statement.setString(3, genre);
+				statement.setInt(4, pgi);
+				statement.setInt(5, bookId);
+				
+				statement.executeUpdate();
+				success = true;
+			}
+				
+			
+		} finally {
+			if(results != null)
+				results.close();
+			if(statement != null)
+				statement.close();
+			if(con != null)
+				con.close();
+		}
+		
+		return success;
+	}
+	
+	/** Add a new game to the database. 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException **/
+	public boolean addGame(String title, String genre, int pgi, String bookTitle) throws ClassNotFoundException, SQLException {
+		Connection con = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
+		boolean success = false;
+		
+		try {
+			con = getConnection();
+			statement = con.prepareStatement("SELECT id FROM books WHERE title LIKE ? COLLATE utf8_swedish_ci;");
+			statement.setString(1, bookTitle);
+			
+			results = statement.executeQuery();
+			
+			// Get the book ID.
+			int bookId = -1;
+			if(results.next())
+				bookId = results.getInt("id");
+			
+			// Close the used resources in preparation for the next step.
+			results.close();
+			statement.close();
+			
+			// Did the book exist?
+			if(bookId != -1) {
+				
+				// Add the film.
+				statement = con.prepareStatement("INSERT INTO games VALUES(NULL,?,?,?,?);");
+				statement.setString(1, title);
+				statement.setString(2, genre);
+				statement.setInt(3, pgi);
+				statement.setInt(4, bookId);
+				
+				statement.executeUpdate();
+				success = true;
+			}
+				
+			
+		} finally {
+			if(results != null)
+				results.close();
+			if(statement != null)
+				statement.close();
+			if(con != null)
+				con.close();
+		}
+		
+		return success;
+	}
+	
+	/** Get all films from the database. 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException **/
+	public List<Film> getFilms() throws ClassNotFoundException, SQLException {
+		List<Film> films = new ArrayList<Film>();
+		
+		Connection con = null;
+		PreparedStatement filmStatement = null;
+		PreparedStatement bookStatement = null;
+		ResultSet filmResults = null;
+		ResultSet bookResults = null;
+		
+		try {
+			con = getConnection();
+			filmStatement = con.prepareStatement("SELECT * FROM films ORDER BY title ASC;");
+			filmResults = filmStatement.executeQuery();
+			
+			while(filmResults.next()) {
+				int bookId = filmResults.getInt("book_id");
+				bookStatement = con.prepareStatement("SELECT title FROM books WHERE id=?;");
+				bookStatement.setInt(1, bookId);
+				bookResults = bookStatement.executeQuery();
+				
+				if(bookResults.next()) {
+					String bookTitle = bookResults.getString("title");
+					String title = filmResults.getString("title");
+					int id = filmResults.getInt("id");
+					String genre = filmResults.getString("genre");
+					int pgi = filmResults.getInt("pgi");
+					Time time = filmResults.getTime("duration");
+					LocalTime duration = time.toLocalTime();
+					
+					films.add(new Film(id, title, duration, genre, pgi, bookTitle, bookId));
+				}
+				
+				bookResults.close();
+				bookStatement.close();
+			}
+			
+		} finally {
+			if(filmResults != null)
+				filmResults.close();
+			if(filmStatement != null)
+				filmStatement.close();
+			if(con != null)
+				con.close();
+		}
+		
+		return films;
+	}
+	
+	/** Get all games from the database. 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException **/
+	public List<Game> getGame(int id) throws ClassNotFoundException, SQLException {
+		List<Game> games = new ArrayList<Game>();
+		
+		Connection con = null;
+		PreparedStatement gameStatement = null;
+		PreparedStatement bookStatement = null;
+		ResultSet gameResults = null;
+		ResultSet bookResults = null;
+		
+		try {
+			con = getConnection();
+			gameStatement = con.prepareStatement("SELECT * FROM games WHERE id=? ORDER BY title ASC;");
+			gameStatement.setInt(1, id);
+			gameResults = gameStatement.executeQuery();
+
+			while(gameResults.next()) {
+				int bookId = gameResults.getInt("book_id");
+				bookStatement = con.prepareStatement("SELECT title FROM books WHERE id=?;");
+				bookStatement.setInt(1, bookId);
+				bookResults = bookStatement.executeQuery();
+				
+				if(bookResults.next()) {
+					String bookTitle = bookResults.getString("title");
+					String title = gameResults.getString("title");
+					int gid = gameResults.getInt("id");
+					String genre = gameResults.getString("genre");
+					int pgi = gameResults.getInt("pgi");
+					
+					games.add(new Game(gid, title, genre, pgi, bookTitle, bookId));
+				}
+				
+				bookResults.close();
+				bookStatement.close();
+			}
+		} finally {
+			if(gameResults != null)
+				gameResults.close();
+			if(gameStatement != null)
+				gameStatement.close();
+			if(con != null)
+				con.close();
+		}
+		
+		return games;
+	}
+	
+	/** Get all films from the database. 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException **/
+	public List<Film> getFilm(int id) throws ClassNotFoundException, SQLException {
+		List<Film> films = new ArrayList<Film>();
+		
+		Connection con = null;
+		PreparedStatement filmStatement = null;
+		PreparedStatement bookStatement = null;
+		ResultSet filmResults = null;
+		ResultSet bookResults = null;
+		
+		try {
+			con = getConnection();
+			filmStatement = con.prepareStatement("SELECT * FROM films Where id=? ORDER BY title ASC;");
+			filmStatement.setInt(1, id);
+			filmResults = filmStatement.executeQuery();
+			
+			while(filmResults.next()) {
+				int bookId = filmResults.getInt("book_id");
+				bookStatement = con.prepareStatement("SELECT title FROM books WHERE id=?;");
+				bookStatement.setInt(1, bookId);
+				bookResults = bookStatement.executeQuery();
+				
+				if(bookResults.next()) {
+					String bookTitle = bookResults.getString("title");
+					String title = filmResults.getString("title");
+					int fid = filmResults.getInt("id");
+					String genre = filmResults.getString("genre");
+					int pgi = filmResults.getInt("pgi");
+					Time time = filmResults.getTime("duration");
+					LocalTime duration = time.toLocalTime();
+					
+					films.add(new Film(fid, title, duration, genre, pgi, bookTitle, bookId));
+				}
+				
+				bookResults.close();
+				bookStatement.close();
+			}
+			
+		} finally {
+			if(filmResults != null)
+				filmResults.close();
+			if(filmStatement != null)
+				filmStatement.close();
+			if(con != null)
+				con.close();
+		}
+		
+		return films;
+	}
+	
+	/** Get all games from the database. 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException **/
+	public List<Game> getGames() throws ClassNotFoundException, SQLException {
+		List<Game> games = new ArrayList<Game>();
+		
+		Connection con = null;
+		PreparedStatement gameStatement = null;
+		PreparedStatement bookStatement = null;
+		ResultSet gameResults = null;
+		ResultSet bookResults = null;
+		
+		try {
+			con = getConnection();
+			gameStatement = con.prepareStatement("SELECT * FROM games ORDER BY title ASC;");
+			gameResults = gameStatement.executeQuery();
+
+			while(gameResults.next()) {
+				int bookId = gameResults.getInt("book_id");
+				bookStatement = con.prepareStatement("SELECT title FROM books WHERE id=?;");
+				bookStatement.setInt(1, bookId);
+				bookResults = bookStatement.executeQuery();
+				
+				if(bookResults.next()) {
+					String bookTitle = bookResults.getString("title");
+					String title = gameResults.getString("title");
+					int id = gameResults.getInt("id");
+					String genre = gameResults.getString("genre");
+					int pgi = gameResults.getInt("pgi");
+					
+					games.add(new Game(id, title, genre, pgi, bookTitle, bookId));
+				}
+				
+				bookResults.close();
+				bookStatement.close();
+			}
+		} finally {
+			if(gameResults != null)
+				gameResults.close();
+			if(gameStatement != null)
+				gameStatement.close();
+			if(con != null)
+				con.close();
+		}
+		
+		return games;
+	}
+	
+	/** Alter an existing book.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException **/
+	public void alterFilm(int id, String title, String genre, int pgi, LocalTime duration) throws ClassNotFoundException, SQLException {
+		String query = "UPDATE films INNER JOIN SET ";
+		int indices[] = {-1, -1, -1, -1, -1};
+		int index = 0;
+		
+		if(title.length() > 0) {
+			query += "title=? ";
+			indices[0] = index;
+			index++;
+		}
+		if(genre.length() > 0) {
+			query += "genre=? ";
+			
+			if(indices[index - 1] > -1)
+				query += ",";
+			
+			indices[1] = index;
+			index++;
+		}
+		if(pgi > 0) {
+			query += "pgi=? ";
+			
+			if(indices[index - 1] > -1)
+				query += ",";
+			
+			indices[2] = index;
+			index++;
+		}
+		if(duration.getHour() != 0 && duration.getMinute() != 0) {
+			query += "duration=? ";
+			
+			indices[3] = index;
+			index++;
+		}
+		
+		indices[4] = index;
+		
+		query += "WHERE id=?;";
+		
+			
+		try (Connection con = getConnection();
+				PreparedStatement statement = con.prepareStatement(query);){
+			if(indices[0] > -1)
+				statement.setString(indices[0], title);
+			if(indices[1] > -1)
+				statement.setString(indices[1], genre);
+			if(indices[2] > -1)
+				statement.setInt(indices[2], pgi);
+			if(indices[3] > -1)
+				statement.setTime(indices[3], Time.valueOf(duration));
+
+			statement.setInt(indices[4], id);
+			
+			statement.executeUpdate();
+			
+		}
 	}
 	
 	/** Main function for testing. **/

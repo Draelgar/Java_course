@@ -13,18 +13,55 @@
 			<h1>Book Database</h1>
 		</header>
 		<nav>
-			<a href="Books">See Library</a>
+			<ul>
+				<li><a href="Books">See Book Library</a></li>
+				<li><a href="Films">See Film Library</a></li>
+				<li><a href="Games">See Game Library</a></li>
+			</ul>
 		</nav>
-		<article>
-			<form method="POST" action="AddBook" accept-charset="UTF-8">
-				<label for="title">Title</label>
-				<input type="text" name="title" required><br>
-				<label for="first_name">Author First Name</label>
-				<input type="text" name="first_name" required><br>
-				<label for="last_name">Author Last Name</label>
-				<input type="text" name="last_name" required><br>
-				<input type="submit" value="add book">
-			</form>
+		<article class="flex_container">
+			<div class="flex_block">
+				<h2>Books</h2>
+				<form method="POST" action="AddBook" accept-charset="UTF-8" class="index_form">
+					<label for="title">Title</label>
+					<input type="text" name="title" required><br>
+					<label for="first_name">Author First Name</label>
+					<input type="text" name="first_name" required><br>
+					<label for="last_name">Author Last Name</label>
+					<input type="text" name="last_name" required><br>
+					<input type="submit" value="add book">
+				</form>
+			</div>
+			<div class="flex_block">
+				<h2>Films</h2>
+				<form method="POST" action="AddFilm" accept-charset="UTF-8" class="index_form">
+					<label for="title">Title</label>
+					<input type="text" name="title" required><br>
+					<label for="genre">Genre</label>
+					<input type="text" name="genre" required><br>
+					<label for="duration">Duration</label>
+					<input type="time" name="duration" required><br>
+					<label for="pgi">PGI</label>
+					<input type="number" name="pgi" required><br>
+					<label for="book_title">Book Title</label>
+					<input type="text" name="book_title" required><br>
+					<input type="submit" value="add film">
+				</form>
+			</div>
+			<div class="flex_block">
+				<h2>Games</h2>
+				<form method="POST" action="AddGame" accept-charset="UTF-8" class="index_form">
+					<label for="title">Title</label>
+					<input type="text" name="title" required><br>
+					<label for="genre">Genre</label>
+					<input type="text" name="genre" required><br>
+					<label for="pgi">PGI</label>
+					<input type="number" name="pgi" required><br>
+					<label for="book_title">Book Title</label>
+					<input type="text" name="book_title" required><br>
+					<input type="submit" value="add game">
+				</form>
+			</div>
 		</article>
 		<footer>
 			<p>&copy; 2017, Gustaf Peter Hultgren, All Rights Reserved</p>

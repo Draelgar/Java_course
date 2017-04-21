@@ -8,7 +8,7 @@
 <meta name="author" content="Gustaf Peter Hultgren">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="src/style.css">
-<title>Books</title>
+<title>Films</title>
 </head>
 <body>
 	<div id="main_container">
@@ -17,28 +17,27 @@
 			<a href="index.html">Home</a>
 		</nav>
 		<article>
-			<h1>Böcker: </h1>
-			<c:forEach items="${books}" var="book">
+			<h1>Spel: </h1>
+			<c:forEach items="${games}" var="game">
 			<h2>
-				<a href="GetBook?id=${book.id}" class="book_link">
-				&bull;<c:out value=" ${book.title}"/>
-				</a>, 
-				<a href="GetAuthor?first_name=${book.authorFirstName}&last_name=${book.authorLastName}" class="book_link">
-				<c:out value="${book.authorFirstName} "/>
-				<c:out value="${book.authorLastName}"/>
+				<a href="GetGame?id=${game.id}" class="book_link">
+				&bull;<c:out value=" ${game.title}"/>
+				<c:out value=" ${game.genre}"/>
+				<c:out value=" ${game.pgi}"/>
+				</a>,
+				<a href="GetBook?id=${game.bookId}" class="book_link">
+				<c:out value=" ${game.bookTitle}"/>
 				</a>
 			</h2>
 			</c:forEach>
 			<div class="flex_container">
 				<div class="flex_block"></div>
 				<div class="flex_block">
-					<form method="GET" action="FindBooks" accept-charset="UTF-8">
-						<label for="title">Title filter</label>
-						<input type="text" name="title"><br>
-						<label for="author">Author filter</label>
-						<input type="text" name="author"><br>
-						<input type="submit" value="refresh">
-					</form>
+				<form method="GET" action="FindBooks" accept-charset="UTF-8">
+					<label for="title">Title filter</label>
+					<input type="text" name="title"><br>
+					<input type="submit" value="refresh">
+				</form>
 				</div>
 				<div class="flex_block"></div>
 			</div>

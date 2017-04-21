@@ -40,6 +40,9 @@ article {
 
 form {
 	padding-top: 5%;
+	padding-left: 20px;
+	padding-right: 20px;
+	text-align: right;
 }
 
 input {
@@ -56,6 +59,7 @@ input[type="submit"] {
 	background: hsl(293, 75%, 50%);
 	color: white;
 	margin-bottom: 30px;
+	margin-right: 20px;
 }
 
 .book_link, .book_link:active {
@@ -68,4 +72,14 @@ input[type="submit"] {
 
 #delete_button {
 	margin-top: 0px;
+}
+
+.flex_container {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+}
+
+.flex_block {
+	flex: 1;
 }
