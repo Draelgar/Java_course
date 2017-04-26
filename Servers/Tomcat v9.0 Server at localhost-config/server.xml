@@ -149,7 +149,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="FishTankWeb" path="/FishTankWeb" reloadable="true" source="org.eclipse.jst.jee.server:FishTankWeb"/><Context docBase="ServletCodealong" path="/ServletCodealong" reloadable="true" source="org.eclipse.jst.jee.server:ServletCodealong"/><Context docBase="CinemaWeb" path="/CinemaWeb" reloadable="true" source="org.eclipse.jst.jee.server:CinemaWeb"/><Context docBase="ServletCodealong2" path="/ServletCodealong2" reloadable="true" source="org.eclipse.jst.jee.server:ServletCodealong2"/></Host>
+      <Context docBase="FishTankWeb" path="/FishTankWeb" reloadable="true" source="org.eclipse.jst.jee.server:FishTankWeb"/><Context docBase="ServletCodealong" path="/ServletCodealong" reloadable="true" source="org.eclipse.jst.jee.server:ServletCodealong"/><Context docBase="ServletCodealong2" path="/ServletCodealong2" reloadable="true" source="org.eclipse.jst.jee.server:ServletCodealong2"/><Context docBase="CinemaWeb" path="/CinemaWeb" reloadable="true" source="org.eclipse.jst.jee.server:CinemaWeb"/><Context docBase="angularJsCodealong" path="/angularJsCodealong" reloadable="true" source="org.eclipse.jst.jee.server:angularJsCodealong"/><Context docBase="AngularJSAssignments" path="/AngularJSAssignments" reloadable="true" source="org.eclipse.jst.jee.server:AngularJSAssignments"/></Host>
     </Engine>
   </Service>
 </Server>

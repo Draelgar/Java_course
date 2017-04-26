@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>AngularJS Assignments</title>
+	<meta name="author" content="Gustaf Peter Hultgren">
+	<link rel="stylesheet" href="stylesheet/style.css">
+</head>
+<body data-ng-app="snApp">
+	<div data-ng-controller="snController">
+		<nav>
+			<button data-ng-click="button1()">Option 1</button>
+			<button data-ng-click="button2()">Option 2</button>
+			<button data-ng-click="button3()">Option 3</button>
+		</nav>
+		<div data-ng-hide="hide1">
+			<h1>This text is for option 1.</h1>
+		</div>
+		<div data-ng-hide="hide2">
+			<h1>This text is definitely for option 2.</h1>
+		</div>
+		<div data-ng-hide="hide3">
+			<h1>This text is can not be for any option other than option 3.</h1>
+		</div>
+	</div>
+	
+	<!-- Load AngularJS version 1.6.2 -->
+	<script data-require="angular.js@1.6.2" data-semver="1.6.2" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
+	<!-- Load the Java Script to use. -->
+	<script src="script/script4.js"></script>
+</body>

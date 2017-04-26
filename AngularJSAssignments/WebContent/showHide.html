@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>AngularJS Assignments</title>
+	<meta name="author" content="Gustaf Peter Hultgren">
+	<link rel="stylesheet" href="stylesheet/style.css">
+</head>
+<body data-ng-app="shApp">
+	<div data-ng-controller="shController">
+		<div data-ng-hide="showText">
+			<!-- The contents of this div will hide. -->
+			<p>This is a section of text that will hide when the button is pressed.</p>
+		</div>
+		<button id="shButton" data-ng-click="toggle()">{{buttonText}}</button>
+	</div>
+	
+	<!-- Load AngularJS version 1.6.2 -->
+	<script data-require="angular.js@1.6.2" data-semver="1.6.2" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
+	<!-- Load the Java Script to use. -->
+	<script src="script/script2.js"></script>
+</body>
