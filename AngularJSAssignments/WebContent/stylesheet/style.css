@@ -19,18 +19,18 @@ header, article, footer {
 
 header {
 	text-align: center;
-	background: hsl(120, 100%, 20%);
+	background: linear-gradient(20deg, hsl(120, 100%, 20%), hsl(120, 100%, 50%), hsl(120, 100%, 20%), hsl(120, 100%, 20%));
 	color: white;
 	flex: 1;
 }
 
 article {
-	background: hsl(120, 100%, 80%);
+	background: linear-gradient(0deg, hsl(120, 100%, 80%), hsl(47, 100%, 100%), hsl(120, 100%, 80%));
 	flex: 1;
 }
 
 footer {
-	background: hsl(120, 40%, 40%);
+	background: linear-gradient(20deg, hsl(120, 40%, 40%), hsl(120, 40%, 40%), hsl(120, 80%, 90%), hsl(120, 40%, 40%));
 	color: white;
 	text-align: center;
 	flex: 1;
