@@ -29,14 +29,29 @@
 			var fizzNum = number % $scope.fizz;
 			var buzzNum = number % $scope.buzz;
 			
-			if(fizzNum == 0 && buzzNum == 0)
+			if(fizzNum == 0 && buzzNum == 0) {
 				return $scope.fizzText + $scope.buzzText;
-			else if(fizzNum == 0)
+			}
+			else if(fizzNum == 0) {
 				return $scope.fizzText;
-			else if(buzzNum == 0)
+			}
+			else if(buzzNum == 0) {
 				return $scope.buzzText;
-			else
+			}
+			else {
 				return number;
+			}
+		}
+		
+		$scope.color = function(value) {
+			if(value == "FizzBuzz")
+				return {"color":"hsl(360, 100%, 40%)"};
+			else if(value == "Fizz")
+				return {"color":"hsl(120, 100%, 20%)"};
+			else if(value == "Buzz")
+				return {"color":"hsl(233, 100%, 40%)"};
+			else
+				return {"color":"black"};
 		}
 	};
 	

@@ -28,7 +28,7 @@
 			</div>
 			<div id="results">
 				<h1>Results</h1>
-				<span>{{f(start)}}</span><span data-ng-repeat="n in range()">, {{f(n)}}</span>
+				<span data-ng-style="{{color(f(start))}}">{{f(start)}}</span><span data-ng-repeat="n in range()" data-ng-style="{{color(f(n))}}">, {{f(n)}}</span>
 			</div>
 		</article>
 		<footer>
