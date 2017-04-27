@@ -44,11 +44,11 @@
 		}
 		
 		$scope.color = function(value) {
-			if(value == "FizzBuzz")
+			if(value == $scope.fizzText + $scope.buzzText)
 				return {"color":"hsl(360, 100%, 40%)"};
-			else if(value == "Fizz")
+			else if(value == $scope.fizzText)
 				return {"color":"hsl(120, 100%, 20%)"};
-			else if(value == "Buzz")
+			else if(value == $scope.buzzText)
 				return {"color":"hsl(233, 100%, 40%)"};
 			else
 				return {"color":"black"};
