@@ -19,9 +19,5 @@
 		}
 	};
 	
-	document.getElementById("shButton").onclick = function($scope) {
-		val = !val;
-	};
-	
 	app.controller("shController", ['$scope', controller]);
 }());

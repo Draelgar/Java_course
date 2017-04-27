@@ -6,11 +6,11 @@
 	var app = angular.module("tApp", []);
 	
 	var controller = function($scope, $interval) {
-		$scope.time = 30;
+		$scope.time = 10;
 		$scope.buttonText = "Stop";
 		
 		/* Function, delay between ticks, iterations. */
-		var stop = $interval(function() { $scope.time--; }, 1000, 30);
+		var stop = $interval(function() { if($scope.time > 0) $scope.time--; }, 1000, $scope.time);
 		
 		$scope.stopTimer = function() {
 			if(angular.isDefined(stop)) {
@@ -19,7 +19,7 @@
 				$scope.buttonText = "Start";
 			}
 			else {
-				stop = $interval(function() { $scope.time--; }, 1000, 30);
+				stop = $interval(function() { if($scope.time > 0) $scope.time--; }, 1000, $scope.time);
 				$scope.buttonText = "Stop";
 			}
 		}

@@ -11,25 +11,17 @@
 			{name: "item2", price: "50 kr", description: "Second item"},
 			{name: "item3", price: "100 kr", description: "Third item"}];
 		
-		$scope.test = "unavailable";
+		$scope.hidden = [true, true, true];
 		
 		$scope.showToolTip = function(index) {
-			$scope.test = $scope.items[index].description;
+			$scope.hidden[index] = false;
+		}
+		
+		$scope.hideToolTip = function(index) {
+			$scope.hidden[index] = true;
 		}
 	};
 	
 	app.controller("exController", ["$scope", controller]);
-	
-	var tooltip = function($scope, $index) {
-		return { link: "Tooltip" };
-		/*return { link: function (scope, element, attr) {
-		      // use tag's title text for a popup
-		      element
-		        .addClass('tooltip-wrap')
-		        .append(angular.element('<div class="tooltip-text">'+attr.title+'</div>'))
-		        .attr('title', null);*/
-	};
-	
-	app.directive("toolTip", ["$scope", "$index", tooltip]);
 	
 }());

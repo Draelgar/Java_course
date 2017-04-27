@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>AngularJS Assignments</title>
+	<meta name="author" content="Gustaf Peter Hultgren">
+	<link rel="stylesheet" href="stylesheet/style.css">
+</head>
+<body data-ng-app="FizzBuzzApp">
+	<div data-ng-controller="FizzBuzzController" class="flex_container" id="main_container">
+		<header>
+			<h1>FizzBuzz</h1>
+		</header>
+		<article class="flex_container_row">
+			<div id="input">
+				<label for="start">Start Value</label>
+				<input type="number" value="0" name="start" data-ng-model="start" max="{{end - 1}}"><br>
+				<label for="end">End Value</label>
+				<input type="number" value="100" name="end" data-ng-model="end" min="{{start + 1}}"><br>
+				<label for="fizz">Fizz Value</label>
+				<input type="number" value="3" name="fizz" data-ng-model="fizz"><br>
+				<label for="buzz">Buzz Value</label>
+				<input type="number" value="4" name="buzz" data-ng-model="buzz"><br>
+				<label for="fizzText">Fizz replacement</label>
+				<input type="text" value="Fizz" name="fizzText" data-ng-model="fizzText"><br>
+				<label for="buzzText">Buzz Replacement</label>
+				<input type="text" value="Buzz" name="buzzText" data-ng-model="buzzText"><br>
+			</div>
+			<div id="results">
+				<h1>Results</h1>
+				<span>{{f(start)}}</span><span data-ng-repeat="n in range()">, {{f(n)}}</span>
+			</div>
+		</article>
+		<footer>
+			<p>&copy; 2017, Gustaf Peter Hultgren, All Rights Reserved.</p>
+		</footer>
+	</div>
+	
+	<!-- Load AngularJS version 1.6.2 -->
+	<script data-require="angular.js@1.6.2" data-semver="1.6.2" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
+	<!-- Load the Java Script to use. -->
+	<script src="script/script9.js"></script>
+</body>

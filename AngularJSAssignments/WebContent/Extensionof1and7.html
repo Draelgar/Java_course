@@ -9,10 +9,13 @@
 <body data-ng-app="exApp">
 	<div data-ng-controller="exController">
 		<div>
-			<h1 data-ng-repeat="item in items" data-ng-mouseover="showToolTip($index)">
-			{{item.name}}, {{item.price}}
-			</h1>
-			<h2>{{test}}</h2>
+			<ul class="flex_container">
+				<li data-ng-repeat="item in items" data-ng-mouseover="showToolTip($index)"
+				 	data-ng-mouseleave="hideToolTip($index)" id="items" class="tooltip">
+					<h1>{{item.name}}, {{item.price}}</h1>
+					<span class="tooltiptext" data-ng-hide="hidden[$index]">{{item.description}}</span>
+				</li>
+			</ul>
 		</div>
 	</div>
 	
