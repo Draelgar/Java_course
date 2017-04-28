@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Angular routing demoApp</title>
+<style>
+#container{
+	padding: 100px;
+	margin: auto;
+	width: 60%;
+	background: lightyellow;
+	border: dotted 0.5px;
+	font-family: Helvetica, sans-serif;
+	font-size: 14px;
+}
+</style>
+</head>
+
+<body data-ng-app="routingApplication">
+<div id="container">
+<a href="#!/">Home</a>
+| <a href="#!/about">About</a> 
+| <a href="#!/contact">Contact</a> 
+| <a href="#!/books">Books</a>  
+
+<ng-view></ng-view>
+<!-- Här  kommer templates att laddas-->
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+<script src="script/routing.js"></script>
+</body>
+</html>

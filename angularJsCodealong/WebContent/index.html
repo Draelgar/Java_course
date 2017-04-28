@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="Gustaf Peter Hultgren">
+	<link rel="stylesheet" href="stylesheets/style.css" />
+	<title>Angular JS Codealong</title>
+</head>
+<body>
+	<h1>Hello Plunker!</h1>
+    <div data-ng-controller="minController">
+      <h3>{{name}}</h3>
+      <h3>{{person.firstName}}
+      {{person.lastName}}</h3>
+    </div>
+    <div data-ng-controller="secondController">
+      <h3>{{day}}</h3>
+      <p>{{fullName}}</p>
+      <input type="text" data-ng-model="fullName">
+    </div>
+    
+    <script data-require="angular.js@1.6.2" data-semver="1.6.2" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
+    <script src="script/script.js"></script>
+    
+    <!-- If javaScript is disabled, show a message. -->
+	<noscript>Sorry, javaScript is disabled on your browser!</noscript>
+</body>
+</html>
