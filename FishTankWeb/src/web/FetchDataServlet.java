@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import aquarium.Aquarium;
 import aquarium.Fish;
 
@@ -32,16 +34,6 @@ public class FetchDataServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
 		ArrayList<Fish> fishes = mAquarium.fetch();
 
 		String data = "";
@@ -53,6 +45,29 @@ public class FetchDataServlet extends HttpServlet {
 			}
 			
 			data = data.substring(0, data.length() - 1);
+		
+			response.getWriter().append(data);
+		}
+		else
+			response.getWriter().append("Error, Something went wrong!");
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+		ArrayList<Fish> fishes = mAquarium.fetch();
+		
+		if(fishes != null) {
+			Gson gson = new Gson();
+			String data = gson.toJson(fishes.toArray());
+			
+			/*for(Fish fish : fishes) {
+				data += fish.name() + "," + fish.fishType().toString().toLowerCase() + ","
+						+ fish.age() + "," + fish.weight() + "," + fish.length() + ":";
+			}
+			
+			data = data.substring(0, data.length() - 1);*/
 		
 			response.getWriter().append(data);
 		}

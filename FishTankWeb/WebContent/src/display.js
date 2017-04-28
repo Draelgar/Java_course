@@ -14,15 +14,18 @@ class Fish {
 var module = angular.module('fish_app', []);
 module.controller('fish_controller', function($scope, $http) {
 	
-	$http.post("FetchDataServlet").then(function (response) {
-        var rows = response.data.split(":");
+	$http.get("FetchDataServlet").then(function (response) {
+		//var rows = response.data.split(":");
+        //$scope.debugData = response;
         
-        var fishes = [];
+        var fishes = JSON.parse(response);
         
-        for(var i = 0; i < rows.length; i++) {
+        $scope.debugData = fishes.data[0].name;
+        
+        /*for(var i = 0; i < rows.length; i++) {
         	var values = rows[i].split(",");
         	fishes.push(new Fish(values[0], values[1], values[2], values[3], values[4]));
-        }
+        }*/
         
         $scope.fishes = fishes;
     });

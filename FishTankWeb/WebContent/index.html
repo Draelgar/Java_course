@@ -40,9 +40,9 @@
 			</article>
 			<article>
 				<h1>Aquarium Contents</h1>
-				<div id="flex_article">
-					<div class="padding"></div>
-					<div data-ng-app="fish_app" data-ng-controller="fish_controller" id="table_div">
+				<div id="flex_article" data-ng-app="fish_app" data-ng-controller="fish_controller">
+					<div class="padding"><p>{{debugData}}</p></div>
+					<div  id="table_div">
 						<table id="table">
 							<tr>
 								<th><b>Name</b></th>
@@ -58,7 +58,7 @@
 								<td>{{ x.weight }}</td>
 								<td>{{ x.length }}</td>
 							</tr>
-						</table>
+						</table>	
 					</div>
 					<div class="padding"></div>
 				</div>
