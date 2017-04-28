@@ -35,16 +35,10 @@ public class FetchDataServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArrayList<Fish> fishes = mAquarium.fetch();
-
-		String data = "";
 		
 		if(fishes != null) {
-			for(Fish fish : fishes) {
-				data += fish.name() + "," + fish.fishType().toString().toLowerCase() + ","
-						+ fish.age() + "," + fish.weight() + "," + fish.length() + ":";
-			}
-			
-			data = data.substring(0, data.length() - 1);
+			Gson gson = new Gson();
+			String data = gson.toJson(fishes);
 		
 			response.getWriter().append(data);
 		}
@@ -61,13 +55,6 @@ public class FetchDataServlet extends HttpServlet {
 		if(fishes != null) {
 			Gson gson = new Gson();
 			String data = gson.toJson(fishes.toArray());
-			
-			/*for(Fish fish : fishes) {
-				data += fish.name() + "," + fish.fishType().toString().toLowerCase() + ","
-						+ fish.age() + "," + fish.weight() + "," + fish.length() + ":";
-			}
-			
-			data = data.substring(0, data.length() - 1);*/
 		
 			response.getWriter().append(data);
 		}

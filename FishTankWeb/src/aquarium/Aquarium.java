@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.google.gson.Gson;
+
 import database.SQLManager;
 
 /**
@@ -91,6 +93,11 @@ public class Aquarium {
 					}
 				}
 			}
+			
+			Gson gson = new Gson();
+			String data = gson.toJson(fishes.toArray());
+			
+			System.out.println(data);
 			
 			return fishes;
 			

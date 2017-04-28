@@ -41,7 +41,7 @@
 			<article>
 				<h1>Aquarium Contents</h1>
 				<div id="flex_article" data-ng-app="fish_app" data-ng-controller="fish_controller">
-					<div class="padding"><p>{{debugData}}</p></div>
+					<div class="padding"></div>
 					<div  id="table_div">
 						<table id="table">
 							<tr>
@@ -52,11 +52,11 @@
 								<th><b>Length</b></th>
 							</tr>
 							<tr data-ng-repeat="x in fishes">
-								<td>{{ x.name }}</td>
-								<td>{{ x.type }}</td>
-								<td>{{ x.age }}</td>
-								<td>{{ x.weight }}</td>
-								<td>{{ x.length }}</td>
+								<td>{{ x.mNickName }}</td>
+								<td>{{ x.mType }}</td>
+								<td>{{ x.mAge }}</td>
+								<td>{{ x.mWeight }}</td>
+								<td>{{ x.mLength }}</td>
 							</tr>
 						</table>	
 					</div>

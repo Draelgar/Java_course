@@ -1,0 +1,10 @@
+<h1>{{title}}</h1>
+<form>
+	<input type="text" data-ng-model="bookTitle" placeholder="title">
+	<input type="text" data-ng-model="bookAuthorFirstName" placeholder="author first name">
+	<input type="text" data-ng-model="bookAuthorLastName" placeholder="author last name">
+	<input type="button" data-ng-click="addBook()" value="Add Book">
+</form>
+<div data-ng-repeat="book in books">
+	<p>{{book.title}}, {{book.authorFirstName}} {{book.authorLastName}}</p>
+</div>
