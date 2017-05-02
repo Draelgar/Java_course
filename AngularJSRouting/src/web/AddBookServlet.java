@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +16,7 @@ import com.google.gson.Gson;
 
 import book.Book;
 import database.DatabaseHandler;
+import database.Parameters;
 
 /**
  * Servlet implementation class AddBookServlet
@@ -79,27 +81,30 @@ public class AddBookServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-request.setCharacterEncoding("UTF-8");
+		request.setCharacterEncoding("UTF-8");
 		
-		String title = request.getParameter("title");
-		String firstName = request.getParameter("first_name");
-		String lastName = request.getParameter("last_name");
+		String parameters = request.getReader().lines().collect(Collectors.joining());
+
+		Gson gson = new Gson();
 		
-		if(title.equalsIgnoreCase("undefined")) {
-			title="";
+		Parameters info = gson.fromJson(parameters, Parameters.class);
+		
+		
+		if(info.title.equalsIgnoreCase("undefined")) {
+			info.title="";
 		}
-		if(firstName.equalsIgnoreCase("undefined")) {
-			firstName="";
+		if(info.first_name.equalsIgnoreCase("undefined")) {
+			info.first_name="";
 		}
-		if(lastName.equalsIgnoreCase("undefined")) {
-			lastName="";
+		if(info.last_name.equalsIgnoreCase("undefined")) {
+			info.last_name="";
 		}
 		
 		DatabaseHandler db = new DatabaseHandler();
 		
-		if(title.length() > 0 && firstName.length() > 0 && lastName.length() > 0) {	
+		if(info.title.length() > 0 && info.first_name.length() > 0 && info.last_name.length() > 0) {	
 			try {
-				db.addBook(title, firstName, lastName);
+				db.addBook(info.title, info.first_name, info.last_name);
 			} catch (ClassNotFoundException e) {
 			} catch (SQLException e) {
 			}

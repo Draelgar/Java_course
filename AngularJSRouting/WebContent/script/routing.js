@@ -83,17 +83,14 @@
 		
 		$scope.addBook = function() {
 			
-			/*var parameters = {'title' : $scope.bookTitle,
+			var parameters = {'title' : $scope.bookTitle,
 					'first_name' : $scope.bookAuthorFirstName,
 					'last_name' : $scope.bookAuthorLastName};
 			
-			$http.post("AddBook", parameters).then(onBookAdded, onError);*/
+			var jsonParameters = JSON.stringify(parameters);
 			
-			// TODO send JSON instead.
+			$http.post("AddBook", jsonParameters).then(onBookAdded, onError);
 			
-			$http.get("AddBook?title=" + $scope.bookTitle 
-					+ "&first_name=" + $scope.bookAuthorFirstName 
-					+ "&last_name=" + $scope.bookAuthorLastName).then(onBookAdded, onError);
 		}
 		
 	});
