@@ -60,7 +60,7 @@ public class FileHandler {
 		}
 		
 		// Load the data.
-		public static void load(Set<BookedTime> bookings, String path) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
+		public static void load(BookKeeper bookKeeper, String path) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
 			// Open a new file to get the appointments data.
 			BufferedReader br = null;
 			
@@ -74,7 +74,7 @@ public class FileHandler {
 					line = br.readLine(); // Read 1 line of data.
 					
 					if(line != null)
-						bookings.add(new BookedTime(line));
+						bookKeeper.bookTime(new BookedTime(line));
 					
 				} while(line != null);
 				

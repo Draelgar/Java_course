@@ -18,15 +18,13 @@ public class BookKeeper {
 	BookKeeper() throws IOException{
 		mBookings = new TreeSet<BookedTime>();
 		mBarbers = new HashSet<String>();
-		
-		init();
 	}
 	
 	// Initialize the system.
-	private void init() throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
+	public void init() throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
 		// Add some default barbers.
 		FileHandler.loadStaff(mBarbers, "data/barbers.txt");
-		FileHandler.load(mBookings, "data/data.txt");
+		FileHandler.load(this, "data/data.txt");
 		
 		assert (mBookings != null); // Assume that the set isn't null!
 		
@@ -37,11 +35,15 @@ public class BookKeeper {
 	}
 	
 	public void load(String path) throws IOException, DateTimeParseException, ArrayIndexOutOfBoundsException, NumberFormatException{
-		FileHandler.load(mBookings, path);
+		FileHandler.load(this, path);
 	}
 
 	public void save(String path) throws IOException{
 		FileHandler.save(mBookings, path);
+	}
+	
+	public Set<String> getBarbers() {
+		return mBarbers;
 	}
 	
 	public String getBarber() {
@@ -49,43 +51,33 @@ public class BookKeeper {
 	}
 	
 	// Attempt to book a new time for the customer.
-	public boolean bookTime(BookedTime bt) {
-		if(checkOverlaps(bt))
-			return false;
+	public boolean bookTime(BookedTime bt) {	
+		ZonedDateTime zdt = ZonedDateTime.now();
 		
-		assert (mBookings != null); // Assume that the set isn't null!
-		mBookings.add(bt);
+		// Only allow future dates and times to be booked!
+		if(bt.getStartTime().isAfter(zdt)) {
 		
-		ZonedDateTime zdt = bt.getStartTime().plusWeeks(bt.getRecurring());
-		BookedTime newBt = bt;
-		newBt.setTimeInterval(zdt, bt.getDuration());
+			assert (mBookings != null); // Assume that the set isn't null!
+			mBookings.add(bt);
 		
-		// If recurring, add the remaining bookings for the whole year.
-		if(bt.getRecurring() > 0) {
-			while(zdt.getYear() == bt.getStartTime().getYear()) {
-				zdt = zdt.plusWeeks(bt.getRecurring());
-				newBt.setTimeInterval(zdt, bt.getDuration());
-				
-				if(!checkOverlaps(newBt))
-					mBookings.add(newBt);
-			}
-		}
+			if(BookedTime.foundCollision())
+				return false;
 		
-		return true;
-	}
-	
-	public boolean checkOverlaps(BookedTime bt) {
-		// Loop through the list.
-		Iterator<BookedTime> it = mBookings.iterator();
-		
-		while(it.hasNext()) {
-			BookedTime b = it.next();
+			zdt = bt.getStartTime().plusWeeks(bt.getRecurring());
+			BookedTime newBt = bt;
+			newBt.setTimeInterval(zdt, bt.getDuration());
 			
-			// Check for overlaps!
-			if(b.isOverlaping(mCurrentBarber, bt.getStartTime(), bt.getEndTime())) {
-				System.out.println("The selected time is already in use!");
-				return true;
+			// If recurring, add the remaining bookings for the whole year.
+			if(bt.getRecurring() > 0) {
+				while(zdt.getYear() == bt.getStartTime().getYear()) {
+					zdt = zdt.plusWeeks(bt.getRecurring());
+					newBt.setTimeInterval(zdt, bt.getDuration());
+					
+					mBookings.add(newBt);
+				}
 			}
+		
+			return true; 
 		}
 		
 		return false;
@@ -174,7 +166,7 @@ public class BookKeeper {
 	}
 	
  	// Display the booked appointments for the given display limit.
-	public int displayBookings(DisplayMode display) {
+	public String displayBookings(DisplayMode display) {
 		String text = "";
 		
 		if(mBookings.size() > 0)
@@ -195,9 +187,7 @@ public class BookKeeper {
 			text = "There are no current bookings for " + mCurrentBarber + ".\n";
 		}
 		
-		System.out.print(text);
-		
-		return 0;
+		return text;
 	}
 	
 	// Add a new barber to the list.
@@ -210,14 +200,15 @@ public class BookKeeper {
 		mBarbers.remove(barber);
 	}
 	
-	public void listBarbers() {
-		System.out.println("These are the barbers that work here:");
-		
+	public String listBarbers() {
+		String string = "";
 		Iterator<String> it = mBarbers.iterator();
 		
 		while(it.hasNext()) {
-			System.out.println("\t-" + it.next());
+			string += "\t-" + it.next() + "\n";
 		}
+		
+		return string;
 	}
 	
 	// Select an available barber.
@@ -238,10 +229,9 @@ public class BookKeeper {
 	}
 	
 	// Show available times for the currently selected barber.
-	public int showFreeTime(DisplayMode displayMode) {
+	public String showFreeTime(DisplayMode displayMode) {
 		
-		System.out.print("Current unbooked time for " + mCurrentBarber + ":\n");
-		
+		String information = "";
 		ZonedDateTime zdt = ZonedDateTime.now();
 		Calendar cal = Calendar.getInstance();
 
@@ -255,7 +245,10 @@ public class BookKeeper {
 		}
 		
 		for(int i = 0; i < limit; i++) {
-			System.out.print(zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() + " " + zdt.getMonth().toString() + " " + zdt.getYear() + "\n08:00 - ");		
+			information = zdt.getDayOfWeek().toString() + " " + zdt.getDayOfMonth() 
+							+ " " + zdt.getMonth().toString() + " " 
+							+ zdt.getYear() + "\n08:00 - ";
+			
 			Iterator<BookedTime> it = mBookings.iterator();
 			
 			while(it.hasNext()) {
@@ -264,17 +257,21 @@ public class BookKeeper {
 					if(isIncluded(booking.getStartTime(), i, DisplayMode.Day) || isIncluded(booking.getEndTime(), i, DisplayMode.Day)) {
 						
 						// Assuming the list is in order.
-						System.out.println(booking.getStartTime().minusMinutes(1).toLocalTime().toString());
-						System.out.print(booking.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ");
+						information += booking.getStartTime().minusMinutes(1).toLocalTime().toString() + "\n";
+						information += booking.getEndTime().plusMinutes(1).toLocalTime().toString() + " - ";
 						
 					}
 			}
 			
 			zdt = zdt.plusDays(1);
 			
-			System.out.println("18:00");
+			information += "18:00\n";
 		}
 		
-		return 0;
+		return information;
+	}
+	
+	public boolean foundCollision() {
+		return BookedTime.foundCollision();
 	}
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="author" content="Gustaf Peter Hultgren"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>My First HTML Page</title>
+		<link rel="stylesheet" href="src/styles.css"/>
+	</head>
+	<body>
+		<div class="flex-container">
+			<header>
+				<!-- The main headline. -->
+				<h1>My Own Web Site</h1>
+			</header>
+			
+			<nav class="nav">
+				<ul>
+					<li><a href="http://localhost:8080/HTML5Proj/index.html">First Item</a></li>
+					<li><a href="http://localhost:8080/HTML5Proj/subpage.html">Second Item</a></li>
+					<li><a href="http://localhost:8080/HTML5Proj/index.html">Third Item</a></li>
+					<li><a href="http://localhost:8080/HTML5Proj/subpage.html">Fourth Item</a></li>
+					<li><a href="http://localhost:8080/HTML5Proj/index.html">Fifth Item</a></li>
+				</ul>
+			</nav>
+			<article class="article">
+				<iframe class="art" src="middlepage.html"></iframe>
+			</article>
+			
+			<footer>Copyright notices etc.</footer>
+			
+			<!-- All scripts should be loaded at the end to avoid page load delays.  -->
+			<!-- Load the angularJS scripts. -->
+			<script data-require="angular.js@*" data-semver="1.3.0-beta.5" src="https://code.angularjs.org/1.3.0-beta.5/angular.js"></script>
+			
+			<!-- Load the local javaScript file. -->
+			<script src="src/script.js"></script>
+			
+			<!-- If javaScript is disabled, show a message. -->
+			<noscript>Sorry, javaScript is disabled on your browser!</noscript>
+		</div>
+	</body>
+</html>
