@@ -29,6 +29,10 @@
 			templateUrl : "addbook.htm",
 			controller : "addBookController"
 		})
+		.when("/book:id", {
+			templateUrl : "book.htm",
+			controller : "bookController"
+		})
 		.otherwise({ redirectTo : "/" });
 		
 	});
@@ -57,6 +61,10 @@
 	app.controller("booksController", function($scope, $http) {
 		
 		$scope.title = "Books";
+		
+		$scope.author = function(id) {
+			// TODO result of clicking in the author.
+		}
 
 		var onBooksComplete = function(response) {
 			$scope.books = response.data;
@@ -92,6 +100,24 @@
 			$http.post("AddBook", jsonParameters).then(onBookAdded, onError);
 			
 		}
+		
+	});
+	
+	app.controller("bookController", function($scope, $http, $routeParams) {
+		
+		$scope.title = "Book Info";
+
+		var bookId = $routeParams.id;
+		
+		var onBookComplete = function(response) {
+			$scope.book = response.data;
+		}
+		
+		var onError = function(reason) {
+			$scope.title = "Could not fetch data: " + reason.status;
+		}
+		
+		$http.get("Book?id=" + bookId).then(onBookComplete, onError);
 		
 	});
 	
