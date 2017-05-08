@@ -5,11 +5,11 @@
 		<td>
 			<a data-ng-href="#!/book:{{book.id}}">{{book.title}}</a>
 		</td>
-		<td data-ng-click="author(book.id)">
+		<td data-ng-click="author(book.authorFirstName, book.authorLastName)">
 			{{book.authorFirstName}} {{book.authorLastName}}
 		</td>
 		<td>
-			<button>remove</button>
+			<button data-ng-click="remove(book.id)">remove</button>
 		</td>
 	</tr>
 	</table>

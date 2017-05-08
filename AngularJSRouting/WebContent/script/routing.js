@@ -62,10 +62,23 @@
 		
 		$scope.title = "Books";
 		
-		$scope.author = function(id) {
-			// TODO result of clicking in the author.
+		$scope.author = function(firstName, lastName) {
+			var name = firstName + " " + lastName;
+			$http.get("Books?author=" + name).then(onBooksComplete, onError);
+		}
+		
+		$scope.remove = function(id) {
+			var par = {'id' : id};
+			
+			var jsonPar = JSON.stringify(par);
+			
+			$http.post("RemoveBook", jsonPar).then(onDeleteComplete, onError);
 		}
 
+		var onDeleteComplete = function(response) {
+			$http.get("Books").then(onBooksComplete, onError);
+		}
+		
 		var onBooksComplete = function(response) {
 			$scope.books = response.data;
 		}

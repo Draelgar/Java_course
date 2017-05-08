@@ -282,6 +282,7 @@ public class DatabaseHandler {
 				+ "INNER JOIN authors "
 				+ "ON books.author_id = authors.id_";
 		String data = "";
+		String data2 = "";
 		boolean both = false;
 		List<Book> books = new ArrayList<Book>();
 				
@@ -295,7 +296,10 @@ public class DatabaseHandler {
 		} 
 		else if(author.length() > 0){
 			query += " WHERE last_name LIKE ? OR first_name LIKE ? COLLATE utf8_swedish_ci ORDER BY title ASC;";
-			data = "%" + author + "%";
+			String parts[] = author.trim().split(" ");
+			
+			data = "%" + parts[0] + "%";
+			data2 = "%" + parts[1] + "%";
 		} 
 		else {
 			return getBooks();
@@ -313,7 +317,7 @@ public class DatabaseHandler {
 					statement.setString(1, data);
 				}
 				else {
-					statement.setString(1, data);
+					statement.setString(1, data2);
 					statement.setString(2, data);
 				}
 				
